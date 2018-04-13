@@ -1,6 +1,8 @@
 const state = {
-  toggleOnOff:true,
+    toggleOnOff:true,
     nowTabData: '',
-    Context:false
+    Context:false,
+    outLoginDialogOnOff:false,
+    loginOnOff:localStorage.getItem("userName")?localStorage.getItem("userName"):''
 };
 export default  state;

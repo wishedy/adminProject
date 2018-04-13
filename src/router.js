@@ -1,11 +1,5 @@
 import index from './views/index.vue'
 import Tabid1 from './views/tab/tabContent/tabid1.vue'
-/*import css from './views/css.vue'
-import stylus from './views/stylus.vue'
-import less from './views/less.vue'
-import sass from './views/sass.vue'
-import image from './views/image.vue'
-import iconfont from './views/iconfont.vue'*/
 export default {
     linkActiveClass: 'active',
     routes: [
@@ -18,7 +12,7 @@ export default {
             component: index
         },
         {
-            path:"/tabid1",
+            path:"/011",
             component: Tabid1
         }
     ]

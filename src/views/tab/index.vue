@@ -28,7 +28,7 @@
             }
         },
         computed:{
-            ...mapGetters(['Context']),
+            ...mapGetters(['Context','loginOnOff']),
             nowTabData(){
                 let t = this;
                 return (t.$store.state.nowTabData.length)?JSON.parse(t.$store.state.nowTabData):{};
@@ -36,6 +36,14 @@
         },
         components:{
             ContextCom
+        },
+        watch:{
+            loginOnOff(n,o){
+                let t = this;
+                if(n.length===0){
+                    t.closeAll();
+                }
+            }
         },
         methods: {
             ...mapActions(['deleteTab','ContextOff','ContextOn']),
@@ -81,13 +89,15 @@
                 }
                 t.ContextOff();
             }
-        },
-        mounted(){
-            console.log(this.nowTabData)
         }
     }
 </script>
 <style lang="scss">
+    .full-calendar-header{
+        .header-center{
+            font-size: 30px;
+        }
+    }
     .el-tabs__header{
         border-bottom: none;
         margin: 0 0 10px;

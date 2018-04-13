@@ -10,24 +10,16 @@
                 <Hamburger class="adminNav" @click.native.stop="toggleSide" :class="{'rotateClassName':toggleOnOff}"></Hamburger>
                 <p class="adminTitle">后台管理系统</p>
                 <div class="right-menu">
-                    <el-dropdown class="adminUser">
+                    <section class="adminUser">
                         <section class="adminUserLogo">
                             <img src="https://p2.ssl.qhimgs1.com/bdr/326__/t01833006cd35e8478e.jpg" alt="">
-                            <i class="el-icon-arrow-down el-icon--right"></i>
                         </section>
-                    <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item>黄金糕</el-dropdown-item>
-                        <el-dropdown-item>狮子头</el-dropdown-item>
-                        <el-dropdown-item>螺蛳粉</el-dropdown-item>
-                        <el-dropdown-item>双皮奶</el-dropdown-item>
-                        <el-dropdown-item>蚵仔煎</el-dropdown-item>
-                    </el-dropdown-menu>
-                    </el-dropdown>
+                    </section>
                 </div>
             </el-menu>
-            <Tab class="adminTab" :tabData="list"></Tab>
+            <Tab class="adminTab" v-show="marTop"></Tab>
         </el-header>
-        <router-view class="adminContent"></router-view>
+        <router-view class="adminContent" :class="{'marTop':marTop}"></router-view>
 
     </section>
 </template>
@@ -42,6 +34,10 @@
     .adminContent{
         width: 100%;
         min-height: 400px;
+        margin-top:60px ;
+        &.marTop{
+            margin-top:88px;
+        }
     }
     .main-container{
         min-height: 100%;
@@ -50,6 +46,8 @@
         box-sizing: inherit;
         transition: margin-left .28s ease;
         width: 100%;
+        /*position: fixed;
+        top:0;*/
         .rotateClassName{
             transform: rotate(90deg);
             transition: all .28s ease;
@@ -59,9 +57,19 @@
             transition: margin-left .28s ease;
         }
         .adminHeader{
-            padding: 0 !important;
+            padding: 0 30px 0 0 !important;
             color:#97a8be;
-            height: 88px !important;
+            height: auto !important;
+            position: fixed;
+            top:0;
+            width: 100%;
+            z-index: 2000;
+            /*.el-menu--horizontal{*/
+                /*display: flex;*/
+                /*flex-direction: row;*/
+                /*justify-content: flex-start;*/
+                /*width: 100%;*/
+            /*}*/
             .adminNav{
                 height: 50px;
                 line-height: 58px;
@@ -82,6 +90,7 @@
                 height: 100%;
                 line-height: 50px;
                 padding: 0 20px;
+                margin: 0 150px 0 0;
                 &:focus{
                     outline: none;
                 }
@@ -144,7 +153,10 @@
             }
         },
         computed:{
-            ...mapGetters(['toggleOnOff'])
+            ...mapGetters(['toggleOnOff','nowTabData']),
+            marTop(){
+                return (this.nowTabData.length>2);
+            }
         },
         methods:{
             ...mapActions(['toggleSide'])

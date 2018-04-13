@@ -2,6 +2,18 @@ const actions = {
     toggleSide: ({commit, state}) => {
         commit('toggleSide');//toggleSide(commit, state);
     },
+    login:({commit,state},str)=>{
+      commit('login',str);
+    },
+    cancelOutLogin:({commit})=>{
+      commit('cancelOutLogin');
+    },
+    outLoginOne:({commit,state})=>{
+        commit('outLoginOne');
+    },
+    outLogin:({commit,state})=>{
+      commit('outLogin');
+    },
     addTab:({commit,state},data)=>{
         //type 0增 1减 2，全删
         commit('addTab',data);

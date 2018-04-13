@@ -1,7 +1,6 @@
 <template>
 
         <aside class="adminSide" :class="{'active':!toggleOnOff}">
-            <el-col></el-col>
             <el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"
                      :collapse="toggleOnOff" text-color="#BFCBD9" >
                 <el-submenu :index="item.index" v-for="(item,i) in tabList" :key="i">
@@ -9,7 +8,7 @@
                         <i :class="item.icon"></i>
                         <span slot="title">{{item.title}}</span>
                     </template>
-                    <el-menu-item :index="inItem.index" v-for="(inItem,index) in item.tabList" :key="index" @click.native.stop="routerDirec(inItem)">
+                    <el-menu-item :index="inItem.index" v-for="(inItem,index) in item.tabList" :key="index" @click.native.stop="routerDirec(inItem)" @mouseup.native.stop="runFn(inItem)">
                         <i :class="inItem.icon"></i>
                         {{inItem.title}}
                     </el-menu-item>
@@ -32,11 +31,12 @@
         bottom: 0;
         left: 0;
         z-index: 1001;
-        transition: width .38s ease;
+        transition: width .28s ease;
         .el-submenu .el-menu-item{
             min-width: 180px;
-            transition: width  .38s ease;
-            &:hover{
+            transition: width  .28s ease;
+            /*background: rgb(38,52,69);*/
+            &:hover,&:focus{
                 background: rgb(38,52,69);
             }
 
@@ -50,22 +50,25 @@
                 /*color: rgb(191, 203, 217) !important;*/
             }
         }
-        .el-submenu__title{
-            /*color: rgb(191, 203, 217) !important;*/
+        .el-submenu__title,.el-menu--vertical{
+            /*background: rgb(38,52,69);*/
         }
         &.active{
             width: 180px;
-            transition: width .38s ease;
+            transition: width .28s ease;
             .el-menu{
                 width: 180px !important;
+                transition: width .28s ease;
             }
         }
         .el-menu{
             width: 36px !important;
             background-color: rgb(48, 65, 86);
+            border-right: none;
         }
         .el-tooltip,.el-submenu__title{
             padding: 0px 5px !important;
+            transition: width .28s ease;
         }
     }
     .el-menu-vertical-demo:not(.el-menu--collapse) {
@@ -112,13 +115,16 @@
                 },
                 timeout: 30000
             }).then(function (res) {
-                console.log(res);
                 t.tabList = res.data.tabList;
             }).catch(function (err) {
             });
         },
         methods: {
-            ...mapActions(['addTab']),
+            ...mapActions(['addTab','outLoginOne']),
+            runFn(v){
+                let t = this;
+                t[v.eventFn]&&t[v.eventFn]();
+            },
             routerDirec(v){
                 let t = this;
                 t.addTab(v);
