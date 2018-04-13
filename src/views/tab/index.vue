@@ -4,7 +4,7 @@
             <router-link tag="li" active-class="is-active" v-for="(item,i) in nowTabData" :key="i" class="el-tabs__item" :to="'/'+item.routerLink" @contextmenu.native.prevent="rightClose($event,item)">
                 {{item.title}}<span class="el-icon-close" @click.stop="closeTab(item)"></span>
             </router-link>
-            <ContextCom :style="styleJson"  v-show="Context&&editOnOff" @deleteAll="closeAll" @deleteIt="closeIt" @deleteOthers="closeOthers"></ContextCom>
+            <ContextCom :style="styleJson"  v-show="Context" @deleteAll="closeAll" @deleteIt="closeIt" @deleteOthers="closeOthers"></ContextCom>
         </ul>
     </section>
 </template>
@@ -27,21 +27,18 @@
 
             }
         },
-        props:['menuDeleta'],
         computed:{
+            ...mapGetters(['Context']),
             nowTabData(){
                 let t = this;
                 return (t.$store.state.nowTabData.length)?JSON.parse(t.$store.state.nowTabData):{};
-            },
-            Context(){
-                return this.menuDeleta;
             }
         },
         components:{
             ContextCom
         },
         methods: {
-            ...mapActions(['deleteTab']),
+            ...mapActions(['deleteTab','ContextOff','ContextOn']),
             closeAll(){
                 let t = this;
                 for(let key in t.nowTabData){
@@ -65,12 +62,11 @@
                 t.contextData = v;
                 t.styleJson.left = (e.clientX)+'px';
                 t.styleJson.top= e.offsetY+'px';
-                t.editOnOff = true;
+                t.ContextOn();
             },
             closeTab(v){
                 let t = this;
                 let nowPathname = this.$route.path.substring(1,1000);
-                console.log(v);
                 this.deleteTab(v);
                 let  lastKey = '';
                 if((v.routerLink)&&(nowPathname===v.routerLink)){
@@ -83,8 +79,7 @@
                         t.$router.push({ path: '/' });
                     }
                 }
-                t.editOnOff = false;
-
+                t.ContextOff();
             }
         },
         mounted(){

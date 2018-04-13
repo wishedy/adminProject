@@ -4,6 +4,9 @@ const  getters = {
   },
     nowTabData(state){
       return state.nowTabData;
+    },
+    Context(state){
+      return state.Context;
     }
 };
 export default  getters;

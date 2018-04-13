@@ -1,7 +1,7 @@
 <template>
     <el-container class="adminContainer" @click.native.stop="closeMask($event)">
         <SideBar></SideBar>
-        <ContentBar :contentxM="Context"></ContentBar>
+        <ContentBar></ContentBar>
     </el-container>
 </template>
 <style lang="scss" scoped >
@@ -19,7 +19,7 @@
     import jquery from 'jquery'
     import SideBar from './views/sideBar';
     import ContentBar from './views/MainContent';
-    import {mapGetters} from 'vuex';
+    import {mapGetters,mapActions} from 'vuex';
     export default {
         data(){
             return {
@@ -40,8 +40,10 @@
             ...mapGetters(['nowTabData'])
         },
         methods:{
+            ...mapActions(['ContextOff']),
             closeMask(e){
-
+                let t = this;
+                t.ContextOff();
             }
         }
     }

@@ -14,6 +14,12 @@ const mutations = {
         let nowData = (state.nowTabData.length)?JSON.parse(state.nowTabData):{};
         delete  nowData[data.routerLink];
         state.nowTabData = JSON.stringify(nowData);
+    },
+    ContextOn(state){
+        state.Context = true;
+    },
+    ContextOff(state){
+        state.Context = false;
     }
 };
 export default  mutations;

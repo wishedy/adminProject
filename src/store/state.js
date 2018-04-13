@@ -1,5 +1,6 @@
 const state = {
   toggleOnOff:true,
-    nowTabData: ''
+    nowTabData: '',
+    Context:false
 };
 export default  state;

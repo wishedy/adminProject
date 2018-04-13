@@ -25,7 +25,7 @@
                     </el-dropdown>
                 </div>
             </el-menu>
-            <Tab class="adminTab" :tabData="list" :menuDeleta="contentxM"></Tab>
+            <Tab class="adminTab" :tabData="list"></Tab>
         </el-header>
         <router-view class="adminContent"></router-view>
 
@@ -143,7 +143,6 @@
                list:{}
             }
         },
-        props:['contentxM'],
         computed:{
             ...mapGetters(['toggleOnOff'])
         },

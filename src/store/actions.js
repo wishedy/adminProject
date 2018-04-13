@@ -8,6 +8,12 @@ const actions = {
     },
     deleteTab:({commit,state},data)=>{
         commit('deleteTab',data);
+    },
+    ContextOn:({commit,state},data)=>{
+        commit('ContextOn');
+    },
+    ContextOff:({commit,state},data)=>{
+        commit('ContextOff');
     }
 };
 export default  actions;
