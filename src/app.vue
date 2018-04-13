@@ -1,32 +1,48 @@
 <template>
-    <div>
-        <div class="nav">
-            <router-link to="/" exact>Home</router-link>
-            <router-link to="/css">支持css</router-link>
-            <router-link to="/stylus">支持stylus</router-link>
-            <router-link to="/less">支持less</router-link>
-            <router-link to="/sass">支持sass</router-link>
-            <router-link to="/image">支持图片</router-link>
-            <router-link to="/iconfont">支持图标字体</router-link>
-            <router-link to="/async">异步组件</router-link>
-        </div>
-        <div class="view">
-            <router-view></router-view>
-        </div>
-    </div>
+    <el-container class="adminContainer" @click.native.stop="closeMask($event)">
+        <SideBar></SideBar>
+        <ContentBar :contentxM="Context"></ContentBar>
+    </el-container>
 </template>
-<style lang="stylus" scoped>
-    .nav a
-        display inline-block
-        color #3490de
-        text-decoration none
-        margin 5px
-        padding: 3px
-        &:hover
-            color #2283d4
-        &.active
-            border-bottom 2px solid #3490de
-    .view
-        margin-top 30px
-
+<style lang="scss" scoped >
+    .adminContainer{
+        position: absolute;
+        top: 0;
+        /* bottom: 0; */
+        left: 0;
+        right: 0;
+        min-height: 100vh; // 或 100%
+        background: #fdfdfd;
+    }
 </style>
+<script>
+    import jquery from 'jquery'
+    import SideBar from './views/sideBar';
+    import ContentBar from './views/MainContent';
+    import {mapGetters} from 'vuex';
+    export default {
+        data(){
+            return {
+                mag:"",
+                Context:false
+            }
+        },
+        components:{
+            SideBar,
+            ContentBar
+        },
+        watch:{
+            nowTabData(){
+                console.log("改变");
+            }
+        },
+        computed:{
+            ...mapGetters(['nowTabData'])
+        },
+        methods:{
+            closeMask(e){
+
+            }
+        }
+    }
+</script>

@@ -1,7 +1,6 @@
-# vue2-vue-router2-webpack3
+# 一生有你后台管理系统
 
-## Blog
-《从零搭建vue2+vue-router2+webpack3工程》
+## 整站描述
 
-[http://www.qinshenxue.com/article/20161118151423.html](http://www.qinshenxue.com/article/20161118151423.html)
+
 
