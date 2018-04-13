@@ -53,7 +53,7 @@
     "webpack-merge": "^4.1.1"
   },
   "dependencies": {
-    "jquery": "^3.3.1",
-    "vue-contextmenu": "^1.4.8"
+    "axios": "^0.18.0",
+    "jquery": "^3.3.1"
   }
 }
