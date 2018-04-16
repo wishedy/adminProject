@@ -57,13 +57,14 @@
             transition: margin-left .28s ease;
         }
         .adminHeader{
+            z-index: 2;
             padding: 0 30px 0 0 !important;
             color:#97a8be;
             height: auto !important;
             position: fixed;
             top:0;
             width: 100%;
-            z-index: 2000;
+
             /*.el-menu--horizontal{*/
                 /*display: flex;*/
                 /*flex-direction: row;*/

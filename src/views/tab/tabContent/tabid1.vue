@@ -105,6 +105,7 @@
 
 </template>
 <style lang="scss" scoped>
+
     @import "../../../styleComponent/ContentInner";
    .adminContentInner{
        @include ContentInner();
@@ -112,11 +113,12 @@
            padding: 0 0 10px 0;
        }
        .adminPage{
-           padding: 10px 0;
+           padding: 20px 0;
        }
    }
 </style>
 <script>
+    import userData from '../../../virtualData/UserStatistics'
     export default {
         data() {
             return {
@@ -124,85 +126,7 @@
                 formInline: {
                     user: ''
                 },
-                demoData:[
-                    {
-                        id:111111111,
-                        name:111111111,
-                        sex:"男",
-                        age:"91",
-                        job:"前端工程师",
-                        activeValue:122,
-                        address:"这是我的家乡",
-                        locationAdd:"这是我的所在地",
-                        state:0,
-                        email:"",
-                        phone:"",
-                        createTime:111111111,
-                        auditTime:"",
-                        auditer:'张三'
-                    }
-                ],
-                tableData: [{
-                    id:1356987451236,
-                    job:"前端工程师",
-                    state:"已注册",
-                    sexType:"男",
-                    age:13,
-                    phone:"13568954745",
-                    email:"webheng@126.com",
-                    activeVal:"124",
-                    auditTime:"2016-05-02",
-                    registerTime:"2016-05-02",
-                    date: '2016-05-02',
-                    name: '王小虎',
-                    auditer:"会飞的鸟",
-                    address: '山东济南'
-                }, {
-                    id:1356987451236,
-                    job:"前端工程师",
-                    state:"已注册",
-                    sexType:"男",
-                    age:13,
-                    phone:"13568954745",
-                    email:"webheng@126.com",
-                    activeVal:"124",
-                    auditTime:"2016-05-02",
-                    registerTime:"2016-05-02",
-                    date: '2016-05-04',
-                    name: '王小虎',
-                    auditer:"会飞的鸟",
-                    address: '山东济南'
-                }, {
-                    id:1356987451236,
-                    job:"前端工程师",
-                    state:"已注册",
-                    sexType:"男",
-                    age:13,
-                    phone:"13568954745",
-                    email:"webheng@126.com",
-                    activeVal:"124",
-                    auditTime:"2016-05-02",
-                    registerTime:"2016-05-02",
-                    date: '2016-05-01',
-                    name: '王小虎',
-                    auditer:"会飞的鸟",
-                    address: '山东济南'
-                }, {
-                    id:1356987451236,
-                    job:"前端工程师",
-                    state:"已注册",
-                    sexType:"男",
-                    age:13,
-                    phone:"13568954745",
-                    email:"webheng@126.com",
-                    activeVal:"124",
-                    auditTime:"2016-05-02",
-                    registerTime:"2016-05-02",
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    auditer:"会飞的鸟",
-                    address: '山东济南'
-                }]
+                tableData:userData.data.dataList
             }
         },
         methods:{
