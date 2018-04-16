@@ -19,78 +19,63 @@
                     @selection-change="handleSelectionChange"
                     style="width: 100%">
                     <el-table-column
-                        type="selection"
-                        width="35">
+                        type="selection">
                     </el-table-column>
                     <el-table-column
                         prop="id"
-                        label="会员ID"
-                        width="130">
+                        label="会员ID">
                     </el-table-column>
                     <el-table-column
                         prop="name"
-                        label="姓名"
-                        width="70">
+                        label="姓名">
                     </el-table-column>
                     <el-table-column
                         prop="sexType"
-                        label="性别"
-                        width="60">
+                        label="性别">
                     </el-table-column>
                     <el-table-column
                         prop="age"
-                        label="年龄"
-                        width="50">
+                        label="年龄">
                     </el-table-column>
                     <el-table-column
                         prop="job"
-                        label="职业"
-                        width="100">
+                        label="职业">
                     </el-table-column>
                     <el-table-column
                         prop="state"
-                        label="状态"
-                        width="80">
+                        label="状态">
                     </el-table-column>
                     <el-table-column
                         prop="activeVal"
-                        label="活跃值"
-                        width="70">
+                        label="活跃值">
                     </el-table-column>
                     <el-table-column
                         prop="address"
-                        label="所在地"
-                        width="90">
+                        label="所在地">
                     </el-table-column>
                     <el-table-column
                         prop="email"
-                        label="邮件"
-                        width="100">
+                        label="邮件">
                     </el-table-column>
                     <el-table-column
                         prop="phone"
-                        label="手机号"
-                        width="110">
+                        label="手机号">
                     </el-table-column>
                     <el-table-column
                         prop="registerTime"
-                        label="注册时间"
-                        width="100">
+                        label="注册时间">
                     </el-table-column>
                     <el-table-column
                         prop="auditTime"
-                        label="审核时间"
-                        width="100">
+                        label="审核时间">
                     </el-table-column>
                     <el-table-column
                         prop="auditer"
-                        label="审核人"
-                        width="80">
+                        label="审核人">
                     </el-table-column>
                     <el-table-column
                         prop="address"
-                        label="操作"
-                        width="100">
+                        label="操作">
                         <template slot-scope="scope">
                             <el-button
                                 size="mini">
