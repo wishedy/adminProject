@@ -16,11 +16,7 @@
                 <el-table
                     :data="tableData"
                     border
-                    @selection-change="handleSelectionChange"
                     style="width: 100%">
-                    <el-table-column
-                        type="selection">
-                    </el-table-column>
                     <el-table-column
                         prop="id"
                         label="会员ID">
@@ -72,16 +68,6 @@
                     <el-table-column
                         prop="auditer"
                         label="审核人">
-                    </el-table-column>
-                    <el-table-column
-                        prop="address"
-                        label="操作">
-                        <template slot-scope="scope">
-                            <el-button
-                                size="mini">
-                                详情
-                            </el-button>
-                        </template>
                     </el-table-column>
                 </el-table>
                 <div class="block adminPage">

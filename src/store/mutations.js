@@ -1,3 +1,4 @@
+import tab2Mutations from './contentMutations/tab2Mutations';
 const mutations = {
     toggleSide(state,data){
         state.toggleOnOff = !state.toggleOnOff;
@@ -36,4 +37,10 @@ const mutations = {
         state.Context = false;
     }
 };
+const contentActions = [tab2Mutations];
+for(let i = 0;i<contentActions.length;i++){
+    for(let key in contentActions[i]){
+        mutations[key] = contentActions[i][key];
+    }
+}
 export default  mutations;

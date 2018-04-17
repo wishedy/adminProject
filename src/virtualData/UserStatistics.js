@@ -1,6 +1,6 @@
 import Mock from 'mockjs';
 const data = Mock.mock({
-   'dataList|10-20':[
+   'dataList|10':[
        {
            'id':'@datetime(T)',
            'job':"@ctitle(8)",

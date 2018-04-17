@@ -3,11 +3,12 @@ const data = Mock.mock({
     'dataList|10':[
         {
             'id':'@datetime(T)',
+            'changeId':'@datetime(T)',
             'job':"@ctitle(8)",
             'jobPhoto':"@image('383x265', '#894FC4', '#FFF', 'png','demo')",
             'jobNum':"@datetime(T)",
             'idNum':/^\d{17}(\d|x)$/,
-            'idState|1':['通过','无效'],
+            'idState|1':['通过','驳回'],
             'studyNum':"@datetime(T)",
             'otherNum':"@datetime(T)",
             'studyPhoto':"@image('383x265', '#894FC4', '#FFF', 'png','demo')",

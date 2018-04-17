@@ -16,11 +16,9 @@
                 <el-table
                     :data="tableData"
                     border
-                    @selection-change="handleSelectionChange"
+                    highlight-current-row
+                    @current-change="handleCurrentChange"
                     style="width: 100%">
-                    <el-table-column
-                        type="selection">
-                    </el-table-column>
                     <el-table-column
                         prop="id"
                         label="会员ID">
@@ -38,24 +36,12 @@
                         label="年龄">
                     </el-table-column>
                     <el-table-column
-                        prop="address"
-                        label="职业审核">
-                        <template slot-scope="scope">
-                            <el-button
-                                size="mini">
-                                职业审核
-                            </el-button>
-                        </template>
+                        prop="job"
+                        label="职业">
                     </el-table-column>
                     <el-table-column
-                        prop="address"
-                        label="学历审核">
-                        <template slot-scope="scope">
-                            <el-button
-                                size="mini">
-                                职业审核
-                            </el-button>
-                        </template>
+                        prop="educationLevel"
+                        label="学历或学位">
                     </el-table-column>
                     <el-table-column
                         prop="idState"
@@ -70,19 +56,8 @@
                         label="注册时间">
                     </el-table-column>
                     <el-table-column
-                        prop="address"
-                        label="操作">
-                        <template slot-scope="scope">
-                            <el-button
-                                size="mini">
-                                通过
-                            </el-button>
-                            <el-button
-                                size="mini"
-                                type="danger">
-                                驳回
-                            </el-button>
-                        </template>
+                        prop="auditState"
+                        label="审核状态">
                     </el-table-column>
                 </el-table>
                 <div class="block adminPage">
@@ -99,17 +74,83 @@
                     </el-pagination>
                 </div>
             </div>
+            <div class="block adminAuditControl">
+                <el-form :inline="true" class="demo-form-inline">
+                    <el-form-item>
+                        <el-button @click.native="awakenUserInfo">详情</el-button>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click.native="passAudit(0)">审核通过</el-button>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="danger" @click.native="rejectAudit(0)">驳回</el-button>
+                    </el-form-item>
+                </el-form>
+            </div>
         </section>
+        <AuditDialog :DialogInfo="dialogInfo"></AuditDialog>
+        <el-dialog
+            title="提示"
+            :visible.sync="centerDialogVisible"
+            width="30%"
+            center>
+            <span>是否确认通过{{selectedData.name}}的审核信息</span>
+            <span slot="footer" class="dialog-footer">
+            <el-button @click="centerDialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="passAudit(1)">确 定</el-button>
+            </span>
+        </el-dialog>
+        <el-dialog
+            title="提示"
+            :visible.sync="rejectDialogVisible"
+            width="30%"
+            center>
+            <span class="rejectAuditTitle">是否确认驳回{{selectedData.name}}的审核信息</span>
+            <section class="rejectAuditInline">
+                <el-form :inline="true" class="demo-form-inline">
+                    <el-form-item label="选择驳回理由" :inline="true" class="rejectAuditInline">
+                        <el-select v-model="formInline.region" placeholder="驳回审核的理由">
+                            <el-option label="第一个驳回理由" value="0"></el-option>
+                            <el-option label="第二个驳回理由" value="1"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="输入驳回理由" :inline="true" class="rejectAuditInline">
+                        <el-input type="textarea" v-model="rejectAuditReason" placeholder="驳回审核的理由"></el-input>
+                    </el-form-item>
+                </el-form>
+            </section>
+            <span slot="footer" class="dialog-footer">
+            <el-button @click="rejectDialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="rejectAudit(1)">确 定</el-button>
+            </span>
+        </el-dialog>
     </section>
 </template>
 <script>
+    import AuditDialog from '../../Dialog/auditDialog';
     import userData from '../../../virtualData/auditInformation';
+    import {mapGetters,mapActions} from 'vuex';
     export default {
         data() {
             return {
                 formInline: {
-                    user: ''
+                    user: '',
+                    region:''
                 },
+                selectedOne:false,
+                selectedData:{},
+                dialogInfo:{
+                    title:"审核信息",
+                    degreeImg:"",
+                    degreeNum:"",
+                    professionImg:"",
+                    professionNum:"",
+                    otherImg:"",
+                    otherNum:""
+                },
+                rejectAuditReason:'',
+                rejectDialogVisible:false,
+                centerDialogVisible:false,
                 currentPage4: 4,
                 tableData:userData.data.dataList,
                 tableData3: [{
@@ -144,14 +185,50 @@
             }
         },
         methods: {
+            ...mapActions(['tab2ShowDialog']),
+            passAudit(step){
+                let t = this;
+                    if(!t.selectedOne){
+                        t.$message.error('请选择您要审核的用户!');
+                    }else{
+                        if(step===0){
+                            t.centerDialogVisible = true;
+                        } else if(step===1){
+                            t.$message({
+                                message: t.selectedData.name+'审核已通过',
+                                type: 'success'
+                            });
+                            t.centerDialogVisible = false;
+                        }
+
+                    }
+
+
+            },
+            rejectAudit(step){
+              let t = this;
+                if(!t.selectedOne){
+                    t.$message.error('请选择您要审核的用户!');
+                }else{
+                    if(step===0){
+                        t.rejectDialogVisible = true;
+                    }else{
+                        t.$message({
+                            message: t.selectedData.name+'审核已驳回',
+                            type: 'success'
+                        });
+                        t.rejectDialogVisible = false;
+                    }
+                }
+            },
             handleEdit(index, row) {
                 console.log(index, row);
             },
             handleDelete(index, row) {
                 console.log(index, row);
             },
-            handleSelectionChange(val) {
-                this.multipleSelection = val;
+            tryClick(a,b){
+                console.log(a,b);
             },
             onSubmit() {
                 console.log('submit!');
@@ -160,20 +237,58 @@
                 console.log(`每页 ${val} 条`);
             },
             handleCurrentChange(val) {
-                console.log(`当前页: ${val}`);
+                let t = this;
+                t.selectedOne = true;
+                t.selectedData = val;
+            },
+            awakenUserInfo(){
+                let t = this;
+                if(t.selectedOne){
+                    t.dialogInfo ={
+                        title:t.selectedData.name+"审核信息",
+                        degreeImg:t.selectedData.jobPhoto,
+                        degreeNum:t.selectedData.jobNum,
+                        professionImg:t.selectedData.studyPhoto,
+                        professionNum:t.selectedData.studyNum,
+                        otherImg:t.selectedData.otherPhoto,
+                        otherNum:t.selectedData.otherNum
+                    };
+                    t.tab2ShowDialog();
+                }else{
+                    t.$message.error('请选择您要审核的用户!');
+                }
+
             }
+        },
+        computed:{
+            ...mapGetters(['tab2Data'])
+        },
+        components:{
+            AuditDialog
+        },
+        mounted(){
+
         }
     }
 </script>
 <style lang="scss" scoped>
 
     @import "../../../styleComponent/ContentInner";
+    .rejectAuditInline{
+        padding: 20px 0;
+    }
+    .rejectAuditTitle{
+        font-size: 22px;
+    }
     .adminContentInner{
         @include ContentInner();
         .adminUserControl{
             padding: 0 0 10px 0;
         }
         .adminPage{
+            padding: 20px 0;
+        }
+        .adminAuditControl{
             padding: 20px 0;
         }
     }

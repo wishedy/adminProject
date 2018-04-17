@@ -13,6 +13,9 @@ const  getters = {
     },
     outLoginDialogOnOff(state){
         return state.outLoginDialogOnOff;
+    },
+    tab2Data(state){
+      return state.tab2Data;
     }
 };
 export default  getters;
