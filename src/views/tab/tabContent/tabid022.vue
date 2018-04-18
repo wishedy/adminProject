@@ -20,32 +20,44 @@
                     @current-change="handleCurrentChange"
                     style="width: 100%">
                     <el-table-column
-                        prop="changeId"
-                        label="举报ID">
+                        prop="dynamicId"
+                        label="动态ID">
                     </el-table-column>
                     <el-table-column
-                        prop="id"
-                        label="会员ID">
+                        prop="authorId"
+                        label="作者ID">
                     </el-table-column>
                     <el-table-column
-                        prop="name"
+                        prop="author"
                         label="姓名">
                     </el-table-column>
                     <el-table-column
-                        prop="feedBackcontent"
-                        label="举报内容">
+                        prop="imgHave"
+                        label="图片上传">
                     </el-table-column>
                     <el-table-column
-                        prop="auditState"
+                        prop="dynamicType"
+                        label="动态类型">
+                    </el-table-column>
+                    <el-table-column
+                        prop="browseNum"
+                        label="浏览">
+                    </el-table-column>
+                    <el-table-column
+                        prop="praiseNum"
+                        label="点赞">
+                    </el-table-column>
+                    <el-table-column
+                        prop="commentNum"
+                        label="评论">
+                    </el-table-column>
+                    <el-table-column
+                        prop="valid"
                         label="状态">
                     </el-table-column>
                     <el-table-column
                         prop="registerTime"
-                        label="举报时间">
-                    </el-table-column>
-                    <el-table-column
-                        prop="auditer"
-                        label="举报人">
+                        label="创建时间">
                     </el-table-column>
                 </el-table>
                 <div class="block adminPage">
@@ -71,14 +83,24 @@
             </div>
         </section>
         <el-dialog
-            :title="selectedData.name+'的举报信息'"
+            :title="selectedData.author+'的'+selectedData.dynamicType"
             :visible.sync="centerDialogVisible"
             width="35%"
             center>
+            <el-dialog
+                width="30%"
+                title="内层 Dialog"
+                :visible.sync="innerVisible"
+                append-to-body>
+            </el-dialog>
             <div class="block">
                 <p>
                     {{selectedData.feedBackcontent}}
                 </p>
+            </div>
+            <div class="block">
+                <h1 class="dynamicTitle">动态内容</h1>
+                <el-main class="feedBackArea">{{selectedData.dynamicContent}}</el-main>
             </div>
             <div class="block feedBackImgContainer">
                 <ul class="feedBackImgList">
@@ -87,50 +109,31 @@
                     </li>
                 </ul>
             </div>
-            <div class="block">
-                <el-form :inline="true" class="demo-form-inline">
-                    <el-form-item label="输入举报回复" :inline="true" class="rejectAuditInline">
-                        <textarea class="feedBackArea" style="resize: none;" name="" id="" cols="30" rows="10"></textarea>
-                    </el-form-item>
-                </el-form>
-            </div>
             <span slot="footer" class="dialog-footer">
             <el-button @click="centerDialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="feedBackContent()">回复</el-button>
+            <el-button type="danger" @click="validDynamic()">无效</el-button>
             </span>
         </el-dialog>
     </section>
 </template>
 <script>
-    import userData from '../../../virtualData/feedback';
+    import userData from '../../../virtualData/dynamicData';
     export default {
-        data(){
+        data() {
             return {
                 formInline: {
                     user: '',
                     region:''
                 },
-                rejectAuditReason:"",
-                selectedData:{},
+                innerVisible:false,
                 centerDialogVisible:false,
                 selectedOne:false,
-                msg:"",
+                selectedData:{},
                 currentPage4:4,
                 tableData:userData.data.dataList
             }
         },
         methods:{
-            feedBackContent(){
-                let t = this;
-                t.centerDialogVisible = false;
-                t.$message({
-                    message: t.selectedData.name+'举报信息已回复',
-                    type: 'success'
-                });
-            },
-            handleSelectionChange(val) {
-                this.multipleSelection = val;
-            },
             detailInfo(){
                 let t = this;
                 if(!t.selectedOne){
@@ -138,6 +141,9 @@
                 }else{
                     t.centerDialogVisible = true;
                 }
+            },
+            handleSelectionChange(val) {
+                this.multipleSelection = val;
             },
             onSubmit() {
                 console.log('submit!');
@@ -149,7 +155,11 @@
                 let t = this;
                 t.selectedOne = true;
                 t.selectedData = val;
-                console.log(val)
+                console.log(`当前页: ${val}`);
+            },
+            validDynamic(){
+                let t = this;
+                t.innerVisible = true;
             }
         }
     }
@@ -157,16 +167,7 @@
 <style lang="scss" scoped>
     @import "../../../styleComponent/ContentInner";
     .adminContentInner{
-        @include ContentInner();
-        .adminUserControl{
-            padding: 0 0 10px 0;
-        }
-        .adminPage{
-            padding: 20px 0;
-        }
-        .adminAuditControl{
-            padding: 20px 0;
-        }
+        @include ContentInner()
     }
     .block{
         padding: 20px 0;
@@ -190,15 +191,12 @@
             }
         }
     }
-
-
     .rejectAuditInline,.feedBackArea{
         width: 100%;
         height: 100%;
         margin: 0 auto;
-        textarea{
-            width: 583.7px;
-            height: 265.8px;
-        }
+    }
+    .dynamicTitle{
+        font-size: 24px;
     }
 </style>

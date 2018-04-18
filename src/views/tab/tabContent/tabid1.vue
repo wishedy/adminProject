@@ -16,6 +16,8 @@
                 <el-table
                     :data="tableData"
                     border
+                    highlight-current-row
+                    @current-change="handleCurrentChange"
                     style="width: 100%">
                     <el-table-column
                         prop="id"
@@ -36,6 +38,10 @@
                     <el-table-column
                         prop="job"
                         label="职业">
+                    </el-table-column>
+                    <el-table-column
+                        prop="educationLevel"
+                        label="学历或学位">
                     </el-table-column>
                     <el-table-column
                         prop="state"
@@ -84,7 +90,16 @@
                     </el-pagination>
                 </div>
             </div>
-
+            <div class="block adminAuditControl">
+                <el-form :inline="true" class="demo-form-inline">
+                    <el-form-item>
+                        <el-button>详情</el-button>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="danger">拉黑</el-button>
+                    </el-form-item>
+                </el-form>
+            </div>
         </section>
 
     </section>
@@ -99,6 +114,9 @@
            padding: 0 0 10px 0;
        }
        .adminPage{
+           padding: 20px 0;
+       }
+       .adminAuditControl{
            padding: 20px 0;
        }
    }

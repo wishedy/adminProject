@@ -66,6 +66,9 @@
                         <el-form-item>
                             <el-button @click.native="detailInfo">详情</el-button>
                         </el-form-item>
+                        <el-form-item>
+                            <el-button @click.native="detailInfo" type="success">取消拉黑</el-button>
+                        </el-form-item>
                     </el-form>
                 </div>
             </div>
