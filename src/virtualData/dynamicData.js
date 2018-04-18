@@ -9,7 +9,7 @@ const data = Mock.mock({
             'templateId':'@datetime(T)',
             'dynamicType|1':['普通动态','脱单动态','话题动态'],
             'author': '@cname',
-            'imgList|9':["@image('383x265', '#894FC4')"],
+            'imgList|2':["@image('383x265', '#894FC4')"],
             'registerTime':'@datetime()',
             'praiseNum|18-562':22,
             'collectNum|18-562':22,

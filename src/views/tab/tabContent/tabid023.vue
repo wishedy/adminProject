@@ -113,34 +113,53 @@
             :title="selectedData.articleTitle"
             :visible.sync="articleDialog"
             center
-            append-to-body class="articleTitle">
-            <el-main>
-                <el-form :inline="true" :model="formInline" class="demo-form-inline">
-                    <el-form-item label="文章模板">
+            append-to-body
+            class="articleTitle">
+            <div class="block articleTemplateContent">
+                <el-form :inline="true" class="demo-form-inline">
+                    <el-form-item label="文章模板" :inline="true">
                         <el-select v-model="formInline.region" placeholder="文章模板">
-                            <el-option label="第一个驳回理由" value="0"></el-option>
-                            <el-option label="第二个驳回理由" value="1"></el-option>
+                            <el-option label="第一个模板" value="0"></el-option>
+                            <el-option label="第二个模板" value="1"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-main class="templatePreview">
-                        <section class="templatePreviewImg">
-                            <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524054334359&di=8222adebfed9c9f02b8b9ae3c8e9245d&imgtype=0&src=http%3A%2F%2Fpic40.nipic.com%2F20140417%2F18460687_100054352164_2.jpg" alt="" @load="imgInit($event)">
-                        </section>
-                        <section class="templateContent">
-                            <el-form :inline="true" :model="formInline" class="demo-form-inline" style="width: 100%;">
-                                <el-form-item label="文章标题" style="width: 100%;" label="left">
-                                    <el-input v-model="formInline.user" placeholder="文章标题" style="width: 200%;"></el-input>
-                                </el-form-item>
-                            </el-form>
-                            <el-form :inline="true" :model="formInline" class="demo-form-inline" style="width: 100%;">
-                                <el-form-item label="文章副标题" style="width: 100%;" label="left">
-                                    <el-input v-model="formInline.user" placeholder="文章副标题" style="width: 200%;"></el-input>
-                                </el-form-item>
-                            </el-form>
-                        </section>
-                    </el-main>
+                    <el-form-item label="文章标题" :inline="true" size="medium">
+                        <el-input v-model="formInline.user" placeholder="请输入文章标题" class="paragraphTitle"></el-input>
+                    </el-form-item>
+                    <el-form-item label="文章副标题" :inline="true" size="medium">
+                        <el-input v-model="formInline.user" placeholder="请输入文章副标题" type="input" class="paragraphTitle"></el-input>
+                    </el-form-item>
                 </el-form>
-            </el-main>
+                <div class="block templatePreview">
+                    <el-aside class="templateItem" width="49%">
+                        <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524054334359&di=8222adebfed9c9f02b8b9ae3c8e9245d&imgtype=0&src=http%3A%2F%2Fpic40.nipic.com%2F20140417%2F18460687_100054352164_2.jpg" alt="" class="templateImage">
+                    </el-aside>
+                    <el-aside class="templateItem" width="49%">
+                        <div class="block sentionContent">
+                            <el-form :inline="true" class="demo-form-inline paragraphSection"  :label-position="labelPosition" label-width="100px" :model="formLabelAlign">
+                                <el-form-item label="第一段" :inline="true" size="medium" class="rejectAuditInline" style="width: 100%;">
+                                    <textarea class="paragraphContent" name="" id="" cols="30" rows="10"></textarea>
+                                </el-form-item>
+                                <el-form-item label="插图" :inline="true" size="medium" class="rejectAuditInline block paragraphImg" style="width: 100%;">
+                                    <section class="paragraphImgItem" v-for="(item,index) in selectedData.imgList" >
+                                        <img :src="item" alt="">
+                                    </section>
+                                </el-form-item>
+                            </el-form>
+                            <el-form :inline="true" class="demo-form-inline paragraphSection" :label-position="labelPosition" label-width="100px" :model="formLabelAlign">
+                                <el-form-item label="第一段" :inline="true" size="medium" class="rejectAuditInline" style="width: 100%;">
+                                    <textarea class="paragraphContent" name="" id="" cols="30" rows="10"></textarea>
+                                </el-form-item>
+                                <el-form-item label="插图" :inline="true" size="medium" class="rejectAuditInline block paragraphImg" style="width: 100%;">
+                                    <section class="paragraphImgItem" v-for="(item,index) in selectedData.imgList" >
+                                        <img :src="item" alt="">
+                                    </section>
+                                </el-form-item>
+                            </el-form>
+                        </div>
+                    </el-aside>
+                </div>
+            </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="articleDialog = false">取 消</el-button>
                 <el-button type="primary" @click="editArticle(1)">确 定</el-button>
@@ -156,6 +175,12 @@
                 formInline: {
                     user: '',
                     region:''
+                },
+                labelPosition: 'left',
+                formLabelAlign: {
+                    name: '',
+                    region: '',
+                    type: ''
                 },
                 articleDialog:false,
                 innerVisible:false,
@@ -253,11 +278,14 @@
     }
     .rejectAuditInline,.feedBackArea{
         width: 100%;
-        height: 100%;
         margin: 0 auto;
+        padding:10px 0;
     }
     .dynamicTitle{
         font-size: 24px;
+    }
+    .articleTemplateContent{
+        width: 100%;
     }
     .articleTitle{
         font-size: 26px !important;
@@ -271,12 +299,74 @@
         flex-direction: row;
         justify-content: space-between;
         height: auto;
-        .templatePreviewImg{
-            width: 50%;
-        }
-        .templateContent{
-            width: 50%;
-            height: 100%;
+        .templateItem{
+            width: 49%;
+            overflow-x:auto ;
+            height: 820px;
+            .block{
+                padding: 0;
+            }
+            .sentionContent{
+                width: auto;
+                white-space: nowrap;
+                /*display: inline;*/
+                zoom: 1;
+                &::after {
+                    content: ".";
+                    clear: both;
+                    display: block;
+                    overflow: hidden;
+                    font-size: 0;
+                    height: 0;
+                }
+            }
+            .paragraphSection{
+                width: 485px;
+                display: inline-block;
+                &:nth-child(n+2){
+                    padding: 0 40px;
+                }
+                height: 800px;
+            }
+            .templateImage{
+                width: 100%;
+            }
+            .paragraphTitle{
+                width: 300px;
+            }
+            .paragraphContent{
+                width: 300px;
+                height: 160px;
+                resize: none;
+                overflow: auto;
+                -webkit-appearance: none;
+                background-color: #fff;
+                background-image: none;
+                border-radius: 4px;
+                border: 1px solid #dcdfe6;
+                -webkit-box-sizing: border-box;
+                box-sizing: border-box;
+                color: #606266;
+                display: inline-block;
+                font-size: inherit;
+                line-height: 40px;
+                outline: 0;
+                padding: 0 15px;
+                -webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+                transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+            }
+            .paragraphImg{
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                .paragraphImgItem{
+                    width: 89%;
+                    img{
+                        width: 100%;
+                    }
+                }
+            }
         }
     }
 </style>
