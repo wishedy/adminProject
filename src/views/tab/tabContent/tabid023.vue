@@ -124,10 +124,10 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="文章标题" :inline="true" size="medium">
-                        <el-input v-model="formInline.user" placeholder="请输入文章标题" class="paragraphTitle"></el-input>
+                        <el-input v-model="formInline.user" placeholder="请输入文章标题" class="paragraphTitle" disabled="disabled"></el-input>
                     </el-form-item>
                     <el-form-item label="文章副标题" :inline="true" size="medium">
-                        <el-input v-model="formInline.user" placeholder="请输入文章副标题" type="input" class="paragraphTitle"></el-input>
+                        <el-input v-model="formInline.user" placeholder="请输入文章副标题" type="input" class="paragraphTitle"  disabled="disabled"></el-input>
                     </el-form-item>
                 </el-form>
                 <div class="block templatePreview">
@@ -135,27 +135,116 @@
                         <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524054334359&di=8222adebfed9c9f02b8b9ae3c8e9245d&imgtype=0&src=http%3A%2F%2Fpic40.nipic.com%2F20140417%2F18460687_100054352164_2.jpg" alt="" class="templateImage">
                     </el-aside>
                     <el-aside class="templateItem" width="49%">
-                        <div class="block sentionContent">
-                            <el-form :inline="true" class="demo-form-inline paragraphSection"  :label-position="labelPosition" label-width="100px" :model="formLabelAlign">
-                                <el-form-item label="第一段" :inline="true" size="medium" class="rejectAuditInline" style="width: 100%;">
-                                    <textarea class="paragraphContent" name="" id="" cols="30" rows="10"></textarea>
-                                </el-form-item>
-                                <el-form-item label="插图" :inline="true" size="medium" class="rejectAuditInline block paragraphImg" style="width: 100%;">
-                                    <section class="paragraphImgItem" v-for="(item,index) in selectedData.imgList" >
-                                        <img :src="item" alt="">
-                                    </section>
-                                </el-form-item>
-                            </el-form>
-                            <el-form :inline="true" class="demo-form-inline paragraphSection" :label-position="labelPosition" label-width="100px" :model="formLabelAlign">
-                                <el-form-item label="第一段" :inline="true" size="medium" class="rejectAuditInline" style="width: 100%;">
-                                    <textarea class="paragraphContent" name="" id="" cols="30" rows="10"></textarea>
-                                </el-form-item>
-                                <el-form-item label="插图" :inline="true" size="medium" class="rejectAuditInline block paragraphImg" style="width: 100%;">
-                                    <section class="paragraphImgItem" v-for="(item,index) in selectedData.imgList" >
-                                        <img :src="item" alt="">
-                                    </section>
-                                </el-form-item>
-                            </el-form>
+                        <div class="block sectionContent">
+                            <swiper :options="swiperOption" class="sectionSwiperContent">
+                                <swiper-slide>
+                                    <div class="paragraphItem">
+                                        <span class="paragraphItemTitle">文章缩略内容</span>
+                                        <article class="paragraphItemArticle">
+                                            <textarea name=""  cols="30" rows="10" class="paragraphArticleInput"></textarea>
+                                        </article>
+                                    </div>
+                                    <div class="paragraphItem">
+                                        <span class="paragraphItemTitle">文章标题</span>
+                                        <article class="paragraphItemInput">
+                                            <input type="text" class="paragraphTitleInput" placeholder="段落标题"/>
+                                        </article>
+                                    </div>
+                                    <div class="paragraphItem">
+                                        <span class="paragraphItemTitle">文章副标题</span>
+                                        <article class="paragraphItemInput">
+                                            <input type="text" class="paragraphTitleInput" placeholder="段落副标题"/>
+                                        </article>
+                                    </div>
+                                    <div class="paragraphItem">
+                                        <span class="paragraphItemTitle">文章封面</span>
+                                        <article class="paragraphItemImage">
+                                            <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524054334359&di=8222adebfed9c9f02b8b9ae3c8e9245d&imgtype=0&src=http%3A%2F%2Fpic40.nipic.com%2F20140417%2F18460687_100054352164_2.jpg" alt="">
+                                        </article>
+                                    </div>
+                                </swiper-slide>
+                                <swiper-slide>
+                                    <div class="paragraphItem">
+                                        <span class="paragraphItemTitle">第一段文本</span>
+                                        <article class="paragraphItemArticle">
+                                            <textarea name=""  cols="30" rows="10" class="paragraphArticleInput"></textarea>
+                                        </article>
+                                    </div>
+                                    <div class="paragraphItem">
+                                        <span class="paragraphItemTitle">标题</span>
+                                        <article class="paragraphItemInput">
+                                            <input type="text" class="paragraphTitleInput" placeholder="段落标题"/>
+                                        </article>
+                                    </div>
+                                    <div class="paragraphItem">
+                                        <span class="paragraphItemTitle">副标题</span>
+                                        <article class="paragraphItemInput">
+                                            <input type="text" class="paragraphTitleInput" placeholder="段落副标题"/>
+                                        </article>
+                                    </div>
+                                    <div class="paragraphItem">
+                                        <span class="paragraphItemTitle">插图</span>
+                                        <article class="paragraphItemImage">
+                                            <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524054334359&di=8222adebfed9c9f02b8b9ae3c8e9245d&imgtype=0&src=http%3A%2F%2Fpic40.nipic.com%2F20140417%2F18460687_100054352164_2.jpg" alt="">
+                                        </article>
+                                    </div>
+                                </swiper-slide>
+                                <swiper-slide>
+                                    <div class="paragraphItem">
+                                        <span class="paragraphItemTitle">第一段文本</span>
+                                        <article class="paragraphItemArticle">
+                                            <textarea name=""  cols="30" rows="10" class="paragraphArticleInput"></textarea>
+                                        </article>
+                                    </div>
+                                    <div class="paragraphItem">
+                                        <span class="paragraphItemTitle">标题</span>
+                                        <article class="paragraphItemInput">
+                                            <input type="text" class="paragraphTitleInput" placeholder="段落标题"/>
+                                        </article>
+                                    </div>
+                                    <div class="paragraphItem">
+                                        <span class="paragraphItemTitle">副标题</span>
+                                        <article class="paragraphItemInput">
+                                            <input type="text" class="paragraphTitleInput" placeholder="段落副标题"/>
+                                        </article>
+                                    </div>
+                                    <div class="paragraphItem">
+                                        <span class="paragraphItemTitle">插图</span>
+                                        <article class="paragraphItemImage">
+                                            <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524054334359&di=8222adebfed9c9f02b8b9ae3c8e9245d&imgtype=0&src=http%3A%2F%2Fpic40.nipic.com%2F20140417%2F18460687_100054352164_2.jpg" alt="">
+                                        </article>
+                                    </div>
+                                </swiper-slide>
+                                <swiper-slide>
+                                    <div class="paragraphItem">
+                                        <span class="paragraphItemTitle">第一段文本</span>
+                                        <article class="paragraphItemArticle">
+                                            <textarea name=""  cols="30" rows="10" class="paragraphArticleInput"></textarea>
+                                        </article>
+                                    </div>
+                                    <div class="paragraphItem">
+                                        <span class="paragraphItemTitle">标题</span>
+                                        <article class="paragraphItemInput">
+                                            <input type="text" class="paragraphTitleInput" placeholder="段落标题"/>
+                                        </article>
+                                    </div>
+                                    <div class="paragraphItem">
+                                        <span class="paragraphItemTitle">副标题</span>
+                                        <article class="paragraphItemInput">
+                                            <input type="text" class="paragraphTitleInput" placeholder="段落副标题"/>
+                                        </article>
+                                    </div>
+                                    <div class="paragraphItem">
+                                        <span class="paragraphItemTitle">插图</span>
+                                        <article class="paragraphItemImage">
+                                            <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524054334359&di=8222adebfed9c9f02b8b9ae3c8e9245d&imgtype=0&src=http%3A%2F%2Fpic40.nipic.com%2F20140417%2F18460687_100054352164_2.jpg" alt="">
+                                        </article>
+                                    </div>
+                                </swiper-slide>
+                                <div class="swiper-pagination" slot="pagination"></div>
+                                <div class="swiper-button-prev" slot="button-prev"></div>
+                                <div class="swiper-button-next" slot="button-next"></div>
+                            </swiper>
                         </div>
                     </el-aside>
                 </div>
@@ -176,6 +265,17 @@
                     user: '',
                     region:''
                 },
+                swiperOption: {
+                    spaceBetween: 30,
+                    pagination: {
+                        el: '.swiper-pagination',
+                        clickable: true
+                    },
+                    navigation: {
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev'
+                    }
+                },
                 labelPosition: 'left',
                 formLabelAlign: {
                     name: '',
@@ -191,7 +291,13 @@
                 tableData:userData.data.dataList
             }
         },
+        mounted() {
+
+        },
         methods:{
+            callback(){
+                console.log('执行');
+            },
             imgInit(e){
               console.log(e);
             },
@@ -203,7 +309,6 @@
                     if(type===0){
                         t.innerVisible = true;
                     }else if(type===1){
-
                         t.innerVisible = false;
                         t.$message({
                             message: t.selectedData.articleTitle+'文章已被无效',
@@ -261,29 +366,6 @@
         height: 399px;
         width: 100%;
     }
-    .feedBackImgList{
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        height: 399px;
-        flex-wrap: wrap;
-        .feedBackAreaImgItem{
-            width: 191.85px;
-            height: 132.9px;
-            img{
-                width: 100%;
-                height: 100%;
-            }
-        }
-    }
-    .rejectAuditInline,.feedBackArea{
-        width: 100%;
-        margin: 0 auto;
-        padding:10px 0;
-    }
-    .dynamicTitle{
-        font-size: 24px;
-    }
     .articleTemplateContent{
         width: 100%;
     }
@@ -293,52 +375,37 @@
         text-align: center;
         color: #333 !important;
     }
-    .templatePreview{
+    .paragraphItem{
         width: 100%;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
         height: auto;
-        .templateItem{
-            width: 49%;
-            overflow-x:auto ;
-            height: 820px;
-            .block{
-                padding: 0;
-            }
-            .sentionContent{
-                width: auto;
-                white-space: nowrap;
-                /*display: inline;*/
-                zoom: 1;
-                &::after {
-                    content: ".";
-                    clear: both;
-                    display: block;
-                    overflow: hidden;
-                    font-size: 0;
-                    height: 0;
-                }
-            }
-            .paragraphSection{
-                width: 485px;
-                display: inline-block;
-                &:nth-child(n+2){
-                    padding: 0 40px;
-                }
-                height: 800px;
-            }
-            .templateImage{
-                width: 100%;
-            }
-            .paragraphTitle{
-                width: 300px;
-            }
-            .paragraphContent{
-                width: 300px;
-                height: 160px;
+        .paragraphItemTitle{
+            width: 100%;
+            font-size: 22px;
+            padding: 20px 0 ;
+            display: block;
+        }
+        .paragraphItemArticle{
+            width: 100%;
+            height: 400px;
+            display: block;
+            .paragraphArticleInput{
+                width: 90%;
+                height: 100%;
+                margin: 0 auto;
                 resize: none;
+                display: block;
+                font-size: 22px;
                 overflow: auto;
+            }
+        }
+        .paragraphItemInput{
+            width: 100%;
+            height: 32px;
+            .paragraphTitleInput{
+                width: 90%;
+                margin: 0 auto;
+                font-size: 22px;
+                line-height: 32px;
                 -webkit-appearance: none;
                 background-color: #fff;
                 background-image: none;
@@ -347,26 +414,50 @@
                 -webkit-box-sizing: border-box;
                 box-sizing: border-box;
                 color: #606266;
-                display: inline-block;
-                font-size: inherit;
-                line-height: 40px;
                 outline: 0;
                 padding: 0 15px;
+                display: block;
                 -webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
                 transition: border-color .2s cubic-bezier(.645,.045,.355,1);
             }
-            .paragraphImg{
-                display: flex;
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: space-between;
-                .paragraphImgItem{
-                    width: 89%;
-                    img{
-                        width: 100%;
-                    }
+        }
+        .paragraphItemImage{
+            width: 90%;
+            display: block;
+            margin: 0 auto;
+            height:300px;
+            img{
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+    .templatePreview{
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        height: auto;
+        .templateItem{
+            width: 49%;
+            .sectionContent{
+                height:100%;
+                width: 100%;
+                padding: 0;
+                &::after {
+                    content: ".";
+                    clear: both;
+                    display: block;
+                    overflow: hidden;
+                    font-size: 0;
+                    height: 0;
+                }
+                .sectionSwiperContent{
+                    height:100%;
+                    width: 100%;
                 }
             }
+
         }
     }
 </style>
