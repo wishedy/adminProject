@@ -118,8 +118,18 @@
                         </div>
                         <div class="paragraphItem">
                             <span class="paragraphItemTitle">话题封面</span>
-                            <article class="paragraphItemImage">
-                                <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524054334359&di=8222adebfed9c9f02b8b9ae3c8e9245d&imgtype=0&src=http%3A%2F%2Fpic40.nipic.com%2F20140417%2F18460687_100054352164_2.jpg" alt="">
+                            <!--paragraphItemNothing paragraphItemHave无图片-->
+                            <article class="paragraphItemImage paragraphItemHave">
+                                <section class="paragraphItemContent">
+                                    <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524054334359&di=8222adebfed9c9f02b8b9ae3c8e9245d&imgtype=0&src=http%3A%2F%2Fpic40.nipic.com%2F20140417%2F18460687_100054352164_2.jpg" alt="">
+                                    <i class="close el-icon-close"></i>
+                                </section>
+
+                                <section class="paragraphItemEdit">
+                                    <i class="el-icon-upload upload">
+                                    </i>
+                                    <i class="uploadDes">上传图片</i>
+                                </section>
                             </article>
                         </div>
                         <div class="paragraphItem">
@@ -304,10 +314,74 @@
             display: block;
             margin: 0 auto;
             height:300px;
+            position: relative;
+            &.paragraphItemNothing{
+                z-index: 1;
+            }
+            .paragraphItemEdit{
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                top:0;
+                left: 0;
+                bottom:0;
+                right: 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                border: 1px dashed #333;
+                .upload{
+                    width: 160px;
+                    height: 160px;
+                    font-size: 82px;
+                    line-height: 160px;
+                    text-align: center;
+                    color: #3598DB;
+                }
+                .uploadDes{
+                    font-size: 22px;
+                    font-weight: normal;
+                }
+            }
+            &.paragraphItemHave{
+                .paragraphItemContent{
+                    width: 100%;
+                    height: 100%;
+                    position: absolute;
+                    top:0;
+                    left: 0;
+                    bottom:0;
+                    right: 0;
+                    z-index: 2;
+                    border: 1px solid #ffffff;
+                    .close{
+                        opacity: 0;
+                    }
+                    &:hover{
+                        .close{
+                            position: absolute;
+                            top:0;
+                            opacity: 1;
+                            right: 0;
+                            width: 30px;
+                            height: 30px;
+                            line-height: 30px;
+                            text-align: center;
+                            font-size: 22px;
+                            color:#fff;
+                            background: rgba(0,0,0,.5);
+                            transition: opacity .3s ease;
+                        }
+                    }
+                }
+
+            }
             img{
                 width: 100%;
                 height: 100%;
             }
+
         }
     }
     .templatePreview{

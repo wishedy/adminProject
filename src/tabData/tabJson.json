@@ -105,15 +105,21 @@
             "tabList":[
                 {
                     "index":"5-1",
-                    "title":"修改密码",
+                    "title":"权限",
                     "icon":"el-icon-ump-password",
                     "routerLink":"052"
                 },
                 {
                     "index":"5-2",
+                    "title":"修改密码",
+                    "icon":"el-icon-ump-password",
+                    "routerLink":"053"
+                },
+                {
+                    "index":"5-3",
                     "title":"退出登录",
                     "icon":"el-icon-ump-exittoapp",
-                    "routerLink":"052",
+                    "routerLink":"054",
                     "eventFn":"outLoginOne"
                 }
             ]

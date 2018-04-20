@@ -20,52 +20,32 @@
                     @current-change="handleCurrentChange"
                     style="width: 100%">
                     <el-table-column
-                        prop="dynamicId"
-                        label="文章ID">
+                        prop="recommendId"
+                        label="推荐ID">
                     </el-table-column>
                     <el-table-column
-                        prop="authorId"
-                        label="作者ID">
+                        prop="resourceId"
+                        label="资源ID">
                     </el-table-column>
                     <el-table-column
-                        prop="author"
-                        label="作者">
+                        prop="resourceType"
+                        label="资源类型">
                     </el-table-column>
                     <el-table-column
-                        prop="articleTitle"
-                        label="文章标题">
+                        prop="recommendPosition"
+                        label="推荐位置">
                     </el-table-column>
                     <el-table-column
-                        prop="linkUrl"
-                        label="文章链接">
-                    </el-table-column>
-                    <el-table-column
-                        prop="templateId"
-                        label="模板ID">
-                    </el-table-column>
-                    <el-table-column
-                        prop="shareNum"
-                        label="转发">
-                    </el-table-column>
-                    <el-table-column
-                        prop="collectNum"
-                        label="收藏">
-                    </el-table-column>
-                    <el-table-column
-                        prop="browseNum"
-                        label="浏览">
-                    </el-table-column>
-                    <el-table-column
-                        prop="praiseNum"
-                        label="点赞">
-                    </el-table-column>
-                    <el-table-column
-                        prop="commentNum"
-                        label="评论">
+                        prop="recommendOrder"
+                        label="推荐优先级">
                     </el-table-column>
                     <el-table-column
                         prop="valid"
                         label="状态">
+                    </el-table-column>
+                    <el-table-column
+                        prop="updateTime"
+                        label="更新时间">
                     </el-table-column>
                     <el-table-column
                         prop="registerTime"
@@ -87,11 +67,11 @@
                 </div>
                 <div class="block adminAuditControl">
                     <el-form :inline="true" class="demo-form-inline">
-                        <el-form-item>
+                        <!--<el-form-item>
                             <el-button  type="primary" @click.native="editArticle(0)">编辑</el-button>
-                        </el-form-item>
+                        </el-form-item>-->
                         <el-form-item>
-                            <el-button @click.native="pushContent(0)" type="primary">推送</el-button>
+                            <el-button @click.native="pushContent(0)" type="primary">编辑</el-button>
                         </el-form-item>
                         <el-form-item>
                             <el-button @click.native="detailInfo(0)" type="danger">无效</el-button>
@@ -315,7 +295,7 @@
     </section>
 </template>
 <script>
-    import userData from '../../../virtualData/dynamicData';
+    import userData from '../../../virtualData/recommendData';
     export default {
         data() {
             return {
@@ -395,7 +375,7 @@
             pushContent(type){
                 let t = this;
                 if(!t.selectedOne){
-                    t.$message.error('请选择您要推送的文章!');
+                    t.$message.error('请选择您要编辑的推送!');
                 }else{
                     if(type===0){
                         t.pushOnOff = true;
