@@ -1,7 +1,7 @@
 <template>
     <FullCalendar :events="fcEvents" locale="en"></FullCalendar>
 </template>
-<style lang="scss">
+<style lang="scss" scoped>
     .today{
         background: rgba(140,20,151,.5);
         .day-number{
