@@ -7,6 +7,7 @@ const data = Mock.mock({
             'dynamicContent':"@ctitle(288)",
             'articleTitle':"@ctitle(12)",
             'templateId':'@datetime(T)',
+            'updateTime':'@datetime()',
             'dynamicType|1':['普通动态','脱单动态','话题动态'],
             'author': '@cname',
             'imgList|2':["@image('383x265', '#894FC4')"],

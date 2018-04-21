@@ -7,7 +7,7 @@ const data = Mock.mock({
             'jobPhoto':"@image('383x265', '#894FC4', '#FFF', 'png','demo')",
             'jobNum':"@datetime(T)",
             'idNum':/^\d{17}(\d|x)$/,
-            'idState|1':['通过','无效'],
+            'idState|1':['新建','更改','通过','无效'],
             'studyNum':"@datetime(T)",
             'otherNum':"@datetime(T)",
             'studyPhoto':"@image('383x265', '#894FC4', '#FFF', 'png','demo')",

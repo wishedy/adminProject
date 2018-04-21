@@ -10,6 +10,7 @@ import Tabid23 from './views/tab/tabContent/tabid023.vue';
 import Tabid24 from './views/tab/tabContent/tabid024.vue';
 import Tabid25 from './views/tab/tabContent/tabid025.vue';
 import Tabid32 from './views/tab/tabContent/tabid032.vue';
+import Tabid52 from './views/tab/tabContent/tabid052.vue';
 export default {
     linkActiveClass: 'active',
     routes: [
@@ -64,6 +65,10 @@ export default {
         {
             path:"/025",
             component: Tabid25
+        },
+        {
+            path:"/052",
+            component: Tabid52
         }
     ]
 }

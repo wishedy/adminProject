@@ -2,11 +2,53 @@
     <section class="adminContentContainer">
         <section class="adminContentInner">
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
-                <el-form-item label="会员ID">
-                    <el-input v-model="formInline.user" placeholder="会员ID"></el-input>
+                <el-form-item label="推荐ID">
+                    <el-input v-model="formInline.user" placeholder="推荐ID"></el-input>
                 </el-form-item>
-                <el-form-item label="姓名">
-                    <el-input v-model="formInline.user" placeholder="请输入姓名"></el-input>
+                <el-form-item label="资源ID">
+                    <el-input v-model="formInline.user" placeholder="资源ID"></el-input>
+                </el-form-item>
+                <el-form-item label="资源类型" :inline="true">
+                    <el-select v-model="formInline.region" placeholder="资源类型">
+                        <el-option label="文章" value="0"></el-option>
+                        <el-option label="话题" value="1"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="推荐类型" :inline="true">
+                    <el-select v-model="formInline.region" placeholder="推荐类型">
+                        <el-option label="个性化推送" value="0"></el-option>
+                        <el-option label="全站推送" value="1"></el-option>
+                        <el-option label="单独推送" value="2"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="推荐位置" :inline="true">
+                    <el-select v-model="formInline.region" placeholder="推荐位置">
+                        <el-option label="遇见栏目" value="0"></el-option>
+                        <el-option label="消息栏目" value="1"></el-option>
+                        <el-option label="首页全部" value="2"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="推荐优先级" :inline="true">
+                    <el-select v-model="formInline.region" placeholder="推荐优先级">
+                        <el-option label="按序推送" value="0"></el-option>
+                        <el-option label="优先推送" value="1"></el-option>
+                        <el-option label="延后推送" value="2"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="时间">
+                    <el-date-picker
+                        v-model="value2"
+                        align="right"
+                        type="date"
+                        placeholder="选择日期"
+                        :picker-options="pickerOptions1">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="状态" :inline="true">
+                    <el-select v-model="formInline.region" placeholder="模板状态">
+                        <el-option label="有效" value="0"></el-option>
+                        <el-option label="无效" value="1"></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -30,6 +72,10 @@
                     <el-table-column
                         prop="resourceType"
                         label="资源类型">
+                    </el-table-column>
+                    <el-table-column
+                        prop="recommendType"
+                        label="推荐类型">
                     </el-table-column>
                     <el-table-column
                         prop="recommendPosition"
@@ -74,6 +120,9 @@
                             <el-button @click.native="pushContent(0)" type="primary">编辑</el-button>
                         </el-form-item>
                         <el-form-item>
+                            <el-button @click.native="activate(0)" type="success">激活</el-button>
+                        </el-form-item>
+                        <el-form-item>
                             <el-button @click.native="detailInfo(0)" type="danger">无效</el-button>
                         </el-form-item>
                     </el-form>
@@ -89,6 +138,17 @@
             <span slot="footer" class="dialog-footer">
                 <el-button @click="innerVisible = false">取 消</el-button>
                 <el-button type="primary" @click="detailInfo(1)">确 定</el-button>
+            </span>
+        </el-dialog>
+        <el-dialog
+            width="30%"
+            title="提示"
+            :visible.sync="activateOnOff"
+            append-to-body>
+            <span>确定要激活这条动态？</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="activateOnOff = false">取 消</el-button>
+                <el-button type="primary" @click="activate(1)">确 定</el-button>
             </span>
         </el-dialog>
         <el-dialog
@@ -321,6 +381,7 @@
                     type: ''
                 },
                 pushOnOff:false,
+                activateOnOff:false,
                 articleDialog:false,
                 innerVisible:false,
                 centerDialogVisible:false,
@@ -339,6 +400,22 @@
             },
             imgInit(e){
               console.log(e);
+            },
+            activate(type){
+                let t = this;
+                if(!t.selectedOne){
+                    t.$message.error('请选择您要激活的文章!');
+                }else{
+                    if(type===0){
+                        t.activateOnOff = true;
+                    }else if(type===1){
+                        t.activateOnOff = false;
+                        t.$message({
+                            message: t.selectedData.articleTitle+'文章已被激活',
+                            type: 'success'
+                        });
+                    }
+                }
             },
             detailInfo(type){
                 let t = this;

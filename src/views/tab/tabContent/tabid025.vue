@@ -2,11 +2,39 @@
     <section class="adminContentContainer">
         <section class="adminContentInner">
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
-                <el-form-item label="会员ID">
-                    <el-input v-model="formInline.user" placeholder="会员ID"></el-input>
+                <el-form-item label="话题ID">
+                    <el-input v-model="formInline.user" placeholder="话题ID"></el-input>
+                </el-form-item>
+                <el-form-item label="作者ID">
+                    <el-input v-model="formInline.user" placeholder="作者ID"></el-input>
                 </el-form-item>
                 <el-form-item label="姓名">
                     <el-input v-model="formInline.user" placeholder="请输入姓名"></el-input>
+                </el-form-item>
+                <el-form-item label="话题标题">
+                    <el-input v-model="formInline.user" placeholder="话题标题"></el-input>
+                </el-form-item>
+                <el-form-item label="话题类型">
+                    <el-select v-model="formInline.region" placeholder="话题类型">
+                        <el-option label="脱单" value="0"></el-option>
+                        <el-option label="话题" value="1"></el-option>
+                        <el-option label="普通" value="2"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="话题状态">
+                    <el-select v-model="formInline.region" placeholder="话题状态">
+                        <el-option label="有效" value="0"></el-option>
+                        <el-option label="无效" value="1"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="时间">
+                    <el-date-picker
+                        v-model="value2"
+                        align="right"
+                        type="date"
+                        placeholder="选择日期"
+                        :picker-options="pickerOptions1">
+                    </el-date-picker>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -60,6 +88,10 @@
                         label="状态">
                     </el-table-column>
                     <el-table-column
+                        prop="updateTime"
+                        label="更新时间">
+                    </el-table-column>
+                    <el-table-column
                         prop="registerTime"
                         label="创建时间">
                     </el-table-column>
@@ -83,6 +115,12 @@
                             <el-button  type="primary" @click.native="editArticle(0)">编辑</el-button>
                         </el-form-item>
                         <el-form-item>
+                            <el-button @click.native="pushContent(0)" type="primary">推送</el-button>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button @click.native="activate(0)" type="success">激活</el-button>
+                        </el-form-item>
+                        <el-form-item>
                             <el-button @click.native="detailInfo(0)" type="danger">无效</el-button>
                         </el-form-item>
                     </el-form>
@@ -94,10 +132,72 @@
             title="提示"
             :visible.sync="innerVisible"
             append-to-body>
-            <span>确定要无效这条动态？</span>
+            <span>确定要无效这条话题？</span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="innerVisible = false">取 消</el-button>
                 <el-button type="primary" @click="detailInfo(1)">确 定</el-button>
+            </span>
+        </el-dialog>
+        <el-dialog
+            width="50%"
+            :title="selectedData.articleTitle"
+            :visible.sync="pushOnOff"
+            center
+            append-to-body>
+            <el-form :inline="true" class="demo-form-inline">
+                <el-form-item label="推送类型" :inline="true">
+                    <el-select v-model="formInline.region" placeholder="推送类型">
+                        <el-option label="个性化推送" value="0"></el-option>
+                        <el-option label="全站推送" value="1"></el-option>
+                        <el-option label="单独推送" value="2"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="推送位置" :inline="true">
+                    <el-select v-model="formInline.region" placeholder="推送位置">
+                        <el-option label="遇见栏目" value="0"></el-option>
+                        <el-option label="消息栏目" value="1"></el-option>
+                        <el-option label="首页全部" value="2"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="推送优先级" :inline="true">
+                    <el-select v-model="formInline.region" placeholder="推送位置">
+                        <el-option label="按序推送" value="0"></el-option>
+                        <el-option label="优先推送" value="1"></el-option>
+                        <el-option label="延后推送" value="2"></el-option>
+                    </el-select>
+                </el-form-item>
+            </el-form>
+            <el-form :inline="true" class="demo-form-inline">
+                <el-form-item label="推送ID" :inline="true">
+                    <el-input v-model="formInline.user" placeholder="请输入推送ID"></el-input>
+                </el-form-item>
+            </el-form>
+            <el-form :inline="true" class="demo-form-inline">
+                <el-form-item label="个性化推送条件" :inline="true">
+                    <el-button class="tag">个性化标签</el-button>
+                    <el-button class="tag">个性化标签</el-button>
+                    <el-button class="tag">个性化标签</el-button>
+                    <el-button class="tag">个性化标签</el-button>
+                    <el-button class="tag">个性化标签</el-button>
+                    <el-button class="tag">个性化标签</el-button>
+                    <el-button class="tag">个性化标签</el-button>
+                    <el-button class="tag">个性化标签</el-button>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="pushOnOff = false">取 消</el-button>
+                <el-button type="primary" @click="pushContent(1)">确 定</el-button>
+            </span>
+        </el-dialog>
+        <el-dialog
+            width="30%"
+            title="提示"
+            :visible.sync="activateOnOff"
+            append-to-body>
+            <span>确定要激活这条话题？</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="activateOnOff = false">取 消</el-button>
+                <el-button type="primary" @click="activate(1)">确 定</el-button>
             </span>
         </el-dialog>
         <el-dialog
@@ -157,6 +257,31 @@
                     user: '',
                     region:''
                 },
+                pickerOptions1: {
+                    disabledDate(time) {
+                        return time.getTime() > Date.now();
+                    },
+                    shortcuts: [{
+                        text: '今天',
+                        onClick(picker) {
+                            picker.$emit('pick', new Date());
+                        }
+                    }, {
+                        text: '昨天',
+                        onClick(picker) {
+                            const date = new Date();
+                            date.setTime(date.getTime() - 3600 * 1000 * 24);
+                            picker.$emit('pick', date);
+                        }
+                    }, {
+                        text: '一周前',
+                        onClick(picker) {
+                            const date = new Date();
+                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+                            picker.$emit('pick', date);
+                        }
+                    }]
+                },
                 swiperOption: {
                     spaceBetween: 30,
                     pagination: {
@@ -174,6 +299,9 @@
                     region: '',
                     type: ''
                 },
+                value2:"",
+                pushOnOff:false,
+                activateOnOff:false,
                 articleDialog:false,
                 innerVisible:false,
                 centerDialogVisible:false,
@@ -204,6 +332,41 @@
                         t.innerVisible = false;
                         t.$message({
                             message: t.selectedData.articleTitle+'话题已被无效',
+                            type: 'success'
+                        });
+                    }
+
+                }
+            },
+            pushContent(type){
+                let t = this;
+                if(!t.selectedOne){
+                    t.$message.error('请选择您要推送的文章!');
+                }else{
+                    if(type===0){
+                        t.pushOnOff = true;
+                    }else if(type===1){
+                        t.pushOnOff = false;
+                        t.$message({
+                            message: t.selectedData.articleTitle+'文章已推送',
+                            type: 'success'
+                        });
+                    }
+
+                }
+                console.log('推送');
+            },
+            activate(type){
+                let t = this;
+                if(!t.selectedOne){
+                    t.$message.error('请选择您要激活的话题!');
+                }else{
+                    if(type===0){
+                        t.activateOnOff = true;
+                    }else if(type===1){
+                        t.activateOnOff = false;
+                        t.$message({
+                            message: t.selectedData.articleTitle+'话题已被激活',
                             type: 'success'
                         });
                     }
@@ -250,6 +413,9 @@
     @import "../../../styleComponent/ContentInner";
     .adminContentInner{
         @include ContentInner()
+    }
+    .block{
+        padding: 20px 0 ;
     }
     .feedBackImgContainer{
         height: 399px;

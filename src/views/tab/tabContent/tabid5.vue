@@ -2,11 +2,29 @@
     <section class="adminContentContainer">
         <section class="adminContentInner">
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
+                <el-form-item label="举报ID">
+                    <el-input v-model="formInline.user" placeholder="举报ID"></el-input>
+                </el-form-item>
                 <el-form-item label="会员ID">
                     <el-input v-model="formInline.user" placeholder="会员ID"></el-input>
                 </el-form-item>
                 <el-form-item label="姓名">
                     <el-input v-model="formInline.user" placeholder="请输入姓名"></el-input>
+                </el-form-item>
+                <el-form-item label="举报状态">
+                    <el-select v-model="formInline.region" placeholder="举报状态">
+                        <el-option label="新建" value="0"></el-option>
+                        <el-option label="已回复" value="1"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="时间">
+                    <el-date-picker
+                        v-model="value2"
+                        align="right"
+                        type="date"
+                        placeholder="选择日期"
+                        :picker-options="pickerOptions1">
+                    </el-date-picker>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -64,7 +82,7 @@
                 <div class="block adminAuditControl">
                     <el-form :inline="true" class="demo-form-inline">
                         <el-form-item>
-                            <el-button @click.native="detailInfo">详情</el-button>
+                            <el-button @click.native="detailInfo" type="primary">回复</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -73,7 +91,7 @@
         <el-dialog
             :title="selectedData.name+'的举报信息'"
             :visible.sync="centerDialogVisible"
-            width="35%"
+            width="65%"
             center>
             <div class="block">
                 <p>
@@ -110,6 +128,32 @@
                     user: '',
                     region:''
                 },
+                pickerOptions1: {
+                    disabledDate(time) {
+                        return time.getTime() > Date.now();
+                    },
+                    shortcuts: [{
+                        text: '今天',
+                        onClick(picker) {
+                            picker.$emit('pick', new Date());
+                        }
+                    }, {
+                        text: '昨天',
+                        onClick(picker) {
+                            const date = new Date();
+                            date.setTime(date.getTime() - 3600 * 1000 * 24);
+                            picker.$emit('pick', date);
+                        }
+                    }, {
+                        text: '一周前',
+                        onClick(picker) {
+                            const date = new Date();
+                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+                            picker.$emit('pick', date);
+                        }
+                    }]
+                },
+                value2:"",
                 rejectAuditReason:"",
                 selectedData:{},
                 centerDialogVisible:false,
@@ -134,7 +178,7 @@
             detailInfo(){
                 let t = this;
                 if(!t.selectedOne){
-                    t.$message.error('请选择您要变更的用户!');
+                    t.$message.error('请选择您要回复的用户!');
                 }else{
                     t.centerDialogVisible = true;
                 }

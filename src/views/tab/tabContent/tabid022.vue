@@ -24,6 +24,7 @@
                         <el-option label="无效" value="1"></el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="时间">
                 <el-date-picker
                     v-model="value2"
                     align="right"
@@ -31,6 +32,7 @@
                     placeholder="选择日期"
                     :picker-options="pickerOptions1">
                 </el-date-picker>
+                </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit">查询</el-button>
                 </el-form-item>
@@ -115,24 +117,73 @@
             width="30%"
             title="提示"
             :visible.sync="isValid"
-            center
             append-to-body>
             <el-main>确定要激活这条动态？</el-main>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="isValid = false">取消</el-button>
-                <el-button type="success" @click="isValidDynamic(1)">有效</el-button>
+                <el-button type="primary" @click="isValidDynamic(1)">有效</el-button>
                 </span>
+        </el-dialog>
+        <el-dialog
+            width="50%"
+            :title="selectedData.articleTitle"
+            :visible.sync="pushOnOff"
+            center
+            append-to-body>
+            <el-form :inline="true" class="demo-form-inline">
+                <el-form-item label="推送类型" :inline="true">
+                    <el-select v-model="formInline.region" placeholder="推送类型">
+                        <el-option label="个性化推送" value="0"></el-option>
+                        <el-option label="全站推送" value="1"></el-option>
+                        <el-option label="单独推送" value="2"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="推送位置" :inline="true">
+                    <el-select v-model="formInline.region" placeholder="推送位置">
+                        <el-option label="遇见栏目" value="0"></el-option>
+                        <el-option label="消息栏目" value="1"></el-option>
+                        <el-option label="首页全部" value="2"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="推送优先级" :inline="true">
+                    <el-select v-model="formInline.region" placeholder="推送位置">
+                        <el-option label="按序推送" value="0"></el-option>
+                        <el-option label="优先推送" value="1"></el-option>
+                        <el-option label="延后推送" value="2"></el-option>
+                    </el-select>
+                </el-form-item>
+            </el-form>
+            <el-form :inline="true" class="demo-form-inline">
+                <el-form-item label="推送ID" :inline="true">
+                    <el-input v-model="formInline.user" placeholder="请输入推送ID"></el-input>
+                </el-form-item>
+            </el-form>
+            <el-form :inline="true" class="demo-form-inline">
+                <el-form-item label="个性化推送条件" :inline="true">
+                    <el-button class="tag">个性化标签</el-button>
+                    <el-button class="tag">个性化标签</el-button>
+                    <el-button class="tag">个性化标签</el-button>
+                    <el-button class="tag">个性化标签</el-button>
+                    <el-button class="tag">个性化标签</el-button>
+                    <el-button class="tag">个性化标签</el-button>
+                    <el-button class="tag">个性化标签</el-button>
+                    <el-button class="tag">个性化标签</el-button>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="pushOnOff = false">取 消</el-button>
+                <el-button type="primary" @click="pushContent(1)">确 定</el-button>
+            </span>
         </el-dialog>
         <el-dialog
             width="30%"
             title="提示"
             :visible.sync="isNotValid"
-            center
             append-to-body>
             <el-main>确定要无效这条动态？</el-main>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="isNotValid = false">取消</el-button>
-                <el-button type="danger" @click="isNotValidDynamic(1)">无效</el-button>
+                <el-button type="primary" @click="isNotValidDynamic(1)">无效</el-button>
                 </span>
         </el-dialog>
         <el-dialog

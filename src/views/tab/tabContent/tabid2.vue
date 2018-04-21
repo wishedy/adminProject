@@ -8,6 +8,49 @@
                 <el-form-item label="姓名">
                     <el-input v-model="formInline.user" placeholder="请输入姓名"></el-input>
                 </el-form-item>
+                <el-form-item label="性别">
+                    <el-select v-model="formInline.region" placeholder="性别">
+                        <el-option label="男" value="0"></el-option>
+                        <el-option label="女" value="1"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="年龄">
+                    <el-input v-model="formInline.user" placeholder="请输入年龄"></el-input>
+                </el-form-item>
+                <el-form-item label="用户状态">
+                    <el-select v-model="formInline.region" placeholder="用户状态">
+                        <el-option label="游客" value="0"></el-option>
+                        <el-option label="已注册" value="1"></el-option>
+                        <el-option label="已完善信息" value="2"></el-option>
+                        <el-option label="已审核" value="2"></el-option>
+                        <el-option label="正在审核" value="2"></el-option>
+                        <el-option label="更改信息" value="2"></el-option>
+                        <el-option label="拉黑" value="2"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="邮件">
+                    <el-input v-model="formInline.user" placeholder="邮件"></el-input>
+                </el-form-item>
+                <el-form-item label="手机号">
+                    <el-input v-model="formInline.user" placeholder="手机号"></el-input>
+                </el-form-item>
+                <el-form-item label="审核时间">
+                    <el-date-picker
+                        v-model="value2"
+                        align="right"
+                        type="date"
+                        placeholder="审核时间"
+                        :picker-options="pickerOptions1">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="审核状态">
+                    <el-select v-model="formInline.region" placeholder="审核状态">
+                        <el-option label="新建" value="0"></el-option>
+                        <el-option label="更改" value="1"></el-option>
+                        <el-option label="通过" value="2"></el-option>
+                        <el-option label="驳回" value="3"></el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit">查询</el-button>
                 </el-form-item>
@@ -50,6 +93,14 @@
                     <el-table-column
                         prop="address"
                         label="所在地">
+                    </el-table-column>
+                    <el-table-column
+                        prop="auditTime"
+                        label="更新时间">
+                    </el-table-column>
+                    <el-table-column
+                        prop="auditTime"
+                        label="审核时间">
                     </el-table-column>
                     <el-table-column
                         prop="registerTime"

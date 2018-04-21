@@ -2,11 +2,36 @@
     <section class="adminContentContainer">
         <section class="adminContentInner">
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
+                <el-form-item label="拉黑ID">
+                    <el-input v-model="formInline.user" placeholder="拉黑ID"></el-input>
+                </el-form-item>
                 <el-form-item label="会员ID">
                     <el-input v-model="formInline.user" placeholder="会员ID"></el-input>
                 </el-form-item>
                 <el-form-item label="姓名">
                     <el-input v-model="formInline.user" placeholder="请输入姓名"></el-input>
+                </el-form-item>
+                <el-form-item label="拉黑状态">
+                    <el-select v-model="formInline.region" placeholder="状态">
+                        <el-option label="拉黑" value="0"></el-option>
+                        <el-option label="激活" value="1"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="拉黑原因">
+                    <el-select v-model="formInline.region" placeholder="拉黑原因">
+                        <el-option label="原因一" value="0"></el-option>
+                        <el-option label="原因二" value="1"></el-option>
+                        <el-option label="原因三" value="2"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="时间">
+                    <el-date-picker
+                        v-model="value2"
+                        align="right"
+                        type="date"
+                        placeholder="选择日期"
+                        :picker-options="pickerOptions1">
+                    </el-date-picker>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -21,7 +46,7 @@
                     style="width: 100%">
                     <el-table-column
                         prop="changeId"
-                        label="举报ID">
+                        label="拉黑ID">
                     </el-table-column>
                     <el-table-column
                         prop="id"
@@ -32,20 +57,24 @@
                         label="姓名">
                     </el-table-column>
                     <el-table-column
-                        prop="feedBackcontent"
-                        label="举报内容">
+                        prop="blackType"
+                        label="拉黑原因">
                     </el-table-column>
                     <el-table-column
-                        prop="auditState"
+                        prop="blackState"
                         label="状态">
                     </el-table-column>
                     <el-table-column
+                        prop="updateTime"
+                        label="更新时间">
+                    </el-table-column>
+                    <el-table-column
                         prop="registerTime"
-                        label="举报时间">
+                        label="拉黑时间">
                     </el-table-column>
                     <el-table-column
                         prop="auditer"
-                        label="举报人">
+                        label="拉黑人">
                     </el-table-column>
                 </el-table>
                 <div class="block adminPage">
@@ -64,19 +93,30 @@
                 <div class="block adminAuditControl">
                     <el-form :inline="true" class="demo-form-inline">
                         <el-form-item>
-                            <el-button @click.native="detailInfo">详情</el-button>
+                            <el-button @click.native="detailInfo" type="primary">回复</el-button>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click.native="detailInfo" type="success">取消拉黑</el-button>
+                            <el-button @click.native="activate(0)" type="success">激活</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
             </div>
         </section>
         <el-dialog
-            :title="selectedData.name+'的举报信息'"
+            width="30%"
+            title="提示"
+            :visible.sync="activateOnOff"
+            append-to-body>
+            <span>确定要激活该用户？</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="activateOnOff = false">取 消</el-button>
+                <el-button type="primary" @click="activate(1)">确 定</el-button>
+            </span>
+        </el-dialog>
+        <el-dialog
+            :title="selectedData.name+'的拉黑信息'"
             :visible.sync="centerDialogVisible"
-            width="35%"
+            width="65%"
             center>
             <div class="block">
                 <p>
@@ -92,7 +132,7 @@
             </div>
             <div class="block">
                 <el-form :inline="true" class="demo-form-inline">
-                    <el-form-item label="输入举报回复" :inline="true" class="rejectAuditInline">
+                    <el-form-item label="输入拉黑回复" :inline="true" class="rejectAuditInline">
                         <textarea class="feedBackArea" style="resize: none;" name="" id="" cols="30" rows="10"></textarea>
                     </el-form-item>
                 </el-form>
@@ -113,6 +153,33 @@
                     user: '',
                     region:''
                 },
+                pickerOptions1: {
+                    disabledDate(time) {
+                        return time.getTime() > Date.now();
+                    },
+                    shortcuts: [{
+                        text: '今天',
+                        onClick(picker) {
+                            picker.$emit('pick', new Date());
+                        }
+                    }, {
+                        text: '昨天',
+                        onClick(picker) {
+                            const date = new Date();
+                            date.setTime(date.getTime() - 3600 * 1000 * 24);
+                            picker.$emit('pick', date);
+                        }
+                    }, {
+                        text: '一周前',
+                        onClick(picker) {
+                            const date = new Date();
+                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+                            picker.$emit('pick', date);
+                        }
+                    }]
+                },
+                value2:"",
+                activateOnOff:false,
                 rejectAuditReason:"",
                 selectedData:{},
                 centerDialogVisible:false,
@@ -127,12 +194,29 @@
                 let t = this;
                 t.centerDialogVisible = false;
                 t.$message({
-                    message: t.selectedData.name+'举报信息已回复',
+                    message: t.selectedData.name+'拉黑信息已回复',
                     type: 'success'
                 });
             },
             handleSelectionChange(val) {
                 this.multipleSelection = val;
+            },
+            activate(type){
+                let t = this;
+                if(!t.selectedOne){
+                    t.$message.error('请选择您要激活的用户!');
+                }else{
+                    if(type===0){
+                        t.activateOnOff = true;
+                    }else if(type===1){
+                        t.activateOnOff = false;
+                        t.$message({
+                            message:'用户已被激活',
+                            type: 'success'
+                        });
+                    }
+
+                }
             },
             detailInfo(){
                 let t = this;

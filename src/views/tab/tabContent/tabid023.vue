@@ -2,11 +2,32 @@
     <section class="adminContentContainer">
         <section class="adminContentInner">
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
-                <el-form-item label="会员ID">
-                    <el-input v-model="formInline.user" placeholder="会员ID"></el-input>
+                <el-form-item label="文章ID">
+                    <el-input v-model="formInline.user" placeholder="文章ID"></el-input>
+                </el-form-item>
+                <el-form-item label="作者ID">
+                    <el-input v-model="formInline.user" placeholder="作者ID"></el-input>
                 </el-form-item>
                 <el-form-item label="姓名">
                     <el-input v-model="formInline.user" placeholder="请输入姓名"></el-input>
+                </el-form-item>
+                <el-form-item label="文章标题">
+                    <el-input v-model="formInline.user" placeholder="文章标题"></el-input>
+                </el-form-item>
+                <el-form-item label="文章状态">
+                    <el-select v-model="formInline.region" placeholder="文章状态">
+                        <el-option label="有效" value="0"></el-option>
+                        <el-option label="无效" value="1"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="时间">
+                    <el-date-picker
+                        v-model="value2"
+                        align="right"
+                        type="date"
+                        placeholder="选择日期"
+                        :picker-options="pickerOptions1">
+                    </el-date-picker>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -68,6 +89,10 @@
                         label="状态">
                     </el-table-column>
                     <el-table-column
+                        prop="updateTime"
+                        label="更新时间">
+                    </el-table-column>
+                    <el-table-column
                         prop="registerTime"
                         label="创建时间">
                     </el-table-column>
@@ -94,6 +119,9 @@
                             <el-button @click.native="pushContent(0)" type="primary">推送</el-button>
                         </el-form-item>
                         <el-form-item>
+                            <el-button @click.native="activate(0)" type="success">激活</el-button>
+                        </el-form-item>
+                        <el-form-item>
                             <el-button @click.native="detailInfo(0)" type="danger">无效</el-button>
                         </el-form-item>
                     </el-form>
@@ -105,9 +133,20 @@
             title="提示"
             :visible.sync="innerVisible"
             append-to-body>
-            <span>确定要无效这条动态？</span>
+            <span>确定要无效这条文章？</span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="innerVisible = false">取 消</el-button>
+                <el-button type="primary" @click="detailInfo(1)">确 定</el-button>
+            </span>
+        </el-dialog>
+        <el-dialog
+            width="30%"
+            title="提示"
+            :visible.sync="activateOnOff"
+            append-to-body>
+            <span>确定要无效这条文章？</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="activateOnOff = false">取 消</el-button>
                 <el-button type="primary" @click="detailInfo(1)">确 定</el-button>
             </span>
         </el-dialog>
@@ -340,6 +379,33 @@
                     region: '',
                     type: ''
                 },
+                pickerOptions1: {
+                    disabledDate(time) {
+                        return time.getTime() > Date.now();
+                    },
+                    shortcuts: [{
+                        text: '今天',
+                        onClick(picker) {
+                            picker.$emit('pick', new Date());
+                        }
+                    }, {
+                        text: '昨天',
+                        onClick(picker) {
+                            const date = new Date();
+                            date.setTime(date.getTime() - 3600 * 1000 * 24);
+                            picker.$emit('pick', date);
+                        }
+                    }, {
+                        text: '一周前',
+                        onClick(picker) {
+                            const date = new Date();
+                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+                            picker.$emit('pick', date);
+                        }
+                    }]
+                },
+                value2:"",
+                activateOnOff:false,
                 pushOnOff:false,
                 articleDialog:false,
                 innerVisible:false,
@@ -359,6 +425,22 @@
             },
             imgInit(e){
               console.log(e);
+            },
+            activate(type){
+                let t = this;
+                if(!t.selectedOne){
+                    t.$message.error('请选择您要激活的文章!');
+                }else{
+                    if(type===0){
+                        t.activateOnOff = true;
+                    }else if(type===1){
+                        t.activateOnOff = false;
+                        t.$message({
+                            message: t.selectedData.articleTitle+'文章已被激活',
+                            type: 'success'
+                        });
+                    }
+                }
             },
             detailInfo(type){
                 let t = this;

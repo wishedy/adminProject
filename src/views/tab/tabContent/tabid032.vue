@@ -8,6 +8,7 @@
                 <el-form-item label="作者">
                     <el-input v-model="formInline.user" placeholder="请输入姓名"></el-input>
                 </el-form-item>
+                <el-form-item label="时间">
                 <el-date-picker
                     v-model="value2"
                     align="right"
@@ -15,6 +16,7 @@
                     placeholder="选择日期"
                     :picker-options="pickerOptions1">
                 </el-date-picker>
+                </el-form-item>
                 <el-form-item label="状态" :inline="true">
                     <el-select v-model="formInline.region" placeholder="模板状态">
                         <el-option label="有效" value="0"></el-option>
@@ -83,6 +85,9 @@
                             <el-button  type="primary" @click.native="editArticle(0)">编辑</el-button>
                         </el-form-item>
                         <el-form-item>
+                            <el-button @click.native="activate(0)" type="success">激活</el-button>
+                        </el-form-item>
+                        <el-form-item>
                             <el-button @click.native="detailInfo(0)" type="danger">无效</el-button>
                         </el-form-item>
                     </el-form>
@@ -98,6 +103,17 @@
             <span slot="footer" class="dialog-footer">
                 <el-button @click="innerVisible = false">取 消</el-button>
                 <el-button type="primary" @click="detailInfo(1)">确 定</el-button>
+            </span>
+        </el-dialog>
+        <el-dialog
+            width="30%"
+            title="提示"
+            :visible.sync="activateOnOff"
+            append-to-body>
+            <span>确定要激活这条模板？</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="activateOnOff = false">取 消</el-button>
+                <el-button type="primary" @click="activate(1)">确 定</el-button>
             </span>
         </el-dialog>
         <el-dialog
@@ -179,6 +195,7 @@
                         }
                     }]
                 },
+                activateOnOff:false,
                 value2: '',
                 labelPosition: 'left',
                 formLabelAlign: {
@@ -221,14 +238,31 @@
             detailInfo(type){
                 let t = this;
                 if(!t.selectedOne){
-                    t.$message.error('请选择您要无效的话题!');
+                    t.$message.error('请选择您要无效的模板!');
                 }else{
                     if(type===0){
                         t.innerVisible = true;
                     }else if(type===1){
                         t.innerVisible = false;
                         t.$message({
-                            message: t.selectedData.articleTitle+'话题已被无效',
+                            message: '模板已被无效',
+                            type: 'success'
+                        });
+                    }
+
+                }
+            },
+            activate(type){
+                let t = this;
+                if(!t.selectedOne){
+                    t.$message.error('请选择您要激活的模板!');
+                }else{
+                    if(type===0){
+                        t.activateOnOff = true;
+                    }else if(type===1){
+                        t.activateOnOff = false;
+                        t.$message({
+                            message: '模板已被激活',
                             type: 'success'
                         });
                     }
@@ -238,7 +272,7 @@
             editArticle(type){
               let t = this;
                 if(!t.selectedOne){
-                    t.$message.error('请选择您要无效的话题!');
+                    t.$message.error('请选择您要无效的模板!');
                 }else{
                     if(type===0){
                         t.articleDialog = true;
@@ -246,7 +280,7 @@
 
                         t.articleDialog = false;
                         t.$message({
-                            message: t.selectedData.articleTitle+'话题已生成',
+                            message: t.selectedData.articleTitle+'模板已生成',
                             type: 'success'
                         });
                     }
