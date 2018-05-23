@@ -134,6 +134,17 @@
                     </el-pagination>
                 </div>
             </div>
+            <el-dialog
+                width="30%"
+                title="提示"
+                :visible.sync="isNotValid"
+                append-to-body>
+                <el-main>确定要拉黑该用户？</el-main>
+                <span slot="footer" class="dialog-footer">
+                <el-button @click="isNotValid = false">取消</el-button>
+                <el-button type="primary" @click="isNotValidDynamic(1)">拉黑</el-button>
+                </span>
+            </el-dialog>
             <div class="block adminAuditControl">
                 <el-form :inline="true" class="demo-form-inline">
                     <el-form-item>
@@ -143,7 +154,7 @@
                         <el-button type="primary">查看权限</el-button>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="danger">拉黑</el-button>
+                        <el-button type="danger"  @click.native="isNotValidDynamic(0)">拉黑</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -177,6 +188,8 @@
                 formInline: {
                     user: ''
                 },
+                selectedOne:false,
+                isNotValid:false,
                 pickerOptions1: {
                     disabledDate(time) {
                         return time.getTime() > Date.now();
@@ -207,6 +220,22 @@
             }
         },
         methods:{
+            isNotValidDynamic(type){
+                let t = this;
+                if(!t.selectedOne){
+                    t.$message.error('请选择您要拉黑的用户!');
+                }else{
+                    if(type===0){
+                        t.isNotValid = true;
+                    }else if(type===1) {
+                        t.isNotValid = false;
+                        t.$message({
+                            message: '用户已被拉黑',
+                            type: 'success'
+                        });
+                    }
+                }
+            },
             handleSelectionChange(val) {
                 this.multipleSelection = val;
             },
@@ -217,6 +246,8 @@
                 console.log(`每页 ${val} 条`);
             },
             handleCurrentChange(val) {
+                let t = this;
+                t.selectedOne = true;
                 console.log(`当前页: ${val}`);
             }
         }

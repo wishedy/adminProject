@@ -1,7 +1,13 @@
 <template>
-    <FullCalendar :events="fcEvents" locale="en"></FullCalendar>
+    <section class="adminIndex">
+        <FullCalendar :events="fcEvents" locale="en" class="date"></FullCalendar>
+    </section>
+
 </template>
 <style lang="scss" scoped>
+    .date{
+        padding-top: 80px;
+    }
     .today{
         background: rgba(140,20,151,.5);
         .day-number{
