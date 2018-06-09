@@ -1,15 +1,16 @@
 <template>
     <section class="adminContentContainer">
         <section class="adminContentInner">
-            <el-form :inline="true" :model="formInline" class="demo-form-inline">
+            <el-form :inline="true" :model="formInline" class="demo-form-inline" label-width="80px" label-position="left">
                 <el-form-item label="会员ID">
-                    <el-input v-model="formInline.user" placeholder="会员ID"></el-input>
+                    <el-input v-model="formInline.user" placeholder="会员ID" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="姓名">
-                    <el-input v-model="formInline.user" placeholder="请输入姓名"></el-input>
+                    <el-input v-model="formInline.user" placeholder="请输入姓名" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="申请时间">
                     <el-date-picker
+                        class="adminInputEl"
                         v-model="value2"
                         align="right"
                         type="date"
@@ -18,7 +19,7 @@
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="审核状态">
-                    <el-select v-model="formInline.region" placeholder="审核状态">
+                    <el-select v-model="formInline.region" placeholder="审核状态" class="adminInputEl">
                         <el-option label="新建" value="0"></el-option>
                         <el-option label="通过" value="2"></el-option>
                         <el-option label="驳回" value="3"></el-option>
@@ -92,7 +93,12 @@
                 </div>
             </div>
         </section>
-        <el-dialog :title="DialogInfo.title" :visible.sync="toggleSlide" center :before-close="handleClose">
+        <el-dialog
+            :title="DialogInfo.title"
+            :visible.sync="toggleSlide"
+            center
+            width="80%"
+            :before-close="handleClose">
             <el-container class="adminAuditContainer">
                 <el-main>
                     <h2 class="changeTypeTitle">变更前资料</h2>
@@ -221,6 +227,9 @@
     @import "../../../styleComponent/ContentInner";
     .adminContentInner{
         @include ContentInner();
+        .adminInputEl{
+            width:200px;
+        }
         .adminUserControl{
             padding: 0 0 10px 0;
         }
@@ -285,6 +294,32 @@
                     user: '',
                     region:''
                 },
+                pickerOptions1: {
+                    disabledDate(time) {
+                        return time.getTime() > Date.now();
+                    },
+                    shortcuts: [{
+                        text: '今天',
+                        onClick(picker) {
+                            picker.$emit('pick', new Date());
+                        }
+                    }, {
+                        text: '昨天',
+                        onClick(picker) {
+                            const date = new Date();
+                            date.setTime(date.getTime() - 3600 * 1000 * 24);
+                            picker.$emit('pick', date);
+                        }
+                    }, {
+                        text: '一周前',
+                        onClick(picker) {
+                            const date = new Date();
+                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+                            picker.$emit('pick', date);
+                        }
+                    }]
+                },
+                value2:"",
                 selectedData:{},
                 rejectAuditReason:'',
                 rejectDialogVisible:false,

@@ -1,24 +1,24 @@
 <template>
     <section class="adminContentContainer">
         <section class="adminContentInner">
-            <el-form :inline="true" :model="formInline" class="demo-form-inline">
+            <el-form :inline="true" :model="formInline" class="demo-form-inline" label-width="80px" label-position="left">
                 <el-form-item label="会员ID">
-                    <el-input v-model="formInline.user" placeholder="会员ID"></el-input>
+                    <el-input v-model="formInline.user" placeholder="会员ID" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="姓名">
-                    <el-input v-model="formInline.user" placeholder="请输入姓名"></el-input>
+                    <el-input v-model="formInline.user" placeholder="请输入姓名" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="性别">
-                    <el-select v-model="formInline.region" placeholder="性别">
+                    <el-select v-model="formInline.region" placeholder="性别" class="adminInputEl">
                         <el-option label="男" value="0"></el-option>
                         <el-option label="女" value="1"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="年龄">
-                    <el-input v-model="formInline.user" placeholder="请输入年龄"></el-input>
+                    <el-input v-model="formInline.user" placeholder="请输入年龄" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="用户状态">
-                    <el-select v-model="formInline.region" placeholder="用户状态">
+                    <el-select v-model="formInline.region" placeholder="用户状态" class="adminInputEl">
                         <el-option label="游客" value="0"></el-option>
                         <el-option label="已注册" value="1"></el-option>
                         <el-option label="已完善信息" value="2"></el-option>
@@ -29,13 +29,14 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="邮件">
-                    <el-input v-model="formInline.user" placeholder="邮件"></el-input>
+                    <el-input v-model="formInline.user" placeholder="邮件" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="手机号">
-                    <el-input v-model="formInline.user" placeholder="手机号"></el-input>
+                    <el-input v-model="formInline.user" placeholder="手机号" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="审核时间">
                     <el-date-picker
+                        class="adminInputEl"
                         v-model="value2"
                         align="right"
                         type="date"
@@ -44,7 +45,7 @@
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="审核状态">
-                    <el-select v-model="formInline.region" placeholder="审核状态">
+                    <el-select v-model="formInline.region" placeholder="审核状态" class="adminInputEl">
                         <el-option label="新建" value="0"></el-option>
                         <el-option label="更改" value="1"></el-option>
                         <el-option label="通过" value="2"></el-option>
@@ -333,6 +334,9 @@
     }
     .adminContentInner{
         @include ContentInner();
+        .adminInputEl{
+            width:200px;
+        }
         .adminUserControl{
             padding: 0 0 10px 0;
         }

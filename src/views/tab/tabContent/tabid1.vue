@@ -1,24 +1,24 @@
 <template>
     <section class="adminContentContainer">
         <section class="adminContentInner">
-            <el-form :inline="true" :model="formInline" class="demo-form-inline">
+            <el-form :inline="true" :model="formInline" class="demo-form-inline" label-width="80px" label-position="left">
                 <el-form-item label="会员ID">
-                    <el-input v-model="formInline.user" placeholder="会员ID"></el-input>
+                    <el-input v-model="formInline.user" placeholder="会员ID" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="姓名">
-                    <el-input v-model="formInline.user" placeholder="请输入姓名"></el-input>
+                    <el-input v-model="formInline.user" placeholder="请输入姓名" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="性别">
-                    <el-select v-model="formInline.region" placeholder="性别">
+                    <el-select v-model="formInline.region" placeholder="性别" class="adminInputEl">
                         <el-option label="男" value="0"></el-option>
                         <el-option label="女" value="1"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="年龄">
-                    <el-input v-model="formInline.user" placeholder="请输入年龄"></el-input>
+                    <el-input v-model="formInline.user" placeholder="请输入年龄" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="用户状态">
-                    <el-select v-model="formInline.region" placeholder="用户状态">
+                    <el-select v-model="formInline.region" placeholder="用户状态" class="adminInputEl">
                         <el-option label="游客" value="0"></el-option>
                         <el-option label="已注册" value="1"></el-option>
                         <el-option label="已完善信息" value="2"></el-option>
@@ -29,16 +29,17 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="邮件">
-                    <el-input v-model="formInline.user" placeholder="邮件"></el-input>
+                    <el-input v-model="formInline.user" placeholder="邮件" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="手机号">
-                    <el-input v-model="formInline.user" placeholder="手机号"></el-input>
+                    <el-input v-model="formInline.user" placeholder="手机号" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="注册时间">
                     <el-date-picker
                         v-model="value2"
                         align="right"
                         type="date"
+                        class="adminInputEl"
                         placeholder="注册时间"
                         :picker-options="pickerOptions1">
                     </el-date-picker>
@@ -49,6 +50,7 @@
                         align="right"
                         type="date"
                         placeholder="审核时间"
+                        class="adminInputEl"
                         :picker-options="pickerOptions1">
                     </el-date-picker>
                 </el-form-item>
@@ -143,12 +145,22 @@
                         <el-button type="primary">查看权限</el-button>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="danger">拉黑</el-button>
+                        <el-button type="danger"  @click.native="rejectAudit(0)">拉黑</el-button>
                     </el-form-item>
                 </el-form>
             </div>
         </section>
-
+        <el-dialog
+            title="提示"
+            :visible.sync="rejectDialogVisible"
+            width="30%"
+            center>
+            <span>是否确认拉黑{{selectedData.name}}</span>
+            <span slot="footer" class="dialog-footer">
+            <el-button @click="rejectDialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="rejectAudit(1)">确 定</el-button>
+            </span>
+        </el-dialog>
     </section>
 
 </template>
@@ -157,6 +169,9 @@
     @import "../../../styleComponent/ContentInner";
    .adminContentInner{
        @include ContentInner();
+       .adminInputEl{
+           width:200px;
+       }
        .adminUserControl{
            padding: 0 0 10px 0;
        }
@@ -173,10 +188,13 @@
     export default {
         data() {
             return {
+                rejectDialogVisible:false,
                 currentPage4: 4,
                 formInline: {
                     user: ''
                 },
+                selectedData:{},
+                selectedOne:false,
                 pickerOptions1: {
                     disabledDate(time) {
                         return time.getTime() > Date.now();
@@ -207,8 +225,28 @@
             }
         },
         methods:{
+            rejectAudit(step){
+                let t = this;
+                if(!t.selectedOne){
+                    t.$message.error('请选择您要拉黑的用户!');
+                }else{
+                    if(step===0){
+                        console.log('拉黑');
+                        t.rejectDialogVisible = true;
+                    }else{
+                        t.$message({
+                            message: t.selectedData.name+'已拉黑',
+                            type: 'success'
+                        });
+                        t.rejectDialogVisible = false;
+                        console.log(t.rejectDialogVisible);
+                    }
+                }
+            },
             handleSelectionChange(val) {
+                let t = this;
                 this.multipleSelection = val;
+
             },
             onSubmit() {
                 console.log('submit!');
@@ -217,7 +255,11 @@
                 console.log(`每页 ${val} 条`);
             },
             handleCurrentChange(val) {
+                let t = this;
                 console.log(`当前页: ${val}`);
+                t.selectedData = val;
+                t.selectedOne = true;
+                console.log(t.selectedOne);
             }
         }
     }

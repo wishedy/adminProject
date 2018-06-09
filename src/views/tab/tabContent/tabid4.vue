@@ -1,24 +1,25 @@
 <template>
     <section class="adminContentContainer">
         <section class="adminContentInner">
-            <el-form :inline="true" :model="formInline" class="demo-form-inline">
+            <el-form :inline="true" :model="formInline" class="demo-form-inline"  label-width="80px" label-position="left">
                 <el-form-item label="反馈ID">
-                    <el-input v-model="formInline.user" placeholder="反馈ID"></el-input>
+                    <el-input v-model="formInline.user" placeholder="反馈ID" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="会员ID">
-                    <el-input v-model="formInline.user" placeholder="会员ID"></el-input>
+                    <el-input v-model="formInline.user" placeholder="会员ID" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="姓名">
-                    <el-input v-model="formInline.user" placeholder="请输入姓名"></el-input>
+                    <el-input v-model="formInline.user" placeholder="请输入姓名" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="反馈状态">
-                    <el-select v-model="formInline.region" placeholder="反馈状态">
+                    <el-select v-model="formInline.region" placeholder="反馈状态" class="adminInputEl">
                         <el-option label="新建" value="0"></el-option>
                         <el-option label="已回复" value="1"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="时间">
                     <el-date-picker
+                        class="adminInputEl"
                         v-model="value2"
                         align="right"
                         type="date"
@@ -194,6 +195,9 @@
     @import "../../../styleComponent/ContentInner";
     .adminContentInner{
         @include ContentInner();
+        .adminInputEl{
+            width:200px;
+        }
         .adminUserControl{
             padding: 0 0 10px 0;
         }

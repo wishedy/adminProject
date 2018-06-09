@@ -94,6 +94,7 @@
 </style>
 
 <script>
+    import AV from 'leancloud-storage';
     import {mapGetters,mapActions} from 'vuex';
     import axios from 'axios';
     export default {
@@ -106,147 +107,29 @@
             ...mapGetters(['toggleOnOff'])
         },
         mounted(){
-
             let t = this;
-            t.tabList = [
-                {
-                    "index":"1",
-                    "title":"会员管理",
-                    "icon":"el-icon-ump-VIP",
-                    "tabList":[
-                        {
-                            "index":"1-1",
-                            "title":"会员统计",
-                            "icon":"el-icon-ump-VIP",
-                            "routerLink":"011"
-                        },
-                        {
-                            "index":"1-2",
-                            "title":"会员审核",
-                            "icon":"el-icon-ump-Audit",
-                            "routerLink":"012"
-                        },
-                        {
-                            "index":"1-3",
-                            "title":"信息变更",
-                            "icon":"el-icon-ump-edit",
-                            "routerLink":"013"
-                        },
-                        {
-                            "index":"1-4",
-                            "title":"会员反馈",
-                            "icon":"el-icon-ump-ico_feedback",
-                            "routerLink":"014"
-                        },
-                        {
-                            "index":"1-5",
-                            "title":"会员举报",
-                            "icon":"el-icon-ump-chakantiezigengduojubao",
-                            "routerLink":"015"
-                        },
-                        {
-                            "index":"1-6",
-                            "title":"黑名单",
-                            "icon":"el-icon-ump-heimingdan",
-                            "routerLink":"016"
-                        }
-                    ]
-                },
-                {
-                    "index":"2",
-                    "title":"CMS管理",
-                    "icon":"el-icon-ump-heads",
-                    "tabList":[
-                        {
-                            "index":"2-1",
-                            "title":"消息",
-                            "icon":"el-icon-ump-msg",
-                            "routerLink":"021"
-                        },
-                        {
-                            "index":"2-2",
-                            "title":"动态",
-                            "icon":"el-icon-ump-talk",
-                            "routerLink":"022"
-                        },
-                        {
-                            "index":"2-3",
-                            "title":"文章",
-                            "icon":"el-icon-ump-article",
-                            "routerLink":"023"
-                        },
-                        {
-                            "index":"2-4",
-                            "title":"推荐",
-                            "icon":"el-icon-ump-recommend",
-                            "routerLink":"024"
-                        },
-                        {
-                            "index":"2-5",
-                            "title":"话题",
-                            "icon":"el-icon-ump-ictopic",
-                            "routerLink":"025"
-                        }
-                    ]
-                },
-                {
-                    "index":"3",
-                    "title":"建站管理",
-                    "icon":"el-icon-ump-web2",
-                    "tabList":[
-                        {
-                            "index":"3-1",
-                            "title":"模板创建",
-                            "icon":"el-icon-ump-template-o",
-                            "routerLink":"032"
-                        }
-                    ]
-                },
-                {
-                    "index":"4",
-                    "title":"数据可视化",
-                    "icon":"el-icon-ump-database"
-                },{
-                    "index":"5",
-                    "title":"系统管理",
-                    "icon":"el-icon-setting",
-                    "tabList":[
-                        {
-                            "index":"5-1",
-                            "title":"权限",
-                            "icon":"el-icon-ump-password",
-                            "routerLink":"052"
-                        },
-                        {
-                            "index":"5-2",
-                            "title":"修改密码",
-                            "icon":"el-icon-ump-password",
-                            "routerLink":"053"
-                        },
-                        {
-                            "index":"5-3",
-                            "title":"退出登录",
-                            "icon":"el-icon-ump-exittoapp",
-                            "routerLink":"054",
-                            "eventFn":"outLoginOne"
-                        }
-                    ]
-                }
-            ];
-            /*axios({
-                url: '.tabJson.json',
-                method: "GET",
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                timeout: 30000
-            }).then(function (res) {
-                t.tabList = res.data.tabList;
-            }).catch(function (err) {
-            });*/
+            t.getSideData();
         },
         methods: {
             ...mapActions(['addTab','outLoginOne']),
+            getSideData(){
+              let t = this;
+                let APP_ID = '4LMtHfKrTfiVrDcRNV936FoT-gzGzoHsz';
+                let APP_KEY = 'c9hWsdUsGA5kMWTbqNEWiV2d';
+                AV.init({
+                    appId: APP_ID,
+                    appKey: APP_KEY
+                });
+                let task  = new AV.Query("sideBar");
+                t.tabList = [];
+                task.find().then(function(data){
+                    for(let i = 0;i<data.length;i++){
+                        t.tabList.push(data[i].attributes);
+                    }
+                },function(err) {
+                    //错误信息 err
+                });
+            },
             runFn(v){
                 let t = this;
                 t[v.eventFn]&&t[v.eventFn]();

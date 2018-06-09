@@ -1,24 +1,24 @@
 <template>
     <section class="adminContentContainer">
         <section class="adminContentInner">
-            <el-form :inline="true" :model="formInline" class="demo-form-inline">
+            <el-form :inline="true" :model="formInline" class="demo-form-inline" label-width="80px" label-position="left">
                 <el-form-item label="拉黑ID">
-                    <el-input v-model="formInline.user" placeholder="拉黑ID"></el-input>
+                    <el-input v-model="formInline.user" placeholder="拉黑ID" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="会员ID">
-                    <el-input v-model="formInline.user" placeholder="会员ID"></el-input>
+                    <el-input v-model="formInline.user" placeholder="会员ID" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="姓名">
-                    <el-input v-model="formInline.user" placeholder="请输入姓名"></el-input>
+                    <el-input v-model="formInline.user" placeholder="请输入姓名" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="拉黑状态">
-                    <el-select v-model="formInline.region" placeholder="状态">
+                    <el-select v-model="formInline.region" placeholder="状态" class="adminInputEl">
                         <el-option label="拉黑" value="0"></el-option>
                         <el-option label="激活" value="1"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="拉黑原因">
-                    <el-select v-model="formInline.region" placeholder="拉黑原因">
+                    <el-select v-model="formInline.region" placeholder="拉黑原因" class="adminInputEl">
                         <el-option label="原因一" value="0"></el-option>
                         <el-option label="原因二" value="1"></el-option>
                         <el-option label="原因三" value="2"></el-option>
@@ -26,6 +26,7 @@
                 </el-form-item>
                 <el-form-item label="时间">
                     <el-date-picker
+                        class="adminInputEl"
                         v-model="value2"
                         align="right"
                         type="date"
@@ -245,6 +246,9 @@
     @import "../../../styleComponent/ContentInner";
     .adminContentInner{
         @include ContentInner();
+        .adminInputEl{
+            width:200px;
+        }
         .adminUserControl{
             padding: 0 0 10px 0;
         }
