@@ -147,25 +147,63 @@
                     <el-form-item>
                         <el-button type="danger"  @click.native="rejectAudit(0)">拉黑</el-button>
                     </el-form-item>
+                    <el-form-item>
+                        <el-button @click.native="activate(0)" type="success">激活</el-button>
+                    </el-form-item>
                 </el-form>
             </div>
         </section>
         <el-dialog
-            title="提示"
-            :visible.sync="rejectDialogVisible"
             width="30%"
-            center>
-            <span>是否确认拉黑{{selectedData.name}}</span>
+            title="提示"
+            :visible.sync="activateOnOff"
+            append-to-body>
+            <span>确定要激活该用户？</span>
             <span slot="footer" class="dialog-footer">
-            <el-button @click="rejectDialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="rejectAudit(1)">确 定</el-button>
+                <el-button @click="activateOnOff = false">取 消</el-button>
+                <el-button type="primary" @click="activate(1)">确 定</el-button>
             </span>
+        </el-dialog>
+        <el-dialog
+            :title="'拉黑'+selectedData.name"
+            width="40%"
+            :visible.sync="rejectDialogVisible">
+            <section class="block">
+                <el-form  :model="blacklist" class="demo-form-inline" label-width="80px" label-position="left">
+                    <el-form-item label="拉黑原因">
+                        <el-select v-model="blacklist.region" placeholder="用户状态" class="adminInputElDialog">
+                            <el-option label="原因1" value="0"></el-option>
+                            <el-option label="原因2" value="1"></el-option>
+                            <el-option label="原因3" value="2"></el-option>
+                            <el-option label="原因4" value="3"></el-option>
+                            <el-option label="原因5" value="4"></el-option>
+                            <el-option label="原因6" value="5"></el-option>
+                            <el-option label="原因7" value="6"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="拉黑回复">
+                        <el-input
+                            type="textarea"
+                            autosize
+                            class="adminInputElDialog"
+                            placeholder="请输入内容"
+                            v-model="blacklist.textarea2">
+                        </el-input>
+                    </el-form-item>
+                </el-form>
+            </section>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="rejectDialogVisible = false">取 消</el-button>
+                <el-button type="primary"  @click="rejectAudit(1)">确定</el-button>
+            </div>
         </el-dialog>
     </section>
 
 </template>
 <style lang="scss" scoped>
-
+    .adminInputElDialog{
+        width:300px;
+    }
     @import "../../../styleComponent/ContentInner";
    .adminContentInner{
        @include ContentInner();
@@ -188,8 +226,14 @@
     export default {
         data() {
             return {
+                activateOnOff:false,
+                innerVisible:false,
                 rejectDialogVisible:false,
                 currentPage4: 4,
+                blacklist:{
+                    region:1,
+                    textarea2:''
+                },
                 formInline: {
                     user: ''
                 },
@@ -225,6 +269,23 @@
             }
         },
         methods:{
+            activate(type){
+                let t = this;
+                if(!t.selectedOne){
+                    t.$message.error('请选择您要激活的会员!');
+                }else{
+                    if(type===0){
+                        t.activateOnOff = true;
+                    }else if(type===1){
+                        t.activateOnOff = false;
+                        t.$message({
+                            message: t.selectedData.name+'已被激活',
+                            type: 'success'
+                        });
+                    }
+
+                }
+            },
             rejectAudit(step){
                 let t = this;
                 if(!t.selectedOne){

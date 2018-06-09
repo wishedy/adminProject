@@ -3,13 +3,14 @@
         <section class="adminContentInner">
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
                 <el-form-item label="模板ID">
-                    <el-input v-model="formInline.user" placeholder="会员ID"></el-input>
+                    <el-input v-model="formInline.user" placeholder="会员ID"  class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="作者">
-                    <el-input v-model="formInline.user" placeholder="请输入姓名"></el-input>
+                    <el-input v-model="formInline.user" placeholder="请输入姓名"  class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="时间">
                 <el-date-picker
+                    class="adminInputEl"
                     v-model="value2"
                     align="right"
                     type="date"
@@ -18,7 +19,7 @@
                 </el-date-picker>
                 </el-form-item>
                 <el-form-item label="状态" :inline="true">
-                    <el-select v-model="formInline.region" placeholder="模板状态">
+                    <el-select v-model="formInline.region" placeholder="模板状态"  class="adminInputEl">
                         <el-option label="有效" value="0"></el-option>
                         <el-option label="无效" value="1"></el-option>
                     </el-select>
@@ -128,9 +129,6 @@
                     <section class="detailItemImg">
                         <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524054334359&di=8222adebfed9c9f02b8b9ae3c8e9245d&imgtype=0&src=http%3A%2F%2Fpic40.nipic.com%2F20140417%2F18460687_100054352164_2.jpg" alt="">
                     </section>
-                </div>
-                <div class="detailItem">
-                    <h1 class="detailItemTitle">模板结构</h1>
                 </div>
             </el-main>
         </el-dialog>
@@ -307,6 +305,9 @@
 </script>
 <style lang="scss" scoped>
     @import "../../../styleComponent/ContentInner";
+    .adminInputEl{
+        width:200px;
+    }
     .adminContentInner{
         @include ContentInner()
     }
@@ -331,7 +332,7 @@
         flex-direction: row;
         justify-content: space-between;
         .detailItem{
-            width: 49%;
+            width: 98%;
             min-height: 300px;
             font-size: 24px;
             text-align: center;

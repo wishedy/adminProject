@@ -1,34 +1,35 @@
 <template>
     <section class="adminContentContainer">
         <section class="adminContentInner">
-            <el-form :inline="true" :model="formInline" class="demo-form-inline">
+            <el-form :inline="true" :model="formInline" class="demo-form-inline" label-width="80px" label-position="left">
                 <el-form-item label="话题ID">
-                    <el-input v-model="formInline.user" placeholder="话题ID"></el-input>
+                    <el-input v-model="formInline.user" placeholder="话题ID" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="作者ID">
-                    <el-input v-model="formInline.user" placeholder="作者ID"></el-input>
+                    <el-input v-model="formInline.user" placeholder="作者ID" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="姓名">
-                    <el-input v-model="formInline.user" placeholder="请输入姓名"></el-input>
+                    <el-input v-model="formInline.user" placeholder="请输入姓名" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="话题标题">
-                    <el-input v-model="formInline.user" placeholder="话题标题"></el-input>
+                    <el-input v-model="formInline.user" placeholder="话题标题" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="话题类型">
-                    <el-select v-model="formInline.region" placeholder="话题类型">
+                    <el-select v-model="formInline.region" placeholder="话题类型" class="adminInputEl">
                         <el-option label="脱单" value="0"></el-option>
                         <el-option label="话题" value="1"></el-option>
                         <el-option label="普通" value="2"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="话题状态">
-                    <el-select v-model="formInline.region" placeholder="话题状态">
+                    <el-select v-model="formInline.region" placeholder="话题状态" class="adminInputEl">
                         <el-option label="有效" value="0"></el-option>
                         <el-option label="无效" value="1"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="时间">
                     <el-date-picker
+                        class="adminInputEl"
                         v-model="value2"
                         align="right"
                         type="date"
@@ -144,32 +145,30 @@
             :visible.sync="pushOnOff"
             center
             append-to-body>
-            <el-form :inline="true" class="demo-form-inline">
+            <el-form :inline="true" class="demo-form-inline" label-width="80px" label-position="left">
                 <el-form-item label="推送类型" :inline="true">
-                    <el-select v-model="formInline.region" placeholder="推送类型">
+                    <el-select v-model="formInline.region" placeholder="推送类型" class="adminInputEl">
                         <el-option label="个性化推送" value="0"></el-option>
                         <el-option label="全站推送" value="1"></el-option>
                         <el-option label="单独推送" value="2"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="推送位置" :inline="true">
-                    <el-select v-model="formInline.region" placeholder="推送位置">
+                    <el-select v-model="formInline.region" placeholder="推送位置" class="adminInputEl">
                         <el-option label="遇见栏目" value="0"></el-option>
                         <el-option label="消息栏目" value="1"></el-option>
                         <el-option label="首页全部" value="2"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="推送优先级" :inline="true">
-                    <el-select v-model="formInline.region" placeholder="推送位置">
+                <el-form-item label="优先级" :inline="true">
+                    <el-select v-model="formInline.region" placeholder="推送位置" class="adminInputEl">
                         <el-option label="按序推送" value="0"></el-option>
                         <el-option label="优先推送" value="1"></el-option>
                         <el-option label="延后推送" value="2"></el-option>
                     </el-select>
                 </el-form-item>
-            </el-form>
-            <el-form :inline="true" class="demo-form-inline">
                 <el-form-item label="推送ID" :inline="true">
-                    <el-input v-model="formInline.user" placeholder="请输入推送ID"></el-input>
+                    <el-input v-model="formInline.user" placeholder="请输入推送ID" class="adminInputEl"></el-input>
                 </el-form-item>
             </el-form>
             <el-form :inline="true" class="demo-form-inline">
@@ -411,8 +410,14 @@
 </script>
 <style lang="scss" scoped>
     @import "../../../styleComponent/ContentInner";
+    .adminInputEl{
+        width:200px;
+    }
+    .tag{
+        margin: 10px;
+    }
     .adminContentInner{
-        @include ContentInner()
+        @include ContentInner();
     }
     .block{
         padding: 20px 0 ;
