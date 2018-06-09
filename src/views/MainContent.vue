@@ -9,6 +9,7 @@
                 active-text-color="#ffd04b">
                 <Hamburger class="adminNav" @click.native.stop="toggleSide" :class="{'rotateClassName':toggleOnOff}"></Hamburger>
                 <p class="adminTitle">后台管理系统</p>
+                <div class="adminWelcome">心心相遇，欢迎您admin</div>
                 <div class="right-menu">
                     <section class="adminUser">
                         <section class="adminUserLogo">
@@ -24,6 +25,18 @@
     </section>
 </template>
     <style lang="scss" scoped>
+        .adminWelcome{
+            line-height: 50px;
+            font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,微软雅黑,Arial,sans-serif;
+            font-size: 28px;
+            display: inline-block;
+            width: 800px;
+            position: absolute;
+            left: 50%;
+            color:#304156;
+            margin-left: -400px;
+            text-align: center;
+        }
     .adminTab{
         background: #fff;
         height: 34px;
