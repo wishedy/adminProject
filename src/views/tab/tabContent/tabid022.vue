@@ -223,6 +223,7 @@
                     user: '',
                     region:''
                 },
+                pushOnOff:false,
                 isValid:false,
                 isNotValid:false,
                 pickerOptions1: {
