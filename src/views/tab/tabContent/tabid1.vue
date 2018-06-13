@@ -230,7 +230,8 @@
    }
 </style>
 <script>
-    import userData from '../../../virtualData/UserStatistics'
+    import userData from '../../../virtualData/UserStatistics';
+    import axios from 'axios';
     export default {
         data() {
             return {
@@ -292,6 +293,23 @@
                 },
                 deep:true
             }
+        },
+        mounted(){
+          console.log('开始');
+            axios({
+                url: "/mcall/cms/course/getHotAuthorList/",
+                method: "GET",
+                data: {"sortType":4,"courseSubjectTeamId":1,"platformId":"1"},
+                transformRequest: [function(data) {
+                    return "paramJson=" + JSON.stringify(data);
+                }],
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                timeout: 30000
+            }).then(function(res){
+                console.log(res);
+            });
         },
         methods:{
             activate(type){
