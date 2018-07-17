@@ -7,13 +7,20 @@ var server = new webpackDevServer(compiler, {
     hot: true,
     quiet: true,
     publicPath: config.dev.outputPublicPath,
-    stats: { colors: true },
+    stats: { colors: true },/*47.94.225.154:8080/test */
     proxy:{
-        '/mcall': {
-            target: 'http://m.allinmd.cn',
+        '/api': {
+                target: 'http://47.94.225.154:8080',
             changeOrigin: true,
             pathRewrite: {
-                '^/mcall': '/mcall'
+                '^/api': '/'
+            }
+        },
+        '/call': {
+            target: 'http://xy5iwr.natappfree.cc',
+            changeOrigin: true,
+            pathRewrite: {
+                '^/call': '/'
             }
         }
     }
