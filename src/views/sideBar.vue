@@ -109,6 +109,22 @@
         mounted(){
             let t = this;
             t.getSideData();
+            axios({
+                method: 'post',
+                url: '/call/admin/register',
+                transformRequest: [function(data) {
+                    return "paramJson=" + JSON.stringify(data);
+                }],
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                data: {
+                    firstName: 'Fred',
+                    lastName: 'Flintstone'
+                }
+            }).then(function(response) {
+                console.log(response.data);
+            });
         },
         methods: {
             ...mapActions(['addTab','outLoginOne']),

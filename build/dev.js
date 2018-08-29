@@ -9,11 +9,11 @@ var server = new webpackDevServer(compiler, {
     publicPath: config.dev.outputPublicPath,
     stats: { colors: true },
     proxy:{
-        '/mcall': {
-            target: 'http://m.allinmd.cn',
+        '/call': {
+            target: 'http://localhost:8001',
             changeOrigin: true,
             pathRewrite: {
-                '^/mcall': '/mcall'
+                '^/call': '/call'
             }
         }
     }
