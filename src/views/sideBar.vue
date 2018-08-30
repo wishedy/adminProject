@@ -96,7 +96,6 @@
 <script>
     import AV from 'leancloud-storage';
     import {mapGetters,mapActions} from 'vuex';
-    import axios from 'axios';
     export default {
         data() {
             return {
