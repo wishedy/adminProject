@@ -1,6 +1,6 @@
 <template>
     <section class="adminLogin">
-        <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="demo-ruleForm" v-if="!registerOnOff">
+        <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="demo-ruleForm" v-show="!registerOnOff">
             <!--<i class="el-icon-close"></i>-->
             <el-form-item label="账号" prop="pass">
                 <el-input type="email" v-model="ruleForm2.pass" auto-complete="off"></el-input>
@@ -11,12 +11,12 @@
             <el-form-item>
                 <el-button type="primary" @click="submitForm('ruleForm2')">提交</el-button>
                 <el-button @click="resetForm('ruleForm2')">重置</el-button>
-                <el-button type="info" @click.stop="register">注册</el-button>
+                <el-button type="info" @click.stop="goRegister">注册</el-button>
             </el-form-item>
         </el-form>
-        <el-form  label-width="100px" class="demo-ruleForm" :rules='registerRules' v-if="registerOnOff" :model="registerForm" status-icon  ref="registerForm">
+        <el-form  :model="registerForm" status-icon :rules='registerRules' ref="registerForm" label-width="100px" class="demo-ruleForm"  v-show="registerOnOff">
             <el-form-item label="姓名" prop="registerName">
-                <el-input v-model="registerForm.registerName" auto-complete="off"></el-input>
+                <el-input type="name" v-model="registerForm.registerName" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="E-mail" prop="registerEmail">
                 <el-input v-model="registerForm.registerEmail" auto-complete="off"></el-input>
@@ -43,7 +43,7 @@
             <el-form-item>
                 <el-button type="primary"  @click.stop="submitRegisterForm('registerForm')">提交</el-button>
                 <el-button @click="resetForm('registerForm')">重置</el-button>
-                <el-button type="info" @click.stop="login">登录</el-button>
+                <el-button type="info" @click.stop="goLogin">登录</el-button>
             </el-form-item>
         </el-form>
     </section>
@@ -84,9 +84,17 @@
                 if (value === '') {
                     callback(new Error('请输入账号'));
                 } else {
+                    console.log(this.ruleForm2.checkPass);
                     if (this.ruleForm2.checkPass !== '') {
                         this.$refs.ruleForm2.validateField('checkPass');
                     }
+                    callback();
+                }
+            };
+            var validatePass2 = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入密码'));
+                }  else {
                     callback();
                 }
             };
@@ -94,11 +102,12 @@
               if(value===''){
                   callBack(new Error('请输入名字'));
               }else{
-                  if(regularTest.testName(value)){
-                      this.$refs.registerForm.validateField('registerName');
-                      return false;
+                  console.log(this.registerForm.registerName,value,regularTest.testName(value));
+                  if(!regularTest.testName(value)){
+                      callBack(new Error('请输入正确的名字'));
                   }else{
-                      return callBack(new Error('请输入正确的名字'));
+                      this.$refs.registerForm.validateField('registerEmail');
+                      callBack();
                   }
               }
 
@@ -108,7 +117,7 @@
                     callBack(new Error('请输入邮件'));
                 }else{
                     if(regularTest.testEmail(value)){
-                        this.$refs.registerForm.validateField('registerEmail');
+                        this.$refs.registerForm.validateField('registerPhoneNum');
                     }else{
                         callBack(new Error('请输入正确的邮件'));
                     }
@@ -121,7 +130,7 @@
                     callBack(new Error('请输入身份号'));
                 }else{
                     if(regularTest.testID(value)){
-                        this.$refs.registerForm.validateField('registerIdentityNum');
+                        this.$refs.registerForm.validateField('registerGrade');
                     }else{
                         callBack(new Error('请输入正确的身份号'));
                     }
@@ -133,6 +142,7 @@
                 if(value===''){
                     callBack(new Error('请选择管理员级别'));
                 }else{
+                    this.$refs.registerForm.validateField('registerPassWord');
                     callBack();
                 }
             };
@@ -141,7 +151,7 @@
                     callBack(new Error('请输入手机号'));
                 }else{
                     if(regularTest.testPhoneNum(value)){
-                        this.$refs.registerForm.validateField('registerPhoneNum');
+                        this.$refs.registerForm.validateField('registerIdentityNum');
                     }else{
                         callBack(new Error('请输入正确的手机号'));
                     }
@@ -151,16 +161,9 @@
             };
             var validatePassWord = (rule,value,callBack)=>{
                 if(value===''){
-                    callBack(new Error('请输入名字'));
+                    callBack(new Error('请输入密码'));
                 }else{
                    callBack();
-                }
-            };
-            var validatePass2 = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请输入密码'));
-                }  else {
-                    callback();
                 }
             };
             return {
@@ -223,7 +226,7 @@
                         { validator: validatePass2, trigger: 'blur' }
                     ]
                 },
-                registerOnOff:true
+                registerOnOff:false
             };
         },
         methods: {
@@ -234,7 +237,7 @@
                     if (valid) {
                         t.registerAdmin()
                     } else {
-                        console.log('error submit!!');
+                        t.$message.error('请填写正确的注册信息');
                         return false;
                     }
                 });
@@ -259,6 +262,15 @@
                         registerPassWord:t.registerForm.registerPassWord//
                     }
                 }).then(function(response) {
+                    let reqData = response.data;
+                    if(reqData.responseObject.responsePk>0){
+                        t.$message({
+                            type: 'success',
+                            message: '管理员注册成功!'
+                        });
+                        t.registerOnOff = false;
+                        t.resetForm('registerForm');
+                    }
                     console.log(response.data);
                 });
             },
@@ -268,32 +280,43 @@
             },
             checkLogin(){
                 let t = this;
-                var APP_ID = '4LMtHfKrTfiVrDcRNV936FoT-gzGzoHsz';
-                var APP_KEY = 'c9hWsdUsGA5kMWTbqNEWiV2d';
-                AV.init({
-                    appId: APP_ID,
-                    appKey: APP_KEY
-                });
-                var task  = new AV.Query("adminLogin");
-                task.find().then(function(data){
-                    var info = data[0].attributes;
-                    if((t.ruleForm2.pass===info.userName)&&(t.ruleForm2.checkPass===info.passWord)){
+                axios({
+                    method: 'post',
+                    url: '/call/admin/login',
+                    transformRequest: [function(data) {
+                        return "paramJson=" + JSON.stringify(data);
+                    }],
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    data: {
+                        adminName:t.ruleForm2.pass,
+                        adminPassWord:t.ruleForm2.checkPass
+                    }
+                }).then(function(response) {
+                    let reqData = response.data;
+                    if(reqData.responseObject.responsePk>0){
+                        t.login(reqData.responseObject.responseData.adminName);
+                        localStorage.setItem('userName',reqData.responseObject.responseData.adminName);
+                        localStorage.setItem('adminId',reqData.responseObject.responsePk);
                         t.$message({
                             type: 'success',
                             message: '登录成功!'
                         });
-                        t.login(info.userName);
-                        localStorage.setItem('userName',info.userName);
+                    }else{
+                        if(reqData.responseObject.responseCode==1){
+                            t.$message.error('请填写正确的用户名或密码');
+                        }else if(reqData.responseObject.responseCode==0){
+                            t.$message.error('登录参数有误');
+                        }
                     }
-                },function(err) {
-                    //错误信息 err
                 });
             },
-            register(){
+            goRegister(){
               let t = this;
               t.registerOnOff = true;
             },
-            login(){
+            goLogin(){
               let t = this;
                 t.registerOnOff = false;
             },
@@ -303,7 +326,7 @@
                     if (valid) {
                         t.checkLogin()
                     } else {
-                        console.log('error submit!!');
+                        t.$message.error('请填写正确的登录信息');
                         return false;
                     }
                 });
