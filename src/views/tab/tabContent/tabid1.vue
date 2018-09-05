@@ -324,55 +324,55 @@
             }).then(function(res){
                 console.log(res);
             });*/
-            axios.get('/api/test', {
-                params: {"i":4,"j":1},
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
+            // axios.get('/api/test', {
+            //     params: {"i":4,"j":1},
+            //     headers: {
+            //         'X-Requested-With': 'XMLHttpRequest'
+            //     }
+            // })
+            //     .then(function (response) {
+            //         console.log(response);
+            //     })
+            //     .catch(function (error) {
+            //         console.log(error);
+            //     });
+            axios.get('/call/customer/getCustomerList', {
+                params: {"customerSex":"0","pageSize":10,"pageIndex":1}
             })
                 .then(function (response) {
-                    console.log(response);
+                    console.log(response.data);
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
-            axios.get('/api/zbfTest/test', {
-                params: {"a":4,"b":1}
-            })
-                .then(function (response) {
-                    console.log(response);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-            axios({
-                url: "/api/love",
-                method: "POST",
-                data: {"a":4,"b":1},
-                /*transformRequest: [function(data) {
-                    return "paramJson=" + JSON.stringify(data);
-                }],*/
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                timeout: 30000
-            }).then(function(res){
-                console.log(res);
-            });
-            axios({
-                url: "http://xkhb69.natappfree.cc/signIn",
-                method: "POST",
-                data: {"username":"123456","password":"123456"},
-                transformRequest: [function(data) {
-                    return "paramJson=" + JSON.stringify(data);
-                }],
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                timeout: 30000
-            }).then(function(res){
-                console.log(res);
-            });
+            // axios({
+            //     url: "/api/love",
+            //     method: "POST",
+            //     data: {"a":4,"b":1},
+            //     /*transformRequest: [function(data) {
+            //         return "paramJson=" + JSON.stringify(data);
+            //     }],*/
+            //     headers: {
+            //         'X-Requested-With': 'XMLHttpRequest'
+            //     },
+            //     timeout: 30000
+            // }).then(function(res){
+            //     console.log(res);
+            // });
+            // axios({
+            //     url: "http://xkhb69.natappfree.cc/signIn",
+            //     method: "POST",
+            //     data: {"username":"123456","password":"123456"},
+            //     transformRequest: [function(data) {
+            //         return "paramJson=" + JSON.stringify(data);
+            //     }],
+            //     headers: {
+            //         'X-Requested-With': 'XMLHttpRequest'
+            //     },
+            //     timeout: 30000
+            // }).then(function(res){
+            //     console.log(res);
+            // });
             /*axios({
                 url: "/api/test?i=1&j=2",
                 method: "GET",
