@@ -74,7 +74,6 @@
     }
 </style>
 <script>
-    import AV from 'leancloud-storage';
     import {mapActions} from 'vuex';
     import regularTest from '../utils/regularTest.js';
     import axios from 'axios';
@@ -296,8 +295,8 @@
                 }).then(function(response) {
                     let reqData = response.data;
                     if(reqData.responseObject.responsePk>0){
-                        t.login(reqData.responseObject.responseData.adminName);
-                        localStorage.setItem('userName',reqData.responseObject.responseData.adminName);
+                        t.login(reqData.responseObject.responseData['data_list'].adminName);
+                        localStorage.setItem('userName',reqData.responseObject.responseData['data_list'].adminName);
                         localStorage.setItem('adminId',reqData.responseObject.responsePk);
                         t.$message({
                             type: 'success',

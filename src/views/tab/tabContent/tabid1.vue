@@ -11,59 +11,35 @@
                     userRegisterTime: '',
                     userAuditTime: '',-->
                 <el-form-item label="会员ID">
-                    <el-input v-model="formInline.userId" placeholder="会员ID" class="adminInputEl"></el-input>
+                    <el-input v-model="formInline.customerId" placeholder="会员ID" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="姓名">
-                    <el-input v-model="formInline.userName" placeholder="请输入姓名" class="adminInputEl"></el-input>
+                    <el-input v-model="formInline.customerName" placeholder="请输入姓名" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="性别">
-                    <el-select v-model="formInline.userSex" placeholder="性别" class="adminInputEl">
+                    <el-select v-model="formInline.customerSex" placeholder="性别" class="adminInputEl">
                         <el-option label="男" value="0"></el-option>
                         <el-option label="女" value="1"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="年龄">
-                    <el-input v-model="formInline.userAge" placeholder="请输入年龄" class="adminInputEl"></el-input>
-                </el-form-item>
                 <el-form-item label="用户状态">
-                    <el-select v-model="formInline.userState" placeholder="用户状态" class="adminInputEl">
-                        <el-option label="游客" value="0"></el-option>
-                        <el-option label="已注册" value="1"></el-option>
-                        <el-option label="已完善信息" value="2"></el-option>
-                        <el-option label="已审核" value="2"></el-option>
-                        <el-option label="正在审核" value="2"></el-option>
-                        <el-option label="更改信息" value="2"></el-option>
-                        <el-option label="拉黑" value="2"></el-option>
+                    <el-select v-model="formInline.customerAccountStatus" placeholder="用户状态" class="adminInputEl">
+                        <!--0注册，1提交认证，等待审核，2,认证通过,3驳回认证,4拉黑-->
+                        <el-option label="注册" value="0"></el-option>
+                        <el-option label="提交认证" value="1"></el-option>
+                        <el-option label="认证通过" value="2"></el-option>
+                        <el-option label="认证驳回" value="3"></el-option>
+                        <el-option label="拉黑" value="4"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="邮件">
-                    <el-input v-model="formInline.userEmail" placeholder="邮件" class="adminInputEl"></el-input>
+                    <el-input v-model="formInline.customerEmail" placeholder="邮件" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="手机号">
-                    <el-input v-model="formInline.userPhoneNumber" placeholder="手机号" class="adminInputEl"></el-input>
-                </el-form-item>
-                <el-form-item label="注册时间">
-                    <el-date-picker
-                        v-model="formInline.userRegisterTime"
-                        align="right"
-                        type="date"
-                        class="adminInputEl"
-                        placeholder="注册时间"
-                        :picker-options="pickerOptions1">
-                    </el-date-picker>
-                </el-form-item>
-                <el-form-item label="审核时间">
-                    <el-date-picker
-                        v-model="formInline.userAuditTime"
-                        align="right"
-                        type="date"
-                        placeholder="审核时间"
-                        class="adminInputEl"
-                        :picker-options="pickerOptions1">
-                    </el-date-picker>
+                    <el-input v-model="formInline.customerPhoneNum" placeholder="手机号" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="onSubmit">查询</el-button>
+                    <el-button type="primary" @click="getUserList">查询</el-button>
                 </el-form-item>
             </el-form>
             <div class="block">
@@ -74,59 +50,60 @@
                     @current-change="handleCurrentChange"
                     style="width: 100%">
                     <el-table-column
-                        prop="id"
+                        prop="customerId"
                         label="会员ID">
                     </el-table-column>
                     <el-table-column
-                        prop="name"
+                        prop="customerName"
                         label="姓名">
                     </el-table-column>
                     <el-table-column
-                        prop="sexType"
+                        prop="customerSex"
+                        :formatter="sexFormat"
                         label="性别">
                     </el-table-column>
                     <el-table-column
-                        prop="age"
+                        prop="customerBirthday"
                         label="年龄">
                     </el-table-column>
                     <el-table-column
-                        prop="job"
+                        prop="customerProfession"
                         label="职业">
                     </el-table-column>
                     <el-table-column
-                        prop="educationLevel"
+                        prop="customerDegree"
                         label="学历或学位">
                     </el-table-column>
                     <el-table-column
-                        prop="state"
+                        prop="customerAccountStatus"
                         label="状态">
                     </el-table-column>
                     <el-table-column
-                        prop="activeVal"
+                        prop="customerActiveVaule"
                         label="活跃值">
                     </el-table-column>
                     <el-table-column
-                        prop="address"
+                        prop="customerLocation"
                         label="所在地">
                     </el-table-column>
                     <el-table-column
-                        prop="email"
+                        prop="customerEmail"
                         label="邮件">
                     </el-table-column>
                     <el-table-column
-                        prop="phone"
+                        prop="customerPhoneNum"
                         label="手机号">
                     </el-table-column>
                     <el-table-column
-                        prop="registerTime"
+                        prop="createTime"
                         label="注册时间">
                     </el-table-column>
                     <el-table-column
-                        prop="auditTime"
+                        prop="updateTime"
                         label="审核时间">
                     </el-table-column>
                     <el-table-column
-                        prop="auditer"
+                        prop="adminName"
                         label="审核人">
                     </el-table-column>
                 </el-table>
@@ -136,11 +113,11 @@
                         background
                         @size-change="handleSizeChange"
                         @current-change="handleCurrentChange"
-                        :current-page="currentPage4"
-                        :page-sizes="[100, 200, 300, 400]"
-                        :page-size="100"
+                        :current-page="formInline.pageIndex"
+                        :page-sizes="[10, 20, 30]"
+                        :page-size="formInline.pageSize"
                         layout="total, sizes, prev, pager, next, jumper"
-                        :total="400">
+                        :total="count">
                     </el-pagination>
                 </div>
             </div>
@@ -230,7 +207,7 @@
    }
 </style>
 <script>
-    import userData from '../../../virtualData/UserStatistics';
+    import Common from '../../../utils/common.js';
     import axios from 'axios';
     export default {
         data() {
@@ -238,155 +215,43 @@
                 activateOnOff:false,
                 innerVisible:false,
                 rejectDialogVisible:false,
-                currentPage4: 4,
+                count:0,
                 blacklist:{
                     region:1,
                     textarea2:''
                 },
                 formInline: {
-                    userId: '',
-                    userName: '',
-                    userSex: '',
-                    userAge: '',
-                    userState: '',
-                    userEmail: '',
-                    userPhoneNumber: '',
-                    userRegisterTime: '',
-                    userAuditTime: '',
+                    customerId: '',
+                    customerName: '',
+                    customerSex: '',
+                    customerAccountStatus: '',
+                    customerEmail: '',
+                    customerPhoneNum: '',
+                    getType:0,
+                    pageSize:10,
+                    pageIndex:1
                 },
                 selectedData:{},
                 selectedOne:false,
-                pickerOptions1: {
-                    disabledDate(time) {
-                        return time.getTime() > Date.now();
-                    },
-                    shortcuts: [{
-                        text: '今天',
-                        onClick(picker) {
-                            picker.$emit('pick', new Date());
-                            console.log('今天'    ,picker)
-                        }
-                    }, {
-                        text: '昨天',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24);
-                            picker.$emit('pick', date);
-                        }
-                    }, {
-                        text: '一周前',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
-                        }
-                    }]
-                },
                 value2:"",
-                tableData:userData.data.dataList
+                tableData:[]
             }
         },
         watch:{
             formInline:{
                 handler(newVal, oldVal){
+                    let t = this;
                     console.log(newVal,oldVal);
+                    if((newVal.pageIndex!==oldVal.pageIndex)||(newVal.pageSize!==oldVal.pageSize)){
+                        t.getUserList();
+                    }
                 },
                 deep:true
             }
         },
         mounted(){
-          console.log('开始');
-            axios({
-                url: "/api/test",
-                method: "POST",
-                data: {"one":4,"two":1},
-                /*transformRequest: [function(data) {
-                    return "paramJson=" + JSON.stringify(data);
-                }],*/
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                timeout: 30000
-            }).then(function(res){
-                console.log(res);
-            });
-            /*axios({
-                url: "/api/testSum",
-                method: "POST",
-                data: {"one":4,"two":1},
-                /!*transformRequest: [function(data) {
-                    return "paramJson=" + JSON.stringify(data);
-                }],*!/
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                timeout: 30000
-            }).then(function(res){
-                console.log(res);
-            });*/
-            // axios.get('/api/test', {
-            //     params: {"i":4,"j":1},
-            //     headers: {
-            //         'X-Requested-With': 'XMLHttpRequest'
-            //     }
-            // })
-            //     .then(function (response) {
-            //         console.log(response);
-            //     })
-            //     .catch(function (error) {
-            //         console.log(error);
-            //     });
-            axios.get('/call/customer/getCustomerList', {
-                params: {"customerSex":"0","pageSize":10,"pageIndex":1}
-            })
-                .then(function (response) {
-                    console.log(response.data);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-            // axios({
-            //     url: "/api/love",
-            //     method: "POST",
-            //     data: {"a":4,"b":1},
-            //     /*transformRequest: [function(data) {
-            //         return "paramJson=" + JSON.stringify(data);
-            //     }],*/
-            //     headers: {
-            //         'X-Requested-With': 'XMLHttpRequest'
-            //     },
-            //     timeout: 30000
-            // }).then(function(res){
-            //     console.log(res);
-            // });
-            // axios({
-            //     url: "http://xkhb69.natappfree.cc/signIn",
-            //     method: "POST",
-            //     data: {"username":"123456","password":"123456"},
-            //     transformRequest: [function(data) {
-            //         return "paramJson=" + JSON.stringify(data);
-            //     }],
-            //     headers: {
-            //         'X-Requested-With': 'XMLHttpRequest'
-            //     },
-            //     timeout: 30000
-            // }).then(function(res){
-            //     console.log(res);
-            // });
-            /*axios({
-                url: "/api/test?i=1&j=2",
-                method: "GET",
-                data: {"i":4,"j":1},
-                /!*transformRequest: [function(data) {
-                    return "paramJson=" + JSON.stringify(data);
-                }],*!/
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                timeout: 30000
-            }).then(function(res){
-                console.log(res);
-            });*/
+            let t = this;
+            t.getUserList();
         },
         methods:{
             activate(type){
@@ -405,6 +270,26 @@
                     }
 
                 }
+            },
+            getUserList(){
+                let t = this;
+                axios.get('/call/customer/getCustomerList', {
+                    params: t.formInline
+                })
+                    .then(function (response) {
+                        console.log(response.data);
+                        let reqData = response.data;
+                        if(reqData.responseObject.responseData['data_list']){
+                            t.tableData = reqData.responseObject.responseData['data_list'];
+                        }
+                        console.log(reqData.responseObject.responseData.responseCount);
+                        if(reqData.responseObject.responseData.totalCount){
+                            t.count = reqData.responseObject.responseData.totalCount;
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             },
             rejectAudit(step){
                 let t = this;
@@ -429,11 +314,9 @@
                 this.multipleSelection = val;
 
             },
-            onSubmit() {
-                console.log('submit!');
-            },
             handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
+                let t = this;
+                t.formInline.pageSize = val;
             },
             handleCurrentChange(val) {
                 let t = this;
@@ -441,6 +324,11 @@
                 t.selectedData = val;
                 t.selectedOne = true;
                 console.log(t.selectedOne);
+            },
+            sexFormat(row, column){
+                let t = this;
+                var type = row['customerSex'];
+                return Common.sexFormat(type);
             }
         }
     }
