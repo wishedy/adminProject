@@ -1,6 +1,6 @@
 <template>
     <section class="main-container" :class="{'active':!toggleOnOff}">
-        <!--<el-header class="adminHeader">
+        <el-header class="adminHeader">
             <el-menu
                 class="el-menu-demo"
                 mode="horizontal"
@@ -19,7 +19,7 @@
                 </div>
             </el-menu>
             <Tab class="adminTab" v-show="marTop"></Tab>
-        </el-header>-->
+        </el-header>
         <router-view class="adminContent" :class="{'marTop':marTop}"></router-view>
 
     </section>

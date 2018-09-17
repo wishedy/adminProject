@@ -32,22 +32,39 @@
                         <el-option label="拉黑" value="4"></el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="学位">
+                    <!-- //用户学位0大学专科，1大学本科，2研究生，3博士，4博士后 -->
+                    <el-select v-model="formInline.customerDegree" placeholder="用户学位" class="adminInputEl">
+                        <!--0注册，1提交认证，等待审核，2,认证通过,3驳回认证,4拉黑-->
+                        <el-option label="大学专科" value="0"></el-option>
+                        <el-option label="大学本科" value="1"></el-option>
+                        <el-option label="研究生" value="2"></el-option>
+                        <el-option label="博士" value="3"></el-option>
+                        <el-option label="博士后" value="4"></el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="邮件">
                     <el-input v-model="formInline.customerEmail" placeholder="邮件" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="手机号">
                     <el-input v-model="formInline.customerPhoneNum" placeholder="手机号" class="adminInputEl"></el-input>
                 </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="getUserList">查询</el-button>
-                </el-form-item>
+                <div class="block">
+                    <el-form-item>
+                        <el-button type="primary" @click="getUserList">查询</el-button>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="default" @click="resetList">重置</el-button>
+                    </el-form-item>
+                </div>
             </el-form>
             <div class="block">
                 <el-table
                     :data="tableData"
                     border
                     highlight-current-row
-                    @current-change="handleCurrentChange"
+                    :default-sort = "{prop: 'updateTime', order: 'descending'}"
+                    @current-change="tableCurrentChange"
                     style="width: 100%">
                     <el-table-column
                         prop="customerId"
@@ -64,6 +81,8 @@
                     </el-table-column>
                     <el-table-column
                         prop="customerBirthday"
+                        :formatter="jsGetAge"
+                        sortable
                         label="年龄">
                     </el-table-column>
                     <el-table-column
@@ -72,14 +91,17 @@
                     </el-table-column>
                     <el-table-column
                         prop="customerDegree"
-                        label="学历或学位">
+                        :formatter="customerDegree"
+                        label="学位">
                     </el-table-column>
                     <el-table-column
+                        :formatter='accountState'
                         prop="customerAccountStatus"
                         label="状态">
                     </el-table-column>
                     <el-table-column
                         prop="customerActiveVaule"
+                        sortable
                         label="活跃值">
                     </el-table-column>
                     <el-table-column
@@ -96,10 +118,12 @@
                     </el-table-column>
                     <el-table-column
                         prop="createTime"
+                        sortable
                         label="注册时间">
                     </el-table-column>
                     <el-table-column
                         prop="updateTime"
+                        sortable
                         label="审核时间">
                     </el-table-column>
                     <el-table-column
@@ -113,15 +137,15 @@
                         background
                         @size-change="handleSizeChange"
                         @current-change="handleCurrentChange"
-                        :current-page="formInline.pageIndex"
+                        :current-page="pageIndex"
                         :page-sizes="[10, 20, 30]"
-                        :page-size="formInline.pageSize"
+                        :page-size="pageSize"
                         layout="total, sizes, prev, pager, next, jumper"
                         :total="count">
                     </el-pagination>
                 </div>
             </div>
-            <div class="block adminAuditControl">
+            <!-- <div class="block adminAuditControl">
                 <el-form :inline="true" class="demo-form-inline">
                     <el-form-item>
                         <el-button>详情</el-button>
@@ -136,7 +160,7 @@
                         <el-button @click.native="activate(0)" type="success">激活</el-button>
                     </el-form-item>
                 </el-form>
-            </div>
+            </div> -->
         </section>
         <el-dialog
             width="30%"
@@ -150,20 +174,14 @@
             </span>
         </el-dialog>
         <el-dialog
-            :title="'拉黑'+selectedData.name"
+            :title="'拉黑'+selectedData.customerName"
             width="40%"
             :visible.sync="rejectDialogVisible">
             <section class="block">
                 <el-form  :model="blacklist" class="demo-form-inline" label-width="80px" label-position="left">
                     <el-form-item label="拉黑原因">
                         <el-select v-model="blacklist.region" placeholder="用户状态" class="adminInputElDialog">
-                            <el-option label="原因1" value="0"></el-option>
-                            <el-option label="原因2" value="1"></el-option>
-                            <el-option label="原因3" value="2"></el-option>
-                            <el-option label="原因4" value="3"></el-option>
-                            <el-option label="原因5" value="4"></el-option>
-                            <el-option label="原因6" value="5"></el-option>
-                            <el-option label="原因7" value="6"></el-option>
+                            <el-option :label="item.reasonName" v-for="(item,index) in blackReason" :key="index" :value="item.reasonType"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="拉黑回复">
@@ -222,6 +240,7 @@
                 },
                 formInline: {
                     customerId: '',
+                    customerDegree:'',
                     customerName: '',
                     customerSex: '',
                     customerAccountStatus: '',
@@ -231,22 +250,29 @@
                     pageSize:10,
                     pageIndex:1
                 },
+                pageSize:10,
+                pageIndex:1,
                 selectedData:{},
                 selectedOne:false,
                 value2:"",
                 tableData:[]
             }
         },
+        computed: {
+          blackReason(){
+              return Common.blackReason();
+          }  
+        },
         watch:{
-            formInline:{
-                handler(newVal, oldVal){
-                    let t = this;
-                    console.log(newVal,oldVal);
-                    if((newVal.pageIndex!==oldVal.pageIndex)||(newVal.pageSize!==oldVal.pageSize)){
-                        t.getUserList();
-                    }
-                },
-                deep:true
+            pageIndex(newVal){
+                let t = this;
+                t.formInline.pageIndex = newVal; 
+                t.getUserList();       
+            },
+            pageSize(newVal){
+                let t = this;
+                t.formInline.pageSize = newVal;
+                t.getUserList();
             }
         },
         mounted(){
@@ -254,6 +280,31 @@
             t.getUserList();
         },
         methods:{
+            resetList(){
+                let t = this;
+                t.formInline={
+                    customerId: '',
+                    customerDegree:'',
+                    customerName: '',
+                    customerSex: '',
+                    customerAccountStatus: '',
+                    customerEmail: '',
+                    customerPhoneNum: '',
+                    getType:0,
+                    pageSize:10,
+                    pageIndex:1
+                };
+                t.getUserList();
+            },
+            tableCurrentChange(val){
+                let t = this;
+                if(val){
+                 console.log(val);
+                 t.selectedOne = true;
+                 t.selectedData = val;
+                }
+                
+            },
             activate(type){
                 let t = this;
                 if(!t.selectedOne){
@@ -264,7 +315,7 @@
                     }else if(type===1){
                         t.activateOnOff = false;
                         t.$message({
-                            message: t.selectedData.name+'已被激活',
+                            message: t.selectedData.customerName+'已被激活',
                             type: 'success'
                         });
                     }
@@ -273,16 +324,15 @@
             },
             getUserList(){
                 let t = this;
+                t.selectedData = {};
                 axios.get('/call/customer/getCustomerList', {
                     params: t.formInline
                 })
                     .then(function (response) {
-                        console.log(response.data);
                         let reqData = response.data;
                         if(reqData.responseObject.responseData['data_list']){
                             t.tableData = reqData.responseObject.responseData['data_list'];
                         }
-                        console.log(reqData.responseObject.responseData.responseCount);
                         if(reqData.responseObject.responseData.totalCount){
                             t.count = reqData.responseObject.responseData.totalCount;
                         }
@@ -301,7 +351,7 @@
                         t.rejectDialogVisible = true;
                     }else{
                         t.$message({
-                            message: t.selectedData.name+'已拉黑',
+                            message: t.selectedData.customerName+'已拉黑',
                             type: 'success'
                         });
                         t.rejectDialogVisible = false;
@@ -316,19 +366,31 @@
             },
             handleSizeChange(val) {
                 let t = this;
-                t.formInline.pageSize = val;
+                t.pageSize = parseInt(val,10);
             },
             handleCurrentChange(val) {
                 let t = this;
-                console.log(`当前页: ${val}`);
-                t.selectedData = val;
-                t.selectedOne = true;
-                console.log(t.selectedOne);
+                t.pageIndex = parseInt(val,10);
+            },
+            jsGetAge(row,column){
+               let t = this;
+               let birthDay = row['customerBirthday'];
+               return Common.jsGetAge(birthDay);
             },
             sexFormat(row, column){
                 let t = this;
-                var type = row['customerSex'];
+                let type = row['customerSex'];
                 return Common.sexFormat(type);
+            },
+            customerDegree(row,column){
+                let t = this;
+                let type = row['customerDegree'];
+                return Common.customerDegree(type);
+            },
+            accountState(row,column){
+                let t = this;
+                let type = row['customerAccountStatus'];
+                return Common.accountState(type);
             }
         }
     }
