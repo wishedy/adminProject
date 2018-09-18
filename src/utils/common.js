@@ -1,26 +1,26 @@
 class Common {
     constructor(){
-        this.sexFormat = this.sexFormat.bind(this); 
-        this.accountState = this.accountState.bind(this); 
-        this.jsGetAge = this.jsGetAge.bind(this); 
-        this.customerDegree = this.customerDegree.bind(this);  
-        this.blackReason = this.blackReason.bind(this);        
+        this.sexFormat = this.sexFormat.bind(this);
+        this.accountState = this.accountState.bind(this);
+        this.jsGetAge = this.jsGetAge.bind(this);
+        this.customerDegree = this.customerDegree.bind(this);
+        this.blackReason = this.blackReason.bind(this);
     }
     sexFormat(type){
         return parseInt(type,10)===0?'女':'男';
     }
-    jsGetAge(strBirthday){       
+    jsGetAge(strBirthday){
         var returnAge;
         var strBirthdayArr=strBirthday.split("-");
         var birthYear = strBirthdayArr[0];
         var birthMonth = strBirthdayArr[1];
         var birthDay = strBirthdayArr[2];
-        
+
         var d = new Date();
         var nowYear = d.getFullYear();
         var nowMonth = d.getMonth() + 1;
         var nowDay = d.getDate();
-        
+
         if(nowYear == birthYear){
             returnAge = 0;//同年 则为0岁
         }
@@ -56,10 +56,10 @@ class Common {
                 returnAge = -1;//返回-1 表示出生日期输入错误 晚于今天
             }
         }
-        
+
         return returnAge;//返回周岁年龄
-        
-    }    
+
+    }
     customerDegree(type){
         let str = '';
         switch (parseInt(type)){
@@ -79,6 +79,39 @@ class Common {
             case 4:
             str='博士后';
             break;
+        }
+        return str;
+    }
+    blackReasonFormat(type){
+        let str = '';
+        switch (parseInt(type)){
+            case 0:
+                str='营销诈骗';
+                break;
+            case 1:
+                str='淫秽色情';
+                break;
+            case 2:
+                str='不友善行为';
+                break;
+            case 3:
+                str='诱导欺骗';
+                break;
+            case 4:
+                str='虚假资料';
+                break;
+        }
+        return str;
+    }
+    blackState(type){
+        let str = '';
+        switch (parseInt(type)){
+            case 0:
+                str='拉黑';
+                break;
+            case 1:
+                str='激活';
+                break;
         }
         return str;
     }

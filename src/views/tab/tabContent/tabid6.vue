@@ -3,78 +3,73 @@
         <section class="adminContentInner">
             <el-form :inline="true" :model="formInline" class="demo-form-inline" label-width="80px" label-position="left">
                 <el-form-item label="拉黑ID">
-                    <el-input v-model="formInline.user" placeholder="拉黑ID" class="adminInputEl"></el-input>
+                    <el-input v-model="formInline.blackId" placeholder="拉黑ID" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="会员ID">
-                    <el-input v-model="formInline.user" placeholder="会员ID" class="adminInputEl"></el-input>
+                    <el-input v-model="formInline.customerId" placeholder="会员ID" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="姓名">
-                    <el-input v-model="formInline.user" placeholder="请输入姓名" class="adminInputEl"></el-input>
+                    <el-input v-model="formInline.customerName" placeholder="请输入姓名" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="拉黑状态">
-                    <el-select v-model="formInline.region" placeholder="状态" class="adminInputEl">
+                    <el-select v-model="formInline.blackState" placeholder="状态" class="adminInputEl">
                         <el-option label="拉黑" value="0"></el-option>
                         <el-option label="激活" value="1"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="拉黑原因">
-                    <el-select v-model="formInline.region" placeholder="拉黑原因" class="adminInputEl">
-                        <el-option label="原因一" value="0"></el-option>
-                        <el-option label="原因二" value="1"></el-option>
-                        <el-option label="原因三" value="2"></el-option>
+                <el-form-item label="拉黑原因"><!--0营销诈骗、1淫秽色情、2不友善行为、3诱导欺骗、4虚假资料-->
+                    <el-select v-model="formInline.blackReason" placeholder="拉黑原因" class="adminInputEl">
+                        <el-option :label="item.reasonName" :value="item.reasonType" v-for="(item,index) in blackReason" :key="item.reasonType"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="时间">
-                    <el-date-picker
-                        class="adminInputEl"
-                        v-model="value2"
-                        align="right"
-                        type="date"
-                        placeholder="选择日期"
-                        :picker-options="pickerOptions1">
-                    </el-date-picker>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="onSubmit">查询</el-button>
-                </el-form-item>
+                <div class="block">
+                    <el-form-item>
+                        <el-button type="primary" @click="getBlackUserList">查询</el-button>
+                        <el-button type="default" @click="resetList">重置</el-button>
+                    </el-form-item>
+                </div>
             </el-form>
             <div class="block">
                 <el-table
                     :data="tableData"
                     border
                     highlight-current-row
-                    @current-change="handleCurrentChange"
+                    @current-change="tableCurrentChange"
                     style="width: 100%">
                     <el-table-column
-                        prop="changeId"
+                        prop="blackId"
                         label="拉黑ID">
                     </el-table-column>
                     <el-table-column
-                        prop="id"
+                        prop="customerId"
                         label="会员ID">
                     </el-table-column>
                     <el-table-column
-                        prop="name"
+                        prop="customerName"
                         label="姓名">
                     </el-table-column>
                     <el-table-column
-                        prop="blackType"
+                        prop="blackReason"
+                        :formatter="blackReasonFormat"
                         label="拉黑原因">
                     </el-table-column>
                     <el-table-column
                         prop="blackState"
+                        :formatter="blackStateFormat"
                         label="状态">
                     </el-table-column>
                     <el-table-column
                         prop="updateTime"
+                        sortable
                         label="更新时间">
                     </el-table-column>
                     <el-table-column
-                        prop="registerTime"
+                        prop="createTime"
+                        sortable
                         label="拉黑时间">
                     </el-table-column>
                     <el-table-column
-                        prop="auditer"
+                        prop="adminName"
                         label="拉黑人">
                     </el-table-column>
                 </el-table>
@@ -84,11 +79,11 @@
                         background
                         @size-change="handleSizeChange"
                         @current-change="handleCurrentChange"
-                        :current-page="currentPage4"
-                        :page-sizes="[100, 200, 300, 400]"
-                        :page-size="100"
+                        :current-page="pageIndex"
+                        :page-sizes="[10, 20, 30]"
+                        :page-size="pageSize"
                         layout="total, sizes, prev, pager, next, jumper"
-                        :total="400">
+                        :total="count">
                     </el-pagination>
                 </div>
                 <div class="block adminAuditControl">
@@ -115,22 +110,22 @@
             </span>
         </el-dialog>
         <el-dialog
-            :title="selectedData.name+'的拉黑信息'"
+            :title="selectedData.customerName+'的拉黑信息'"
             :visible.sync="centerDialogVisible"
             width="65%"
             center>
             <div class="block">
                 <p>
-                    {{selectedData.feedBackcontent}}
+                    {{blackReason[parseInt(selectedData.blackReason,10)]['reasonName']}}
                 </p>
             </div>
-            <div class="block feedBackImgContainer">
+            <!--<div class="block feedBackImgContainer">
                 <ul class="feedBackImgList">
                     <li class="feedBackAreaImgItem" v-for="(item,index) in selectedData.imgList">
                         <img :src="item" alt="" v-bind:key="index">
                     </li>
                 </ul>
-            </div>
+            </div>-->
             <div class="block">
                 <el-form :inline="true" class="demo-form-inline">
                     <el-form-item label="输入拉黑回复" :inline="true" class="rejectAuditInline">
@@ -146,14 +141,24 @@
     </section>
 </template>
 <script>
-    import userData from '../../../virtualData/feedback';
+    import Common from '../../../utils/common.js';
+    import axios from 'axios';
     export default {
         data(){
             return {
                 formInline: {
-                    user: '',
-                    region:''
+                    blackId:'',//该拉黑的唯一标识
+                    customerId:'',//拉黑用户的id
+                    customerName:'',//拉黑用户的名字
+                    blackReason:'',//拉黑的原因0营销诈骗、1淫秽色情、2不友善行为、3诱导欺骗、4虚假资料
+                    blackState:'',//拉黑的状态，0新建，1已激活
+                    getType:4,
+                    pageSize:10,
+                    pageIndex:1
                 },
+                pageSize:10,
+                pageIndex:1,
+                count:0,
                 pickerOptions1: {
                     disabledDate(time) {
                         return time.getTime() > Date.now();
@@ -187,17 +192,91 @@
                 selectedOne:false,
                 msg:"",
                 currentPage4:4,
-                tableData:userData.data.dataList
+                tableData:[]
+            }
+        },
+        mounted(){
+          let t = this;
+          t.getBlackUserList();
+        },
+        computed:{
+            blackReason(){
+                return Common.blackReason();
+            }
+        },
+        watch:{
+            pageIndex(newVal){
+                let t = this;
+                t.formInline.pageIndex = newVal;
+                t.getBlackUserList();
+            },
+            pageSize(newVal){
+                let t = this;
+                t.formInline.pageSize = newVal;
+                console.log('执行');
+                t.getBlackUserList();
             }
         },
         methods:{
+            tableCurrentChange(val){
+                let t = this;
+                if(val){
+                    console.log(val);
+                    t.selectedOne = true;
+                    t.selectedData = val;
+                }
+
+            },
+            blackReasonFormat(row,column){
+                let t = this;
+                let type = row['blackReason'];
+                return Common.blackReasonFormat(type);
+            },
+            blackStateFormat(row,column){
+                let t = this;
+                let type = row['blackState'];
+                return Common.blackState(type);
+            },
+            resetList(){
+                let t = this;
+                t.formInline={
+                    blackId:'',//该拉黑的唯一标识
+                    customerId:'',//拉黑用户的id
+                    customerName:'',//拉黑用户的名字
+                    blackReason:'',//拉黑的原因0营销诈骗、1淫秽色情、2不友善行为、3诱导欺骗、4虚假资料
+                    blackState:'',//拉黑的状态，0新建，1已激活
+                    getType:4,
+                    pageSize:10,
+                    pageIndex:1
+                };
+                t.getBlackUserList();
+            },
             feedBackContent(){
                 let t = this;
                 t.centerDialogVisible = false;
                 t.$message({
-                    message: t.selectedData.name+'拉黑信息已回复',
+                    message: t.selectedData.customerName+'拉黑信息已回复',
                     type: 'success'
                 });
+            },
+            getBlackUserList(){
+                let t = this;
+                t.selectedData = {};
+                axios.get('/call/customer/getBlacklist', {
+                    params: t.formInline
+                })
+                    .then(function (response) {
+                        let reqData = response.data;
+                        if(reqData.responseObject.responseData['data_list']){
+                            t.tableData = reqData.responseObject.responseData['data_list'];
+                        }
+                        if(reqData.responseObject.responseData.totalCount){
+                            t.count = reqData.responseObject.responseData.totalCount;
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             },
             handleSelectionChange(val) {
                 this.multipleSelection = val;
@@ -232,12 +311,12 @@
             },
             handleSizeChange(val) {
                 console.log(`每页 ${val} 条`);
+                let t = this;
+                t.pageSize = val;
             },
             handleCurrentChange(val) {
                 let t = this;
-                t.selectedOne = true;
-                t.selectedData = val;
-                console.log(val)
+                t.pageIndex = parseInt(val,10);
             }
         }
     }
