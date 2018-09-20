@@ -148,16 +148,10 @@
             <div class="block adminAuditControl">
                 <el-form :inline="true" class="demo-form-inline">
                     <el-form-item>
-                        <el-button>详情</el-button>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary">查看权限</el-button>
+                        <el-button type="default">查看权限</el-button>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="danger"  @click.native="blackCustomer(0)">拉黑</el-button>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button @click.native="activate(0)" type="success">激活</el-button>
                     </el-form-item>
                 </el-form>
             </div>
