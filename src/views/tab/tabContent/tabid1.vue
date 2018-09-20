@@ -145,7 +145,7 @@
                     </el-pagination>
                 </div>
             </div>
-            <!-- <div class="block adminAuditControl">
+            <div class="block adminAuditControl">
                 <el-form :inline="true" class="demo-form-inline">
                     <el-form-item>
                         <el-button>详情</el-button>
@@ -154,13 +154,13 @@
                         <el-button type="primary">查看权限</el-button>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="danger"  @click.native="rejectAudit(0)">拉黑</el-button>
+                        <el-button type="danger"  @click.native="blackCustomer(0)">拉黑</el-button>
                     </el-form-item>
                     <el-form-item>
                         <el-button @click.native="activate(0)" type="success">激活</el-button>
                     </el-form-item>
                 </el-form>
-            </div> -->
+            </div>
         </section>
         <el-dialog
             width="30%"
@@ -197,7 +197,7 @@
             </section>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="rejectDialogVisible = false">取 消</el-button>
-                <el-button type="primary"  @click="rejectAudit(1)">确定</el-button>
+                <el-button type="primary"  @click="blackCustomer(1)">确定</el-button>
             </div>
         </el-dialog>
     </section>
@@ -261,13 +261,13 @@
         computed: {
           blackReason(){
               return Common.blackReason();
-          }  
+          }
         },
         watch:{
             pageIndex(newVal){
                 let t = this;
-                t.formInline.pageIndex = newVal; 
-                t.getUserList();       
+                t.formInline.pageIndex = newVal;
+                t.getUserList();
             },
             pageSize(newVal){
                 let t = this;
@@ -303,7 +303,7 @@
                  t.selectedOne = true;
                  t.selectedData = val;
                 }
-                
+
             },
             activate(type){
                 let t = this;
@@ -314,10 +314,12 @@
                         t.activateOnOff = true;
                     }else if(type===1){
                         t.activateOnOff = false;
+                        t.selectedData['blackState'] = 1;
                         t.$message({
                             message: t.selectedData.customerName+'已被激活',
                             type: 'success'
                         });
+                        t.getUserList();
                     }
 
                 }
@@ -341,7 +343,7 @@
                         console.log(error);
                     });
             },
-            rejectAudit(step){
+            blackCustomer(step){
                 let t = this;
                 if(!t.selectedOne){
                     t.$message.error('请选择您要拉黑的用户!');
@@ -350,12 +352,41 @@
                         console.log('拉黑');
                         t.rejectDialogVisible = true;
                     }else{
-                        t.$message({
-                            message: t.selectedData.customerName+'已拉黑',
-                            type: 'success'
+                        axios({
+                            url: '/call/customer/activate',
+                            method: "POST",
+                            data: {
+                                customerId:t.selectedData.customerId,
+                                blackReason:t.blacklist.region,
+                                reportCustomerId:0,
+                                reportCustomerName:0,
+                                adminId:localStorage.getItem('adminId'),
+                                adminName:localStorage.getItem('userName'),
+                                updateState:4
+                            },
+                            transformRequest: [function (data) {
+                                return "paramJson=" + JSON.stringify(data);
+                            }],
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            },
+                            timeout: 30000
+                        }).then(function(req){
+                            console.log(req.data);
+                            if(req.data.responseObject.responseCode===4){
+                                t.$message({
+                                    message: t.selectedData.customerName+'已拉黑',
+                                    type: 'success'
+                                });
+                                t.getUserList();
+                            }else{
+                                t.$message({
+                                    message: t.selectedData.customerName+'拉黑失败',
+                                    type: 'warning'
+                                });
+                            }
+                            t.rejectDialogVisible = false;
                         });
-                        t.rejectDialogVisible = false;
-                        console.log(t.rejectDialogVisible);
                     }
                 }
             },

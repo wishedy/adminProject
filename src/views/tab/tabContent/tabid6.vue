@@ -34,6 +34,7 @@
                     :data="tableData"
                     border
                     highlight-current-row
+                    :default-sort = "{prop: 'updateTime', order: 'descending'}"
                     @current-change="tableCurrentChange"
                     style="width: 100%">
                     <el-table-column
@@ -70,7 +71,11 @@
                     </el-table-column>
                     <el-table-column
                         prop="adminName"
-                        label="拉黑人">
+                        label="拉黑管理员">
+                    </el-table-column>
+                    <el-table-column
+                        prop="unlockAdminName"
+                        label="解锁管理员">
                     </el-table-column>
                 </el-table>
                 <div class="block adminPage">
@@ -115,8 +120,7 @@
             width="65%"
             center>
             <div class="block">
-                <p>
-                    {{blackReason[parseInt(selectedData.blackReason,10)]['reasonName']}}
+                <p v-text="dialogReason">
                 </p>
             </div>
             <!--<div class="block feedBackImgContainer">
@@ -200,6 +204,10 @@
           t.getBlackUserList();
         },
         computed:{
+            dialogReason(){
+                let t = this;
+              return (!isNaN(parseInt(t.selectedData.blackReason,10)))&&t.blackReason[parseInt(t.selectedData.blackReason,10)]['reasonName']?t.blackReason[parseInt(t.selectedData.blackReason,10)]['reasonName']:'';
+            },
             blackReason(){
                 return Common.blackReason();
             }
@@ -289,11 +297,39 @@
                     if(type===0){
                         t.activateOnOff = true;
                     }else if(type===1){
-                        t.activateOnOff = false;
-                        t.$message({
-                            message:'用户已被激活',
-                            type: 'success'
+                        axios({
+                            url: '/call/customer/activate',
+                            method: "POST",
+                            data: {
+                                blackId:t.selectedData.blackId,
+                                customerId:t.selectedData.customerId,
+                                adminId:localStorage.getItem('adminId'),
+                                updateState:0,
+                                adminName:localStorage.getItem('userName')
+                            },
+                            transformRequest: [function (data) {
+                                return "paramJson=" + JSON.stringify(data);
+                            }],
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            },
+                            timeout: 30000
+                        }).then(function(req){
+                            t.activateOnOff = false;
+                            if(req.data.responseObject.responseCode===4){
+                                t.$message({
+                                    message:'用户已被激活',
+                                    type: 'success'
+                                });
+                                t.getBlackUserList();
+                            }else{
+                                t.$message({
+                                    message:'激活失败',
+                                    type: 'warning'
+                                });
+                            }
                         });
+
                     }
 
                 }
