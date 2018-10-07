@@ -24,7 +24,7 @@
                         <el-option label="无效" value="1"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="时间">
+                <!--<el-form-item label="时间">
                 <el-date-picker
                     class="adminInputEl"
                     v-model="value2"
@@ -33,10 +33,15 @@
                     placeholder="选择日期"
                     :picker-options="pickerOptions1">
                 </el-date-picker>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="onSubmit">查询</el-button>
-                </el-form-item>
+                </el-form-item>-->
+                <div class="block">
+                    <el-form-item>
+                        <el-button type="primary" @click="onSubmit">查询</el-button>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="default" @click="onSubmit">重置</el-button>
+                    </el-form-item>
+                </div>
             </el-form>
             <div class="block">
                 <el-table
