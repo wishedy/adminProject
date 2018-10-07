@@ -9,6 +9,12 @@ class Common {
     sexFormat(type){
         return parseInt(type,10)===0?'女':'男';
     }
+    auditType(type){
+        return parseInt(type,10)===0?'新建':'结束';
+    }
+    auditResult(type){
+        return parseInt(type,10)===0?'驳回':'通过';
+    }
     jsGetAge(strBirthday){
         var returnAge;
         var strBirthdayArr=strBirthday.split("-");

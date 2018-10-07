@@ -3,21 +3,21 @@
         <section class="adminContentInner">
             <el-form :inline="true" :model="formInline" class="demo-form-inline" label-width="80px" label-position="left">
                 <el-form-item label="会员ID">
-                    <el-input v-model="formInline.user" placeholder="会员ID" class="adminInputEl"></el-input>
+                    <el-input v-model="formInline.customerId" placeholder="会员ID" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="姓名">
-                    <el-input v-model="formInline.user" placeholder="请输入姓名" class="adminInputEl"></el-input>
+                    <el-input v-model="formInline.customerName" placeholder="请输入姓名" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="性别">
-                    <el-select v-model="formInline.region" placeholder="性别" class="adminInputEl">
+                    <el-select v-model="formInline.customerSex" placeholder="性别" class="adminInputEl">
                         <el-option label="男" value="0"></el-option>
                         <el-option label="女" value="1"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="年龄">
-                    <el-input v-model="formInline.user" placeholder="请输入年龄" class="adminInputEl"></el-input>
-                </el-form-item>
-                <el-form-item label="用户状态">
+                <!--<el-form-item label="年龄">
+                    <el-input v-model="formInline.customerName" placeholder="请输入年龄" class="adminInputEl"></el-input>
+                </el-form-item>-->
+                <!--<el-form-item label="用户状态">
                     <el-select v-model="formInline.region" placeholder="用户状态" class="adminInputEl">
                         <el-option label="游客" value="0"></el-option>
                         <el-option label="已注册" value="1"></el-option>
@@ -27,14 +27,14 @@
                         <el-option label="更改信息" value="2"></el-option>
                         <el-option label="拉黑" value="2"></el-option>
                     </el-select>
-                </el-form-item>
-                <el-form-item label="邮件">
+                </el-form-item>-->
+                <!--<el-form-item label="邮件">
                     <el-input v-model="formInline.user" placeholder="邮件" class="adminInputEl"></el-input>
-                </el-form-item>
-                <el-form-item label="手机号">
+                </el-form-item>-->
+                <!--<el-form-item label="手机号">
                     <el-input v-model="formInline.user" placeholder="手机号" class="adminInputEl"></el-input>
-                </el-form-item>
-                <el-form-item label="审核时间">
+                </el-form-item>-->
+                <!--<el-form-item label="审核时间">
                     <el-date-picker
                         class="adminInputEl"
                         v-model="value2"
@@ -43,73 +43,87 @@
                         placeholder="审核时间"
                         :picker-options="pickerOptions1">
                     </el-date-picker>
-                </el-form-item>
+                </el-form-item>-->
                 <el-form-item label="审核状态">
-                    <el-select v-model="formInline.region" placeholder="审核状态" class="adminInputEl">
+                    <el-select v-model="formInline.auditType" placeholder="审核状态" class="adminInputEl">
                         <el-option label="新建" value="0"></el-option>
-                        <el-option label="更改" value="1"></el-option>
-                        <el-option label="通过" value="2"></el-option>
-                        <el-option label="驳回" value="3"></el-option>
+                        <el-option label="结束" value="1"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="onSubmit">查询</el-button>
+                <el-form-item label="审核结果">
+                    <el-select v-model="formInline.auditResult" placeholder="审核结果" class="adminInputEl">
+                        <el-option label="驳回" value="0"></el-option>
+                        <el-option label="通过" value="1"></el-option>
+                    </el-select>
                 </el-form-item>
+                <div class="block">
+                    <el-form-item>
+                        <el-button type="primary" @click="onSubmit">查询</el-button>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="default" @click="reset">重置</el-button>
+                    </el-form-item>
+                </div>
+
             </el-form>
             <div class="block">
                 <el-table
                     :data="tableData"
                     border
                     highlight-current-row
-                    @current-change="handleCurrentChange"
+                    @current-change="tableCurrentChange"
                     style="width: 100%">
                     <el-table-column
-                        prop="id"
+                        prop="customerId"
                         label="会员ID">
                     </el-table-column>
                     <el-table-column
-                        prop="name"
+                        prop="customerName"
                         label="姓名">
                     </el-table-column>
                     <el-table-column
-                        prop="sexType"
+                        prop="customerSex"
+                        :formatter="sexFormat"
                         label="性别">
                     </el-table-column>
                     <el-table-column
-                        prop="age"
+                        prop="customerBirthday"
+                        :formatter="jsGetAge"
+                        sortable
                         label="年龄">
                     </el-table-column>
                     <el-table-column
-                        prop="job"
+                        prop="customerProfession"
                         label="职业">
                     </el-table-column>
                     <el-table-column
-                        prop="educationLevel"
+                        prop="customerDegree"
+                        :formatter="customerDegree"
                         label="学历或学位">
                     </el-table-column>
                     <el-table-column
-                        prop="idState"
+                        prop="auditType"
+                        :formatter="auditType"
                         label="身份审核">
                     </el-table-column>
                     <el-table-column
-                        prop="address"
+                        prop="customerLocation"
                         label="所在地">
                     </el-table-column>
                     <el-table-column
-                        prop="auditTime"
+                        prop="updateTime"
+                        sortable
                         label="更新时间">
                     </el-table-column>
                     <el-table-column
-                        prop="auditTime"
+                        prop="createTime"
+                        sortable
                         label="审核时间">
                     </el-table-column>
                     <el-table-column
-                        prop="registerTime"
-                        label="注册时间">
-                    </el-table-column>
-                    <el-table-column
-                        prop="auditState"
-                        label="审核状态">
+                        prop="auditResult"
+                        :formatter="auditResult"
+                        label="审核结果">
                     </el-table-column>
                 </el-table>
                 <div class="block adminPage">
@@ -118,11 +132,11 @@
                         background
                         @size-change="handleSizeChange"
                         @current-change="handleCurrentChange"
-                        :current-page="currentPage4"
-                        :page-sizes="[100, 200, 300, 400]"
-                        :page-size="100"
+                        :current-page="formInline.pageIndex"
+                        :page-sizes="[10, 20, 30]"
+                        :page-size="formInline.pageSize"
                         layout="total, sizes, prev, pager, next, jumper"
-                        :total="400">
+                        :total="count">
                     </el-pagination>
                 </div>
             </div>
@@ -146,7 +160,7 @@
             :visible.sync="centerDialogVisible"
             width="30%"
             center>
-            <span>是否确认通过{{selectedData.name}}的审核信息</span>
+            <span>是否确认通过{{selectedData.customerName}}的审核信息</span>
             <span slot="footer" class="dialog-footer">
             <el-button @click="centerDialogVisible = false">取 消</el-button>
             <el-button type="primary" @click="passAudit(1)">确 定</el-button>
@@ -179,16 +193,27 @@
     </section>
 </template>
 <script>
+    import Common from '../../../utils/common.js';
     import AuditDialog from '../../Dialog/auditDialog';
     import userData from '../../../virtualData/auditInformation';
+    import axios from 'axios';
     import {mapGetters,mapActions} from 'vuex';
     export default {
         data() {
             return {
                 formInline: {
-                    user: '',
-                    region:''
+                    customerId: '',
+                    customerName: '',
+                    customerSex: '',
+                    auditResult:'',
+                    auditType:'',
+                    getType:1,
+                    pageSize:10,
+                    pageIndex:1
                 },
+                pageSize:10,
+                pageIndex:1,
+                count:0,
                 selectedOne:false,
                 selectedData:{},
                 dialogInfo:{
@@ -203,41 +228,57 @@
                 rejectAuditReason:'',
                 rejectDialogVisible:false,
                 centerDialogVisible:false,
-                currentPage4: 4,
-                tableData:userData.data.dataList,
-                tableData3: [{
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-02',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-04',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-01',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-08',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-06',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-07',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }]
+                tableData:[]
+            }
+        },
+        watch:{
+            pageIndex(newVal){
+                let t = this;
+                t.formInline.pageIndex = newVal;
+                t.getAuditList();
+            },
+            pageSize(newVal){
+                let t = this;
+                t.formInline.pageSize = newVal;
+                t.getAuditList();
             }
         },
         methods: {
             ...mapActions(['tab2ShowDialog']),
+            tableCurrentChange(val){
+                let t = this;
+                if(val){
+                    console.log(val);
+                    t.selectedOne = true;
+                    t.selectedData = val;
+                }
+
+            },
+            auditResult(row,column){
+                let t = this;
+                let type = row['auditResult'];
+                return Common.auditResult(type);
+            },
+            auditType(row,column){
+                let t = this;
+                let type = row['auditType'];
+                return Common.auditType(type);
+            },
+            customerDegree(row,column){
+                let t = this;
+                let type = row['customerDegree'];
+                return Common.customerDegree(type);
+            },
+            jsGetAge(row,column){
+                let t = this;
+                let birthDay = row['customerBirthday'];
+                return Common.jsGetAge(birthDay);
+            },
+            sexFormat(row, column){
+                let t = this;
+                let type = row['customerSex'];
+                return Common.sexFormat(type);
+            },
             passAudit(step){
                 let t = this;
                     if(!t.selectedOne){
@@ -257,6 +298,20 @@
 
 
             },
+            reset(){
+                let t = this;
+                t.formInline = {
+                    customerId: '',
+                    customerName: '',
+                    customerSex: '',
+                    auditResult:'',
+                    auditType:'',
+                    getType:1,
+                    pageSize:10,
+                    pageIndex:1
+                };
+                t.getAuditList();
+            },
             rejectAudit(step){
               let t = this;
                 if(!t.selectedOne){
@@ -265,11 +320,38 @@
                     if(step===0){
                         t.rejectDialogVisible = true;
                     }else{
-                        t.$message({
-                            message: t.selectedData.name+'审核已驳回',
-                            type: 'success'
+                        axios({
+                            url: '/call/customer/rejectAudit',
+                            method: "POST",
+                            data: {
+                                auditId:t.selectedData.auditId,
+                                customerId:t.selectedData.customerId,
+                                adminId:localStorage.getItem('adminId'),
+                                updateState:3,
+                                adminName:localStorage.getItem('userName')
+                            },
+                            transformRequest: [function (data) {
+                                return "paramJson=" + JSON.stringify(data);
+                            }],
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            },
+                            timeout: 30000
+                        }).then(function(req){
+                            t.rejectDialogVisible = false;
+                            if(req.data.responseObject.responseCode===4){
+                                t.$message({
+                                    message: t.selectedData.customerName+'审核已驳回',
+                                    type: 'success'
+                                });
+                                t.getAuditList();
+                            }else{
+                                t.$message({
+                                    message:'激活失败',
+                                    type: 'warning'
+                                });
+                            }
                         });
-                        t.rejectDialogVisible = false;
                     }
                 }
             },
@@ -283,21 +365,45 @@
                 console.log(a,b);
             },
             onSubmit() {
+                let t = this;
+                t.getAuditList();
                 console.log('submit!');
             },
             handleSizeChange(val) {
                 console.log(`每页 ${val} 条`);
+                let t = this;
+                t.pageSize = val;
             },
             handleCurrentChange(val) {
                 let t = this;
-                t.selectedOne = true;
-                t.selectedData = val;
+                t.pageIndex = parseInt(val,10);
+            },
+            getAuditList(){
+                let t = this;
+                t.selectedData = {};
+                axios.get('/call/customer/getAuditList', {
+                    params: t.formInline
+                })
+                    .then(function (response) {
+                        let reqData = response.data;
+                        console.log(reqData);
+                        if(reqData.responseObject.responseData['data_list']){
+                            t.tableData = reqData.responseObject.responseData['data_list'];
+
+                        }
+                        if(reqData.responseObject.responseData.totalCount){
+                            t.count = reqData.responseObject.responseData.totalCount;
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             },
             awakenUserInfo(){
                 let t = this;
                 if(t.selectedOne){
                     t.dialogInfo ={
-                        title:t.selectedData.name+"审核信息",
+                        title:t.selectedData.customerName+"的审核信息",
                         degreeImg:t.selectedData.jobPhoto,
                         degreeNum:t.selectedData.jobNum,
                         professionImg:t.selectedData.studyPhoto,
@@ -319,7 +425,8 @@
             AuditDialog
         },
         mounted(){
-
+          let t = this;
+          t.getAuditList();
         }
     }
 </script>
