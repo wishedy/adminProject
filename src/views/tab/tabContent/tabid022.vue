@@ -3,25 +3,25 @@
         <section class="adminContentInner">
             <el-form :inline="true" :model="formInline" class="demo-form-inline" label-width="80px" label-position="left">
                 <el-form-item label="动态ID">
-                    <el-input v-model="formInline.user" placeholder="动态ID" class="adminInputEl"></el-input>
+                    <el-input v-model="formInline.dynamicId" placeholder="动态ID" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="作者ID">
-                    <el-input v-model="formInline.user" placeholder="作者ID" class="adminInputEl"></el-input>
+                    <el-input v-model="formInline.customerId" placeholder="作者ID" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="姓名">
-                    <el-input v-model="formInline.user" placeholder="请输入姓名" class="adminInputEl"></el-input>
+                    <el-input v-model="formInline.customerName" placeholder="请输入姓名" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="动态类型">
-                    <el-select v-model="formInline.region" placeholder="动态类型" class="adminInputEl">
+                    <el-select v-model="formInline.dynamicType" placeholder="动态类型" class="adminInputEl">
                         <el-option label="脱单" value="0"></el-option>
                         <el-option label="话题" value="1"></el-option>
                         <el-option label="普通" value="2"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="动态状态">
-                    <el-select v-model="formInline.region" placeholder="动态状态" class="adminInputEl">
-                        <el-option label="有效" value="0"></el-option>
-                        <el-option label="无效" value="1"></el-option>
+                    <el-select v-model="formInline.isValid" placeholder="动态状态" class="adminInputEl">
+                        <el-option label="有效" value="1"></el-option>
+                        <el-option label="无效" value="0"></el-option>
                     </el-select>
                 </el-form-item>
                 <!--<el-form-item label="时间">
@@ -39,7 +39,7 @@
                         <el-button type="primary" @click="onSubmit">查询</el-button>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="default" @click="onSubmit">重置</el-button>
+                        <el-button type="default" @click="resetList">重置</el-button>
                     </el-form-item>
                 </div>
             </el-form>
@@ -48,47 +48,61 @@
                     :data="tableData"
                     border
                     highlight-current-row
-                    @current-change="handleCurrentChange"
+                    :default-sort = "{prop: 'updateTime', order: 'descending'}"
+                    @current-change="tableCurrentChange"
                     style="width: 100%">
                     <el-table-column
                         prop="dynamicId"
                         label="动态ID">
                     </el-table-column>
                     <el-table-column
-                        prop="authorId"
+                        prop="customerId"
                         label="作者ID">
                     </el-table-column>
                     <el-table-column
-                        prop="author"
+                        prop="customerName"
                         label="姓名">
                     </el-table-column>
                     <el-table-column
-                        prop="imgHave"
+                        prop="dynamicAttachmentIdList"
+                        :formatter="attachmentIdListNum"
                         label="图片上传">
                     </el-table-column>
                     <el-table-column
                         prop="dynamicType"
+                        :formatter="formatterDynamicType"
                         label="动态类型">
                     </el-table-column>
                     <el-table-column
                         prop="browseNum"
+                        sortable
                         label="浏览">
                     </el-table-column>
                     <el-table-column
-                        prop="praiseNum"
+                        prop="likeNum"
+                        sortable
                         label="点赞">
                     </el-table-column>
                     <el-table-column
-                        prop="commentNum"
+                        prop="commentIdList"
+                        sortable
+                        :formatter="commentIdListNum"
                         label="评论">
                     </el-table-column>
                     <el-table-column
-                        prop="valid"
+                        prop="isValid"
+                        :formatter="formatterValid"
                         label="状态">
                     </el-table-column>
                     <el-table-column
-                        prop="registerTime"
+                        prop="createTime"
+                        sortable
                         label="创建时间">
+                    </el-table-column>
+                    <el-table-column
+                        prop="updateTime"
+                        sortable
+                        label="更新时间">
                     </el-table-column>
                 </el-table>
                 <div class="block adminPage">
@@ -97,11 +111,11 @@
                         background
                         @size-change="handleSizeChange"
                         @current-change="handleCurrentChange"
-                        :current-page="currentPage4"
-                        :page-sizes="[100, 200, 300, 400]"
-                        :page-size="100"
+                        :current-page="pageIndex"
+                        :page-sizes="[10, 20, 30]"
+                        :page-size="pageSize"
                         layout="total, sizes, prev, pager, next, jumper"
-                        :total="400">
+                        :total="count">
                     </el-pagination>
                 </div>
                 <div class="block adminAuditControl">
@@ -122,12 +136,12 @@
         <el-dialog
             width="30%"
             title="提示"
-            :visible.sync="isValid"
+            :visible.sync="handleIsValid"
             append-to-body>
             <el-main>确定要激活这条动态？</el-main>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="isValid = false">取消</el-button>
-                <el-button type="primary" @click="isValidDynamic(1)">有效</el-button>
+                <el-button @click="handleIsValid = false">取消</el-button>
+                <el-button type="primary" @click="isValidDynamic(1,1)">有效</el-button>
                 </span>
         </el-dialog>
         <el-dialog
@@ -189,17 +203,17 @@
             <el-main>确定要无效这条动态？</el-main>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="isNotValid = false">取消</el-button>
-                <el-button type="primary" @click="isNotValidDynamic(1)">无效</el-button>
+                <el-button type="primary" @click="isValidDynamic(1,0)">无效</el-button>
                 </span>
         </el-dialog>
         <el-dialog
-            :title="selectedData.author+'的'+selectedData.dynamicType"
+            :title="selectedData.customerName+'的'+selectedData.dynamicType"
             :visible.sync="centerDialogVisible"
             width="35%"
             center>
             <div class="block">
                 <p>
-                    {{selectedData.feedBackcontent}}
+                    {{selectedData.dynamicContent}}
                 </p>
             </div>
             <div class="block">
@@ -221,15 +235,25 @@
 </template>
 <script>
     import userData from '../../../virtualData/dynamicData';
+    import Common from '../../../utils/common.js';
+    import axios from 'axios';
     export default {
         data() {
             return {
                 formInline: {
-                    user: '',
-                    region:''
+                    dynamicId:'',//该动态的唯一标识
+                    'dynamicType':'',//0脱单动态，1话题动态，2普通动态
+                    customerId:'',//该动态的作者id,
+                    customerName:'',//该动态的作者name,
+                    'isValid':'',//，0无效,1有效
+                    'pageIndex':1,
+                    'pageSize':10
                 },
+                count:0,
+                'pageIndex':1,
+                'pageSize':10,
                 pushOnOff:false,
-                isValid:false,
+                handleIsValid:false,
                 isNotValid:false,
                 pickerOptions1: {
                     disabledDate(time) {
@@ -262,10 +286,88 @@
                 selectedOne:false,
                 selectedData:{},
                 currentPage4:4,
-                tableData:userData.data.dataList
+                tableData:[]
+            }
+        },
+        mounted(){
+          let t = this;
+          t.getDynamicList();
+        },
+        watch:{
+            pageIndex(newVal){
+                let t = this;
+                t.formInline.pageIndex = newVal;
+                t.getDynamicList();
+            },
+            pageSize(newVal){
+                let t = this;
+                t.formInline.pageSize = newVal;
+                t.getDynamicList();
             }
         },
         methods:{
+            resetList(){
+              let t = this;
+              t.formInline = {
+                  dynamicId:'',//该动态的唯一标识
+                  'dynamicType':'',//0脱单动态，1话题动态，2普通动态
+                  customerId:'',//该动态的作者id,
+                  customerName:'',//该动态的作者name,
+                  'isValid':'',//，0无效,1有效
+                  'pageIndex':1,
+                  'pageSize':10
+              };
+              t.getDynamicList();
+            },
+            tableCurrentChange(val){
+                let t = this;
+                if(val){
+                    console.log(val);
+                    t.selectedOne = true;
+                    t.selectedData = val;
+                }
+            },
+            formatterValid(row,column){
+                let t = this;
+                let type = row['isValid'];
+                return Common.formatterValid(type);
+            },
+            formatterDynamicType(row,column){
+                let t = this;
+                let type = row['dynamicType'];
+                return Common.dynamicType(type);
+            },
+            attachmentIdListNum(row,column){
+                let t = this;
+                let type = row['dynamicAttachmentIdList'];
+                //console.log(type);
+                return parseInt(Common.listNum(type),10)===0?'无图':'有图';
+            },
+            getDynamicList(){
+              let t = this;
+                axios.get('/call/dynamic/getDynamicList', {
+                    params: t.formInline
+                })
+                    .then(function (response) {
+                        let reqData = response.data;
+                        console.log(reqData);
+                        if(reqData.responseObject.responseData['data_list']){
+                            t.tableData = reqData.responseObject.responseData['data_list'];
+                        }
+                        if(reqData.responseObject.responseData.totalCount){
+                            t.count = reqData.responseObject.responseData.totalCount;
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            commentIdListNum(row,column){
+                let t = this;
+                let type = row['commentIdList'];
+                //console.log(type);
+                return parseInt(Common.listNum(type),10);
+            },
             detailInfo(){
                 let t = this;
                 if(!t.selectedOne){
@@ -278,29 +380,68 @@
                 this.multipleSelection = val;
             },
             onSubmit() {
-                console.log('submit!');
+                let t = this;
+                t.getDynamicList();
             },
             handleSizeChange(val) {
                 console.log(`每页 ${val} 条`);
+                let t = this;
+                t.pageSize = val;
             },
             handleCurrentChange(val) {
                 let t = this;
-                t.selectedOne = true;
-                t.selectedData = val;
-                console.log(`当前页: ${val}`);
+                t.pageIndex = val;
             },
-            isValidDynamic(type){
+            isValidDynamic(type,update){
                 let t = this;
                 if(!t.selectedOne){
-                    t.$message.error('请选择您要激活的动态!');
+                    t.$message.error('请选择您要更新状态的动态!');
                 }else{
                     if(type===0){
-                        t.isValid = true;
+                        t.handleIsValid = true;
                     }else if(type===1) {
-                        t.isValid = false;
-                        t.$message({
-                            message: '动态已被激活',
-                            type: 'success'
+                        let port = '';
+                        if(update===0){
+                            port = '/call/dynamic/invalid';
+                        }else{
+                            port = '/call/dynamic/active';
+                        }
+                        axios({
+                            url: port,
+                            method: "POST",
+                            data: {
+                                dynamicId:t.selectedData.dynamicId,
+                                updateState:update
+                            },
+                            transformRequest: [function (data) {
+                                return "paramJson=" + JSON.stringify(data);
+                            }],
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            },
+                            timeout: 30000
+                        }).then(function(req){
+                            t.handleIsValid = false;
+                            t.isNotValid = false;
+                            if(req.data.responseObject.responseCode===3){
+                                if(parseInt(update,10)==0){
+                                    t.$message({
+                                        message: '动态已被无效',
+                                        type: 'success'
+                                    });
+                                }else{
+                                    t.$message({
+                                        message: '动态已被激活',
+                                        type: 'success'
+                                    });
+                                }
+                                t.getDynamicList();
+                            }else{
+                                t.$message({
+                                    message:'更新状态失败',
+                                    type: 'warning'
+                                });
+                            }
                         });
                     }
                 }
@@ -312,13 +453,13 @@
                 }else{
                     if(type===0){
                         t.isNotValid = true;
-                    }else if(type===1) {
+                    }/*else if(type===1) {
                         t.isNotValid = false;
                         t.$message({
                             message: '动态已被无效',
                             type: 'success'
                         });
-                    }
+                    }*/
                 }
             },
             validDynamic(type){

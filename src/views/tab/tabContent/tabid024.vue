@@ -3,39 +3,39 @@
         <section class="adminContentInner">
             <el-form :inline="true" :model="formInline" class="demo-form-inline"  label-width="80px" label-position="left">
                 <el-form-item label="推荐ID">
-                    <el-input v-model="formInline.user" placeholder="推荐ID" class="adminInputEl"></el-input>
+                    <el-input v-model="formInline.recommendId" placeholder="推荐ID" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="资源ID">
-                    <el-input v-model="formInline.user" placeholder="资源ID" class="adminInputEl"></el-input>
+                    <el-input v-model="formInline.recommendResourceId" placeholder="资源ID" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="资源类型" :inline="true">
-                    <el-select v-model="formInline.region" placeholder="资源类型" class="adminInputEl">
+                    <el-select v-model="formInline.recommendResourceType" placeholder="资源类型" class="adminInputEl">
                         <el-option label="文章" value="0"></el-option>
                         <el-option label="话题" value="1"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="推荐类型" :inline="true">
-                    <el-select v-model="formInline.region" placeholder="推荐类型" class="adminInputEl">
-                        <el-option label="个性化推送" value="0"></el-option>
-                        <el-option label="全站推送" value="1"></el-option>
-                        <el-option label="单独推送" value="2"></el-option>
+                    <el-select v-model="formInline.recommendType" placeholder="推荐类型" class="adminInputEl">
+                        <!--<el-option label="个性化推送" value="0"></el-option>-->
+                        <el-option label="全站推送" value="0"></el-option>
+                        <el-option label="单独推送" value="1"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="推荐位置" :inline="true">
-                    <el-select v-model="formInline.region" placeholder="推荐位置" class="adminInputEl">
+                    <el-select v-model="formInline.recommendPosition" placeholder="推荐位置" class="adminInputEl">
                         <el-option label="遇见栏目" value="0"></el-option>
-                        <el-option label="消息栏目" value="1"></el-option>
-                        <el-option label="首页全部" value="2"></el-option>
+                        <el-option label="首页栏目" value="1"></el-option>
+                        <el-option label="消息栏目" value="2"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="优先级" :inline="true">
-                    <el-select v-model="formInline.region" placeholder="推荐优先级" class="adminInputEl">
+                    <el-select v-model="formInline.recommendGrade" placeholder="推荐优先级" class="adminInputEl">
                         <el-option label="按序推送" value="0"></el-option>
                         <el-option label="优先推送" value="1"></el-option>
-                        <el-option label="延后推送" value="2"></el-option>
+                        <!--<el-option label="延后推送" value="2"></el-option>-->
                     </el-select>
                 </el-form-item>
-                <el-form-item label="时间">
+                <!--<el-form-item label="时间">
                     <el-date-picker
                         class="adminInputEl"
                         v-model="value2"
@@ -44,58 +44,71 @@
                         placeholder="选择日期"
                         :picker-options="pickerOptions1">
                     </el-date-picker>
-                </el-form-item>
+                </el-form-item>-->
                 <el-form-item label="状态" :inline="true">
-                    <el-select v-model="formInline.region" placeholder="模板状态" class="adminInputEl">
-                        <el-option label="有效" value="0"></el-option>
-                        <el-option label="无效" value="1"></el-option>
+                    <el-select v-model="formInline.isValid" placeholder="推送状态" class="adminInputEl">
+                        <el-option label="有效" value="1"></el-option>
+                        <el-option label="无效" value="0"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="onSubmit">查询</el-button>
-                </el-form-item>
+                <div class="block">
+                    <el-form-item>
+                        <el-button type="primary" @click="getRecommendList">查询</el-button>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="default" @click="resetList">重置</el-button>
+                    </el-form-item>
+                </div>
             </el-form>
             <div class="block">
                 <el-table
                     :data="tableData"
                     border
                     highlight-current-row
-                    @current-change="handleCurrentChange"
+                    :default-sort = "{prop: 'updateTime', order: 'descending'}"
+                    @current-change="tableCurrentChange"
                     style="width: 100%">
                     <el-table-column
                         prop="recommendId"
                         label="推荐ID">
                     </el-table-column>
                     <el-table-column
-                        prop="resourceId"
+                        prop="recommendResourceId"
                         label="资源ID">
                     </el-table-column>
                     <el-table-column
-                        prop="resourceType"
+                        prop="recommendResourceTpe"
+                        :formatter="formatterResourceType"
                         label="资源类型">
                     </el-table-column>
                     <el-table-column
                         prop="recommendType"
+                        :formatter="formatterRecommendType"
                         label="推荐类型">
                     </el-table-column>
                     <el-table-column
                         prop="recommendPosition"
+                        :formatter="formatterRecommendPosition"
                         label="推荐位置">
                     </el-table-column>
                     <el-table-column
-                        prop="recommendOrder"
+                        prop="recommendGrade"
+                        :formatter="formatterRecommendGrade"
                         label="推荐优先级">
                     </el-table-column>
                     <el-table-column
-                        prop="valid"
+                        prop="isValid"
+                        :formatter="formatterValid"
                         label="状态">
                     </el-table-column>
                     <el-table-column
                         prop="updateTime"
+                        sortable
                         label="更新时间">
                     </el-table-column>
                     <el-table-column
-                        prop="registerTime"
+                        prop="createTime"
+                        sortable
                         label="创建时间">
                     </el-table-column>
                 </el-table>
@@ -105,11 +118,11 @@
                         background
                         @size-change="handleSizeChange"
                         @current-change="handleCurrentChange"
-                        :current-page="currentPage4"
-                        :page-sizes="[100, 200, 300, 400]"
-                        :page-size="100"
+                        :current-page="pageIndex"
+                        :page-sizes="[10, 20, 30]"
+                        :page-size="pageSize"
                         layout="total, sizes, prev, pager, next, jumper"
-                        :total="400">
+                        :total="count">
                     </el-pagination>
                 </div>
                 <div class="block adminAuditControl">
@@ -154,37 +167,36 @@
         </el-dialog>
         <el-dialog
             width="50%"
-            :title="selectedData.articleTitle"
             :visible.sync="pushOnOff"
             center
             append-to-body>
             <el-form :inline="true" class="demo-form-inline" label-width="80px" label-position="left">
                 <el-form-item label="推送类型" :inline="true">
-                    <el-select v-model="formInline.region" placeholder="推送类型" class="adminInputEl">
-                        <el-option label="个性化推送" value="0"></el-option>
-                        <el-option label="全站推送" value="1"></el-option>
-                        <el-option label="单独推送" value="2"></el-option>
+                    <el-select v-model="editDialogData.recommendType" placeholder="推送类型" class="adminInputEl">
+                        <!--<el-option label="个性化推送" value="0"></el-option>-->
+                        <el-option label="全站推送" value="0"></el-option>
+                        <el-option label="单独推送" value="1"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="推送位置" :inline="true">
-                    <el-select v-model="formInline.region" placeholder="推送位置" class="adminInputEl">
+                    <el-select v-model="editDialogData.recommendPosition" placeholder="推送位置" class="adminInputEl">
                         <el-option label="遇见栏目" value="0"></el-option>
-                        <el-option label="消息栏目" value="1"></el-option>
-                        <el-option label="首页全部" value="2"></el-option>
+                        <el-option label="首页栏目" value="1"></el-option>
+                        <el-option label="消息栏目" value="2"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="优先级" :inline="true">
-                    <el-select v-model="formInline.region" placeholder="推送位置" class="adminInputEl">
+                    <el-select v-model="editDialogData.recommendGrade" placeholder="推送优先级" class="adminInputEl">
                         <el-option label="按序推送" value="0"></el-option>
                         <el-option label="优先推送" value="1"></el-option>
-                        <el-option label="延后推送" value="2"></el-option>
+                        <!--<el-option label="延后推送" value="2"></el-option>-->
                     </el-select>
                 </el-form-item>
                 <el-form-item label="推送ID" :inline="true">
-                    <el-input v-model="formInline.user" placeholder="请输入推送ID"  class="adminInputEl"></el-input>
+                    <el-input v-model="editDialogData.recommendCustomerId" placeholder="请输入推送ID"  class="adminInputEl"></el-input>
                 </el-form-item>
             </el-form>
-            <el-form :inline="true" class="demo-form-inline">
+            <!--<el-form :inline="true" class="demo-form-inline">
                 <el-form-item label="个性化推送条件" :inline="true">
                     <el-button class="tag">个性化标签</el-button>
                     <el-button class="tag">个性化标签</el-button>
@@ -195,173 +207,34 @@
                     <el-button class="tag">个性化标签</el-button>
                     <el-button class="tag">个性化标签</el-button>
                 </el-form-item>
-            </el-form>
+            </el-form>-->
             <span slot="footer" class="dialog-footer">
                 <el-button @click="pushOnOff = false">取 消</el-button>
                 <el-button type="primary" @click="pushContent(1)">确 定</el-button>
-            </span>
-        </el-dialog>
-        <el-dialog
-            width="80%"
-            :title="selectedData.articleTitle"
-            :visible.sync="articleDialog"
-            center
-            append-to-body
-            class="articleTitle">
-            <div class="block articleTemplateContent">
-                <el-form :inline="true" class="demo-form-inline">
-                    <el-form-item label="文章模板" :inline="true">
-                        <el-select v-model="formInline.region" placeholder="文章模板">
-                            <el-option label="第一个模板" value="0"></el-option>
-                            <el-option label="第二个模板" value="1"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="文章标题" :inline="true" size="medium">
-                        <el-input v-model="formInline.user" placeholder="请输入文章标题" class="paragraphTitle" disabled="disabled"></el-input>
-                    </el-form-item>
-                    <el-form-item label="文章副标题" :inline="true" size="medium">
-                        <el-input v-model="formInline.user" placeholder="请输入文章副标题" type="input" class="paragraphTitle"  disabled="disabled"></el-input>
-                    </el-form-item>
-                </el-form>
-                <div class="block templatePreview">
-                    <el-aside class="templateItem" width="49%">
-                        <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524054334359&di=8222adebfed9c9f02b8b9ae3c8e9245d&imgtype=0&src=http%3A%2F%2Fpic40.nipic.com%2F20140417%2F18460687_100054352164_2.jpg" alt="" class="templateImage">
-                    </el-aside>
-                    <el-aside class="templateItem" width="49%">
-                        <div class="block sectionContent">
-                            <swiper :options="swiperOption" class="sectionSwiperContent">
-                                <swiper-slide>
-                                    <div class="paragraphItem">
-                                        <span class="paragraphItemTitle">第一段文本</span>
-                                        <article class="paragraphItemArticle">
-                                            <textarea name=""  cols="30" rows="10" class="paragraphArticleInput"></textarea>
-                                        </article>
-                                    </div>
-                                    <div class="paragraphItem">
-                                        <span class="paragraphItemTitle">标题</span>
-                                        <article class="paragraphItemInput">
-                                            <input type="text" class="paragraphTitleInput" placeholder="段落标题"/>
-                                        </article>
-                                    </div>
-                                    <div class="paragraphItem">
-                                        <span class="paragraphItemTitle">副标题</span>
-                                        <article class="paragraphItemInput">
-                                            <input type="text" class="paragraphTitleInput" placeholder="段落副标题"/>
-                                        </article>
-                                    </div>
-                                    <div class="paragraphItem">
-                                        <span class="paragraphItemTitle">插图</span>
-                                        <!--paragraphItemNothing paragraphItemHave无图片-->
-                                        <article class="paragraphItemImage paragraphItemHave">
-                                            <section class="paragraphItemContent">
-                                                <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524054334359&di=8222adebfed9c9f02b8b9ae3c8e9245d&imgtype=0&src=http%3A%2F%2Fpic40.nipic.com%2F20140417%2F18460687_100054352164_2.jpg" alt="">
-                                                <i class="close el-icon-close"></i>
-                                            </section>
-
-                                            <section class="paragraphItemEdit">
-                                                <i class="el-icon-upload upload">
-                                                </i>
-                                                <i class="uploadDes">上传图片</i>
-                                            </section>
-                                        </article>
-                                    </div>
-                                </swiper-slide>
-                                <swiper-slide>
-                                    <div class="paragraphItem">
-                                        <span class="paragraphItemTitle">第一段文本</span>
-                                        <article class="paragraphItemArticle">
-                                            <textarea name=""  cols="30" rows="10" class="paragraphArticleInput"></textarea>
-                                        </article>
-                                    </div>
-                                    <div class="paragraphItem">
-                                        <span class="paragraphItemTitle">标题</span>
-                                        <article class="paragraphItemInput">
-                                            <input type="text" class="paragraphTitleInput" placeholder="段落标题"/>
-                                        </article>
-                                    </div>
-                                    <div class="paragraphItem">
-                                        <span class="paragraphItemTitle">副标题</span>
-                                        <article class="paragraphItemInput">
-                                            <input type="text" class="paragraphTitleInput" placeholder="段落副标题"/>
-                                        </article>
-                                    </div>
-                                    <div class="paragraphItem">
-                                        <span class="paragraphItemTitle">插图</span>
-                                        <!--paragraphItemNothing paragraphItemHave无图片-->
-                                        <article class="paragraphItemImage paragraphItemHave">
-                                            <section class="paragraphItemContent">
-                                                <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524054334359&di=8222adebfed9c9f02b8b9ae3c8e9245d&imgtype=0&src=http%3A%2F%2Fpic40.nipic.com%2F20140417%2F18460687_100054352164_2.jpg" alt="">
-                                                <i class="close el-icon-close"></i>
-                                            </section>
-
-                                            <section class="paragraphItemEdit">
-                                                <i class="el-icon-upload upload">
-                                                </i>
-                                                <i class="uploadDes">上传图片</i>
-                                            </section>
-                                        </article>
-                                    </div>
-                                </swiper-slide>
-                                <swiper-slide>
-                                    <div class="paragraphItem">
-                                        <span class="paragraphItemTitle">第一段文本</span>
-                                        <article class="paragraphItemArticle">
-                                            <textarea name=""  cols="30" rows="10" class="paragraphArticleInput"></textarea>
-                                        </article>
-                                    </div>
-                                    <div class="paragraphItem">
-                                        <span class="paragraphItemTitle">标题</span>
-                                        <article class="paragraphItemInput">
-                                            <input type="text" class="paragraphTitleInput" placeholder="段落标题"/>
-                                        </article>
-                                    </div>
-                                    <div class="paragraphItem">
-                                        <span class="paragraphItemTitle">副标题</span>
-                                        <article class="paragraphItemInput">
-                                            <input type="text" class="paragraphTitleInput" placeholder="段落副标题"/>
-                                        </article>
-                                    </div>
-                                    <div class="paragraphItem">
-                                        <span class="paragraphItemTitle">插图</span>
-                                        <!--paragraphItemNothing paragraphItemHave无图片-->
-                                        <article class="paragraphItemImage paragraphItemHave">
-                                            <section class="paragraphItemContent">
-                                                <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524054334359&di=8222adebfed9c9f02b8b9ae3c8e9245d&imgtype=0&src=http%3A%2F%2Fpic40.nipic.com%2F20140417%2F18460687_100054352164_2.jpg" alt="">
-                                                <i class="close el-icon-close"></i>
-                                            </section>
-
-                                            <section class="paragraphItemEdit">
-                                                <i class="el-icon-upload upload">
-                                                </i>
-                                                <i class="uploadDes">上传图片</i>
-                                            </section>
-                                        </article>
-                                    </div>
-                                </swiper-slide>
-                                <div class="swiper-pagination" slot="pagination"></div>
-                                <div class="swiper-button-prev" slot="button-prev"></div>
-                                <div class="swiper-button-next" slot="button-next"></div>
-                            </swiper>
-                        </div>
-                    </el-aside>
-                </div>
-            </div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="articleDialog = false">取 消</el-button>
-                <el-button type="primary" @click="editArticle(1)">确 定</el-button>
             </span>
         </el-dialog>
     </section>
 </template>
 <script>
     import userData from '../../../virtualData/recommendData';
+    import Common from '../../../utils/common.js';
+    import axios from 'axios';
     export default {
         data() {
             return {
                 formInline: {
-                    user: '',
-                    region:''
+                    pageIndex:1,
+                    pageSize:10,
+                    recommendId:'',//该推荐的唯一标识
+                    recommendPosition:'',//推荐的位置0遇见栏目，1首页栏目，2消息栏目
+                    recommendGrade:'',//推荐的优先级0按序推荐，1优先推荐
+                    recommendResourceType:'',//推荐的资源类型0文章，1话题
+                    recommendResourceId:'',//推荐的资源id
+                    recommendType:'',//推荐的类型0全站推送，1单独推送
+                    isValid:''//0无效，1有效
                 },
+                pageIndex:1,
+                pageSize:10,
                 swiperOption: {
                     spaceBetween: 30,
                     pagination: {
@@ -379,6 +252,7 @@
                     region: '',
                     type: ''
                 },
+                editDialogData:{},
                 pushOnOff:false,
                 activateOnOff:false,
                 articleDialog:false,
@@ -387,13 +261,95 @@
                 selectedOne:false,
                 selectedData:{},
                 currentPage4:4,
-                tableData:userData.data.dataList
+                count:0,
+                tableData:[]
             }
         },
         mounted() {
-
+            let t = this;
+            t.getRecommendList();
+        },
+        watch:{
+            pageIndex(newVal){
+                let t = this;
+                t.formInline.pageIndex = newVal;
+                t.getRecommendList();
+            },
+            pageSize(newVal){
+                let t = this;
+                t.formInline.pageSize = newVal;
+                t.getRecommendList();
+            }
         },
         methods:{
+            tableCurrentChange(val){
+                let t = this;
+                if(val){
+                    console.log(val);
+                    t.selectedOne = true;
+                    t.selectedData = val;
+                }
+
+            },
+            formatterValid(row,column){
+                let t = this;
+                let type = row['isValid'];
+                return Common.formatterValid(type);
+            },
+            formatterResourceType(row, column) {
+                let t = this;
+                let type = row['recommendResourceType'];
+                return Common.recommendResourceType(type);
+            },
+            formatterRecommendType(row, column) {
+                let t = this;
+                let type = row['recommendType'];
+                return Common.recommendType(type);
+            },
+            formatterRecommendPosition(row, column) {
+                let t = this;
+                let type = row['recommendPosition'];
+                return Common.recommendPosition(type);
+            },
+            formatterRecommendGrade(row, column) {
+                let t = this;
+                let type = row['recommendGrade'];
+                return Common.recommendGrade(type);
+            },
+            resetList(){
+              let t = this;
+              t.formInline = {
+                  pageIndex:1,
+                  pageSize:10,
+                  recommendId:'',//该推荐的唯一标识
+                  recommendPosition:'',//推荐的位置0遇见栏目，1首页栏目，2消息栏目
+                  recommendGrade:'',//推荐的优先级0按序推荐，1优先推荐
+                  recommendResourceType:'',//推荐的资源类型0文章，1话题
+                  recommendResourceId:'',//推荐的资源id
+                  recommendType:'',//推荐的类型0全站推送，1单独推送
+                  isValid:''//0无效，1有效
+              };
+              t.getRecommendList();
+            },
+            getRecommendList(){
+              let t = this;
+                axios.get('/call/recommend/getRecommendList', {
+                    params: t.formInline
+                })
+                    .then(function (response) {
+                        let reqData = response.data;
+                        console.log(reqData);
+                        if(reqData.responseObject.responseData['data_list']){
+                            t.tableData = reqData.responseObject.responseData['data_list'];
+                        }
+                        if(reqData.responseObject.responseData.totalCount){
+                            t.count = reqData.responseObject.responseData.totalCount;
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
             callback(){
                 console.log('执行');
             },
@@ -403,15 +359,32 @@
             activate(type){
                 let t = this;
                 if(!t.selectedOne){
-                    t.$message.error('请选择您要激活的文章!');
+                    t.$message.error('请选择您要激活的推荐!');
                 }else{
                     if(type===0){
                         t.activateOnOff = true;
                     }else if(type===1){
-                        t.activateOnOff = false;
-                        t.$message({
-                            message: t.selectedData.articleTitle+'文章已被激活',
-                            type: 'success'
+                        axios({
+                            url: '/call/recommend/active',
+                            method: "POST",
+                            data: {
+                                recommendId:t.selectedData.recommendId,
+                                updateState:'1'
+                            },
+                            transformRequest: [function (data) {
+                                return "paramJson=" + JSON.stringify(data);
+                            }],
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            },
+                            timeout: 30000
+                        }).then(function(req){
+                            t.activateOnOff = false;
+                            t.$message({
+                                message: '推荐已被激活',
+                                type: 'success'
+                            });
+                            t.getRecommendList();
                         });
                     }
                 }
@@ -424,10 +397,27 @@
                     if(type===0){
                         t.innerVisible = true;
                     }else if(type===1){
-                        t.innerVisible = false;
-                        t.$message({
-                            message: t.selectedData.articleTitle+'文章已被无效',
-                            type: 'success'
+                        axios({
+                            url: '/call/recommend/invalid',
+                            method: "POST",
+                            data: {
+                                recommendId:t.selectedData.recommendId,
+                                updateState:'0'
+                            },
+                            transformRequest: [function (data) {
+                                return "paramJson=" + JSON.stringify(data);
+                            }],
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            },
+                            timeout: 30000
+                        }).then(function(req){
+                            t.innerVisible = false;
+                            t.$message({
+                                message: '推荐已被无效',
+                                type: 'success'
+                            });
+                            t.getRecommendList();
                         });
                     }
                 }
@@ -448,6 +438,17 @@
                     }
                 }
             },
+            checkSelectDataChange(lastData,newData){
+              let t = this;
+              let keyArr = Object.keys(lastData);
+              let num = 0;
+              for(let item in lastData){
+                  if(lastData[item]==newData[item]){
+                      num++;
+                  }
+              }
+              return !(num===keyArr.length);
+            },
             pushContent(type){
                 let t = this;
                 if(!t.selectedOne){
@@ -455,12 +456,35 @@
                 }else{
                     if(type===0){
                         t.pushOnOff = true;
+                        t.editDialogData = JSON.parse(JSON.stringify(t.selectedData));
                     }else if(type===1){
-                        t.pushOnOff = false;
-                        t.$message({
-                            message: t.selectedData.articleTitle+'文章已推送',
-                            type: 'success'
-                        });
+                        if(t.checkSelectDataChange(t.selectedData,t.editDialogData)){
+                            //推送编辑过
+                            console.log('编辑过');
+                            axios({
+                                url: '/call/recommend/update',
+                                method: "POST",
+                                data: t.editDialogData,
+                                transformRequest: [function (data) {
+                                    return "paramJson=" + JSON.stringify(data);
+                                }],
+                                headers: {
+                                    'X-Requested-With': 'XMLHttpRequest'
+                                },
+                                timeout: 30000
+                            }).then(function(req){
+                                t.pushOnOff = false;
+                                t.$message({
+                                    message: '已推送',
+                                    type: 'success'
+                                });
+                                t.getRecommendList();
+                            });
+                        }else{
+                            //推送没编辑
+                            console.log('没编辑过');
+                            t.pushOnOff = false;
+                        }
                     }
 
                 }
@@ -473,12 +497,13 @@
                 console.log('submit!');
             },
             handleSizeChange(val) {
+                let t = this;
+                t.pageSize = val;
                 console.log(`每页 ${val} 条`);
             },
             handleCurrentChange(val) {
                 let t = this;
-                t.selectedOne = true;
-                t.selectedData = val;
+                t.pageIndex = val;
                 console.log(`当前页: ${val}`);
             }
         }

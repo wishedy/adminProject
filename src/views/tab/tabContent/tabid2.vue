@@ -71,6 +71,7 @@
                     :data="tableData"
                     border
                     highlight-current-row
+                    :default-sort = "{prop: 'updateTime', order: 'descending'}"
                     @current-change="tableCurrentChange"
                     style="width: 100%">
                     <el-table-column

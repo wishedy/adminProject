@@ -5,9 +5,110 @@ class Common {
         this.jsGetAge = this.jsGetAge.bind(this);
         this.customerDegree = this.customerDegree.bind(this);
         this.blackReason = this.blackReason.bind(this);
+        this.dynamicType = this.dynamicType.bind(this);
+        this.listNum = this.listNum.bind(this);
+        this.auditType = this.auditType.bind(this);
+        this.auditResult = this.auditResult.bind(this);
+    }
+    TopicStatus(type){
+        let str = '';
+        switch (parseInt(type)){
+            //用户学位0脱单动态，1话题动态，2普通动态
+            case 0:
+                str='待审核';
+                break;
+            case 1:
+                str='驳回';
+                break;
+            case 2:
+                str='通过';
+                break;
+        }
+        return str;
+    }
+    recommendResourceType(type){
+        let str = '';
+        switch (parseInt(type)){
+            //推荐的资源类型0文章，1话题
+            case 0:
+                str='文章';
+                break;
+            case 1:
+                str='话题';
+                break;
+        }
+        return str;
+    }
+    recommendPosition(type){
+        let str = '';
+        switch (parseInt(type)){
+            //推荐的位置0遇见栏目，1首页栏目，2消息栏目
+            case 0:
+                str='遇见栏目';
+                break;
+            case 1:
+                str='首页栏目';
+                break;
+            case 2:
+                str='消息栏目';
+                break;
+        }
+        return str;
+    }
+    recommendGrade(type){
+        let str = '';
+        switch (parseInt(type)){
+            //推荐的位置0遇见栏目，1首页栏目，2消息栏目
+            case 0:
+                str='按序推荐';
+                break;
+            case 1:
+                str='优先推荐';
+                break;
+        }
+        return str;
+    }
+    recommendType(type){
+        let str = '';
+        switch (parseInt(type)){
+            //推荐的位置0遇见栏目，1首页栏目，2消息栏目
+            case 0:
+                str='全站推送';
+                break;
+            case 1:
+                str='单独推送';
+                break;
+        }
+        return str;
     }
     sexFormat(type){
         return parseInt(type,10)===0?'女':'男';
+    }
+    dynamicType(type){
+        let str = '';
+        switch (parseInt(type)){
+            //用户学位0脱单动态，1话题动态，2普通动态
+            case 0:
+                str='脱单动态';
+                break;
+            case 1:
+                str='话题动态';
+                break;
+            case 2:
+                str='普通动态';
+                break;
+        }
+        return str;
+    }
+    listNum(str){
+        if(str&&str.indexOf(',')>-1){
+            return str.split(',').length;
+        }else{
+            return 0;
+        }
+    }
+    formatterValid(type){
+        return parseInt(type,10)===0?'无效':'有效';
     }
     auditType(type){
         return parseInt(type,10)===0?'新建':'结束';
