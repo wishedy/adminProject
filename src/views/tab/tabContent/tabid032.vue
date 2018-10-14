@@ -3,12 +3,15 @@
         <section class="adminContentInner">
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
                 <el-form-item label="模板ID">
-                    <el-input v-model="formInline.user" placeholder="会员ID"  class="adminInputEl"></el-input>
+                    <el-input v-model="formInline.templateId" placeholder="模板ID"  class="adminInputEl"></el-input>
                 </el-form-item>
-                <el-form-item label="作者">
+                <el-form-item label="模板ID">
+                    <el-input v-model="formInline.templateTitle" placeholder="模板标题"  class="adminInputEl"></el-input>
+                </el-form-item>
+                <!--<el-form-item label="作者">
                     <el-input v-model="formInline.user" placeholder="请输入姓名"  class="adminInputEl"></el-input>
-                </el-form-item>
-                <el-form-item label="时间">
+                </el-form-item>-->
+                <!--<el-form-item label="时间">
                 <el-date-picker
                     class="adminInputEl"
                     v-model="value2"
@@ -17,50 +20,61 @@
                     placeholder="选择日期"
                     :picker-options="pickerOptions1">
                 </el-date-picker>
-                </el-form-item>
+                </el-form-item>-->
                 <el-form-item label="状态" :inline="true">
-                    <el-select v-model="formInline.region" placeholder="模板状态"  class="adminInputEl">
-                        <el-option label="有效" value="0"></el-option>
-                        <el-option label="无效" value="1"></el-option>
+                    <el-select v-model="formInline.isValid" placeholder="模板状态"  class="adminInputEl">
+                        <el-option label="无效" value="0"></el-option>
+                        <el-option label="有效" value="1"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="onSubmit">查询</el-button>
-                </el-form-item>
+                <div class="block">
+                    <el-form-item>
+                        <el-button type="primary" @click="checkList">查询</el-button>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="default" @click="resetList">重置</el-button>
+                    </el-form-item>
+                </div>
             </el-form>
             <div class="block">
                 <el-table
                     :data="tableData"
                     border
                     highlight-current-row
-                    @current-change="handleCurrentChange"
+                    :default-sort = "{prop: 'updateTime', order: 'descending'}"
+                    @current-change="tableCurrentChange"
                     style="width: 100%">
                     <el-table-column
                         prop="templateId"
                         label="模板ID">
                     </el-table-column>
                     <el-table-column
-                        prop="useTime"
+                        sortable
+                        prop="useNum"
                         label="使用次数">
                     </el-table-column>
                     <el-table-column
-                        prop="browseTime"
+                        sortable
+                        prop="browseNum"
                         label="浏览次数">
                     </el-table-column>
-                    <el-table-column
+                    <!--<el-table-column
                         prop="author"
                         label="作者">
-                    </el-table-column>
+                    </el-table-column>-->
                     <el-table-column
-                        prop="valid"
+                        :formatter="formatterValid"
+                        prop="isValid"
                         label="状态">
                     </el-table-column>
                     <el-table-column
+                        sortable
                         prop="updateTime"
                         label="更新时间">
                     </el-table-column>
                     <el-table-column
-                        prop="registerTime"
+                        sortable
+                        prop="createTime"
                         label="创建时间">
                     </el-table-column>
                 </el-table>
@@ -70,11 +84,11 @@
                         background
                         @size-change="handleSizeChange"
                         @current-change="handleCurrentChange"
-                        :current-page="currentPage4"
-                        :page-sizes="[100, 200, 300, 400]"
-                        :page-size="100"
+                        :current-page="pageIndex"
+                        :page-sizes="[10, 20, 30]"
+                        :page-size="pageSize"
                         layout="total, sizes, prev, pager, next, jumper"
-                        :total="400">
+                        :total="count">
                     </el-pagination>
                 </div>
                 <div class="block adminAuditControl">
@@ -139,7 +153,16 @@
             center
             append-to-body>
             <el-main class="templateContent">
-                <textarea name="" id="" cols="30" rows="10" class="templateContentArea"></textarea>
+                <div class="demo-input-suffix block">
+                    <div>
+                        模板标题
+                    </div>
+                    <el-input v-model="templateTitle" placeholder="模板标题"  class="adminInputEl"></el-input>
+                </div>
+                <div class="demo-input-suffix block">
+                    模板内容
+                    <textarea name="" id="" cols="30" rows="10" class="templateContentArea" v-model="templateContent"></textarea>
+                </div>
             </el-main>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="articleDialog = false">取 消</el-button>
@@ -150,13 +173,22 @@
 </template>
 <script>
     import userData from '../../../virtualData/templateResource';
+    import Common from '../../../utils/common.js';
+    import axios from 'axios';
     export default {
         data() {
             return {
+                pageIndex:1,
+                pageSize:10,
                 formInline: {
-                    user: '',
-                    region:''
+                    pageIndex:1,
+                    pageSize:10,
+                    templateId:'',
+                    isValid:'',
+                    templateTitle:''
                 },
+                templateContent:'',
+                templateTitle:'',
                 swiperOption: {
                     spaceBetween: 30,
                     pagination: {
@@ -208,13 +240,76 @@
                 selectedOne:false,
                 selectedData:{},
                 currentPage4:4,
-                tableData:userData.data.dataList
+                count:0,
+                tableData:[]
+            }
+        },
+        watch:{
+            pageIndex(newVal){
+                let t = this;
+                t.formInline.pageIndex = newVal;
+                t.getTemplateList();
+            },
+            pageSize(newVal){
+                let t = this;
+                t.formInline.pageSize = newVal;
+                t.getTemplateList();
             }
         },
         mounted() {
-
+            let t = this;
+            t.getTemplateList();
         },
         methods:{
+            tableCurrentChange(val){
+                let t = this;
+                if(val){
+                    console.log(val);
+                    t.selectedOne = true;
+                    t.selectedData = val;
+                }
+            },
+            formatterValid(row,column){
+                let t = this;
+                let type = row['isValid'];
+                return Common.formatterValid(type);
+            },
+            resetList(){
+                let t = this;
+                t.pageSize = 10;
+                t.pageIndex = 1;
+                t.formInline = {
+                    pageIndex:1,
+                    pageSize:10,
+                    templateId:'',
+                    isValid:'',
+                    templateTitle:''
+                };
+                t.getTemplateList();
+            },
+            checkList(){
+                let t = this;
+                t.pageIndex === 1?t.getTemplateList():t.pageIndex =1;
+            },
+            getTemplateList(){
+              let t = this;
+                axios.get('/call/template/getTemplateList', {
+                    params: t.formInline
+                })
+                    .then(function (response) {
+                        let reqData = response.data;
+                        console.log(reqData);
+                        if(reqData.responseObject.responseData['data_list']){
+                            t.tableData = reqData.responseObject.responseData['data_list'];
+                        }
+                        if(reqData.responseObject.responseData.totalCount){
+                            t.count = reqData.responseObject.responseData.totalCount;
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
             callback(){
                 console.log('执行');
             },
@@ -241,10 +336,27 @@
                     if(type===0){
                         t.innerVisible = true;
                     }else if(type===1){
-                        t.innerVisible = false;
-                        t.$message({
-                            message: '模板已被无效',
-                            type: 'success'
+                        axios({
+                            url: '/call/template/invalid',
+                            method: "POST",
+                            data: {
+                                templateId:t.selectedData.templateId,
+                                updateState:'0'
+                            },
+                            transformRequest: [function (data) {
+                                return "paramJson=" + JSON.stringify(data);
+                            }],
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            },
+                            timeout: 30000
+                        }).then(function(req){
+                            t.innerVisible = false;
+                            t.$message({
+                                message: '模板已被无效',
+                                type: 'success'
+                            });
+                            t.getTemplateList();
                         });
                     }
 
@@ -258,11 +370,29 @@
                     if(type===0){
                         t.activateOnOff = true;
                     }else if(type===1){
-                        t.activateOnOff = false;
-                        t.$message({
-                            message: '模板已被激活',
-                            type: 'success'
+                        axios({
+                            url: '/call/template/active',
+                            method: "POST",
+                            data: {
+                                templateId:t.selectedData.templateId,
+                                updateState:'1'
+                            },
+                            transformRequest: [function (data) {
+                                return "paramJson=" + JSON.stringify(data);
+                            }],
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            },
+                            timeout: 30000
+                        }).then(function(req){
+                            t.activateOnOff = false;
+                            t.$message({
+                                message:  t.selectedData.templateTitle+'模板已被激活',
+                                type: 'success'
+                            });
+                            t.getTemplateList();
                         });
+
                     }
 
                 }
@@ -273,14 +403,37 @@
                     t.$message.error('请选择您要无效的模板!');
                 }else{
                     if(type===0){
+                        t.templateContent = t.selectedData.templateContent;
+                        t.templateTitle = t.selectedData.templateTitle;
                         t.articleDialog = true;
                     }else if(type===1){
-
-                        t.articleDialog = false;
-                        t.$message({
-                            message: t.selectedData.articleTitle+'模板已生成',
-                            type: 'success'
-                        });
+                        if((t.selectedData.templateContent !==t.templateContent)||(t.selectedData.templateTitle!==t.templateTitle)){
+                            axios({
+                                url: '/call/template/update',
+                                method: "POST",
+                                data: {
+                                    templateId:t.selectedData.templateId,
+                                    templateContent:t.templateContent,
+                                    templateTitle:t.templateTitle,
+                                },
+                                transformRequest: [function (data) {
+                                    return "paramJson=" + JSON.stringify(data);
+                                }],
+                                headers: {
+                                    'X-Requested-With': 'XMLHttpRequest'
+                                },
+                                timeout: 30000
+                            }).then(function(req){
+                                t.articleDialog = false;
+                                t.$message({
+                                    message: t.selectedData.templateTitle+'模板已更新',
+                                    type: 'success'
+                                });
+                                t.getTemplateList();
+                            });
+                        }else{
+                            t.articleDialog = false;
+                        }
                     }
 
                 }
@@ -292,12 +445,15 @@
                 console.log('submit!');
             },
             handleSizeChange(val) {
+                let t = this;
+                t.pageSize = val;
                 console.log(`每页 ${val} 条`);
             },
             handleCurrentChange(val) {
                 let t = this;
-                t.selectedOne = true;
-                t.selectedData = val;
+                //t.selectedOne = true;
+                //t.selectedData = val;
+                t.pageIndex = val;
                 console.log(`当前页: ${val}`);
             }
         }

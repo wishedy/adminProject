@@ -3,24 +3,27 @@
         <section class="adminContentInner">
             <el-form :inline="true" :model="formInline" class="demo-form-inline" label-width="80px" label-position="left">
                 <el-form-item label="文章ID">
-                    <el-input v-model="formInline.user" placeholder="文章ID" class="adminInputEl"></el-input>
+                    <el-input v-model="formInline.articleId" placeholder="文章ID" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="作者ID">
-                    <el-input v-model="formInline.user" placeholder="作者ID" class="adminInputEl"></el-input>
+                    <el-input v-model="formInline.customerId" placeholder="作者ID" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="姓名">
-                    <el-input v-model="formInline.user" placeholder="请输入姓名" class="adminInputEl"></el-input>
+                    <el-input v-model="formInline.customerName" placeholder="请输入姓名" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="文章标题">
-                    <el-input v-model="formInline.user" placeholder="文章标题" class="adminInputEl"></el-input>
+                    <el-input v-model="formInline.articleTitle" placeholder="文章标题" class="adminInputEl"></el-input>
+                </el-form-item>
+                <el-form-item label="模板ID">
+                    <el-input v-model="formInline.templateId" placeholder="模板ID" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="文章状态">
-                    <el-select v-model="formInline.region" placeholder="文章状态" class="adminInputEl">
-                        <el-option label="有效" value="0"></el-option>
-                        <el-option label="无效" value="1"></el-option>
+                    <el-select v-model="formInline.isValid" placeholder="文章状态" class="adminInputEl">
+                        <el-option label="无效" value="0"></el-option>
+                        <el-option label="有效" value="1"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="时间">
+                <!--<el-form-item label="时间">
                     <el-date-picker
                         class="adminInputEl"
                         v-model="value2"
@@ -29,28 +32,34 @@
                         placeholder="选择日期"
                         :picker-options="pickerOptions1">
                     </el-date-picker>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="onSubmit">查询</el-button>
-                </el-form-item>
+                </el-form-item>-->
+                <div class="block">
+                    <el-form-item>
+                        <el-button type="primary" @click="checkList">查询</el-button>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="default" @click="resetList">重置</el-button>
+                    </el-form-item>
+                </div>
             </el-form>
             <div class="block">
                 <el-table
                     :data="tableData"
                     border
                     highlight-current-row
-                    @current-change="handleCurrentChange"
+                    :default-sort = "{prop: 'updateTime', order: 'descending'}"
+                    @current-change="tableCurrentChange"
                     style="width: 100%">
                     <el-table-column
-                        prop="dynamicId"
+                        prop="articleId"
                         label="文章ID">
                     </el-table-column>
                     <el-table-column
-                        prop="authorId"
+                        prop="customerId"
                         label="作者ID">
                     </el-table-column>
                     <el-table-column
-                        prop="author"
+                        prop="customerName"
                         label="作者">
                     </el-table-column>
                     <el-table-column
@@ -58,7 +67,7 @@
                         label="文章标题">
                     </el-table-column>
                     <el-table-column
-                        prop="linkUrl"
+                        prop="articleLink"
                         label="文章链接">
                     </el-table-column>
                     <el-table-column
@@ -66,35 +75,44 @@
                         label="模板ID">
                     </el-table-column>
                     <el-table-column
-                        prop="shareNum"
+                        prop="forwardNum"
+                        sortable
                         label="转发">
                     </el-table-column>
                     <el-table-column
                         prop="collectNum"
+                        sortable
                         label="收藏">
                     </el-table-column>
                     <el-table-column
                         prop="browseNum"
+                        sortable
                         label="浏览">
                     </el-table-column>
                     <el-table-column
-                        prop="praiseNum"
+                        prop="likeNum"
+                        sortable
                         label="点赞">
                     </el-table-column>
                     <el-table-column
-                        prop="commentNum"
+                        prop="articleIdList"
+                        sortable
+                        :formatter="commentIdListNum"
                         label="评论">
                     </el-table-column>
                     <el-table-column
-                        prop="valid"
+                        prop="isValid"
+                        :formatter="formatterValid"
                         label="状态">
                     </el-table-column>
                     <el-table-column
                         prop="updateTime"
+                        sortable
                         label="更新时间">
                     </el-table-column>
                     <el-table-column
-                        prop="registerTime"
+                        prop="createTime"
+                        sortable
                         label="创建时间">
                     </el-table-column>
                 </el-table>
@@ -104,11 +122,11 @@
                         background
                         @size-change="handleSizeChange"
                         @current-change="handleCurrentChange"
-                        :current-page="currentPage4"
-                        :page-sizes="[100, 200, 300, 400]"
-                        :page-size="100"
+                        :current-page="pageIndex"
+                        :page-sizes="[10, 20, 30]"
+                        :page-size="pageSize"
                         layout="total, sizes, prev, pager, next, jumper"
-                        :total="400">
+                        :total="count">
                     </el-pagination>
                 </div>
                 <div class="block adminAuditControl">
@@ -145,10 +163,10 @@
             title="提示"
             :visible.sync="activateOnOff"
             append-to-body>
-            <span>确定要无效这条文章？</span>
+            <span>确定要激活这条文章？</span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="activateOnOff = false">取 消</el-button>
-                <el-button type="primary" @click="detailInfo(1)">确 定</el-button>
+                <el-button type="primary" @click="activate(1)">确 定</el-button>
             </span>
         </el-dialog>
         <el-dialog
@@ -226,7 +244,7 @@
                 </el-form>
                 <div class="block templatePreview">
                     <el-aside class="templateItem" width="49%">
-                        <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524054334359&di=8222adebfed9c9f02b8b9ae3c8e9245d&imgtype=0&src=http%3A%2F%2Fpic40.nipic.com%2F20140417%2F18460687_100054352164_2.jpg" alt="" class="templateImage">
+                        <img src="../../../images/userLogo.jpg" alt="" class="templateImage">
                     </el-aside>
                     <el-aside class="templateItem" width="49%">
                         <div class="block sectionContent">
@@ -255,7 +273,7 @@
                                         <!--paragraphItemNothing paragraphItemHave无图片-->
                                         <article class="paragraphItemImage paragraphItemHave">
                                             <section class="paragraphItemContent">
-                                                <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524054334359&di=8222adebfed9c9f02b8b9ae3c8e9245d&imgtype=0&src=http%3A%2F%2Fpic40.nipic.com%2F20140417%2F18460687_100054352164_2.jpg" alt="">
+                                                <img src="../../../images/userLogo.jpg" alt="">
                                                 <i class="close el-icon-close"></i>
                                             </section>
 
@@ -291,7 +309,7 @@
                                         <!--paragraphItemNothing paragraphItemHave无图片-->
                                         <article class="paragraphItemImage paragraphItemHave">
                                             <section class="paragraphItemContent">
-                                                <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524054334359&di=8222adebfed9c9f02b8b9ae3c8e9245d&imgtype=0&src=http%3A%2F%2Fpic40.nipic.com%2F20140417%2F18460687_100054352164_2.jpg" alt="">
+                                                <img src="../../../images/userLogo.jpg" alt="">
                                                 <i class="close el-icon-close"></i>
                                             </section>
 
@@ -327,7 +345,7 @@
                                         <!--paragraphItemNothing paragraphItemHave无图片-->
                                         <article class="paragraphItemImage paragraphItemHave">
                                             <section class="paragraphItemContent">
-                                                <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524054334359&di=8222adebfed9c9f02b8b9ae3c8e9245d&imgtype=0&src=http%3A%2F%2Fpic40.nipic.com%2F20140417%2F18460687_100054352164_2.jpg" alt="">
+                                                <img src="../../../images/userLogo.jpg" alt="">
                                                 <i class="close el-icon-close"></i>
                                             </section>
 
@@ -355,14 +373,25 @@
     </section>
 </template>
 <script>
-    import userData from '../../../virtualData/dynamicData';
+   // import userData from '../../../virtualData/articleData';
+    import Common from '../../../utils/common.js';
+    import axios from 'axios';
     export default {
         data() {
             return {
                 formInline: {
-                    user: '',
-                    region:''
+                    pageIndex:1,
+                    pageSize:10,
+                    articleId:'',//该文章的唯一标识
+                    articleTitle:'',//文章的标题
+                    templateId:'',//文章使用的模板id
+                    customerId:'',//该文章的作者id,
+                    customerName:'',//该文章的作者Name,
+                    'isValid':''//，0无效,1有效
                 },
+                count:0,
+                pageIndex:1,
+                pageSize:10,
                 swiperOption: {
                     spaceBetween: 30,
                     pagination: {
@@ -414,13 +443,84 @@
                 selectedOne:false,
                 selectedData:{},
                 currentPage4:4,
-                tableData:userData.data.dataList
+                tableData:[]
             }
         },
         mounted() {
-
+            let t = this;
+            t.getArticleList();
+        },
+        watch:{
+            pageIndex(newVal){
+                let t = this;
+                t.formInline.pageIndex = newVal;
+                t.getArticleList();
+            },
+            pageSize(newVal){
+                let t = this;
+                t.formInline.pageSize = newVal;
+                t.getArticleList();
+            }
         },
         methods:{
+            checkList(){
+                let t = this;
+                t.pageIndex === 1?t.getArticleList():t.pageIndex =1;
+            },
+            resetList(){
+              let t = this;
+              t.pageSize = 10;
+              t.pageIndex = 1;
+              t.formInline = {
+                  pageIndex:1,
+                  pageSize:10,
+                  articleId:'',//该文章的唯一标识
+                  articleTitle:'',//文章的标题
+                  templateId:'',//文章使用的模板id
+                  customerId:'',//该文章的作者id,
+                  customerName:'',//该文章的作者Name,
+                  'isValid':''//，0无效,1有效
+              };
+              t.getArticleList();
+            },
+            commentIdListNum(row,column){
+                let t = this;
+                let type = row['articleIdList'];
+                //console.log(type);
+                return parseInt(Common.listNum(type),10);
+            },
+            formatterValid(row,column){
+                let t = this;
+                let type = row['isValid'];
+                return Common.formatterValid(type);
+            },
+            tableCurrentChange(val){
+                let t = this;
+                if(val){
+                    console.log(val);
+                    t.selectedOne = true;
+                    t.selectedData = val;
+                }
+            },
+            getArticleList(){
+              let t = this;
+                axios.get('/call/article/getArticleList', {
+                    params: t.formInline
+                })
+                    .then(function (response) {
+                        let reqData = response.data;
+                        console.log(reqData);
+                        if(reqData.responseObject.responseData['data_list']){
+                            t.tableData = reqData.responseObject.responseData['data_list'];
+                        }
+                        if(reqData.responseObject.responseData.totalCount){
+                            t.count = reqData.responseObject.responseData.totalCount;
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
             callback(){
                 console.log('执行');
             },
@@ -435,10 +535,27 @@
                     if(type===0){
                         t.activateOnOff = true;
                     }else if(type===1){
-                        t.activateOnOff = false;
-                        t.$message({
-                            message: t.selectedData.articleTitle+'文章已被激活',
-                            type: 'success'
+                        axios({
+                            url: '/call/article/active',
+                            method: "POST",
+                            data: {
+                                articleId:t.selectedData.articleId,
+                                updateState:'1'
+                            },
+                            transformRequest: [function (data) {
+                                return "paramJson=" + JSON.stringify(data);
+                            }],
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            },
+                            timeout: 30000
+                        }).then(function(req){
+                            t.activateOnOff = false;
+                            t.$message({
+                                message: t.selectedData.articleTitle+'文章已被激活',
+                                type: 'success'
+                            });
+                            t.getArticleList();
                         });
                     }
                 }
@@ -451,10 +568,27 @@
                     if(type===0){
                         t.innerVisible = true;
                     }else if(type===1){
-                        t.innerVisible = false;
-                        t.$message({
-                            message: t.selectedData.articleTitle+'文章已被无效',
-                            type: 'success'
+                        axios({
+                            url: '/call/article/invalid',
+                            method: "POST",
+                            data: {
+                                articleId:t.selectedData.articleId,
+                                updateState:'0'
+                            },
+                            transformRequest: [function (data) {
+                                return "paramJson=" + JSON.stringify(data);
+                            }],
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            },
+                            timeout: 30000
+                        }).then(function(req){
+                            t.innerVisible = false;
+                            t.$message({
+                                message: t.selectedData.articleTitle+'文章已被无效',
+                                type: 'success'
+                            });
+                            t.getArticleList();
                         });
                     }
                 }
@@ -501,11 +635,14 @@
             },
             handleSizeChange(val) {
                 console.log(`每页 ${val} 条`);
+                let t = this;
+                t.pageSize = val;
             },
             handleCurrentChange(val) {
                 let t = this;
-                t.selectedOne = true;
-                t.selectedData = val;
+                /*t.selectedOne = true;
+                t.selectedData = val;*/
+                t.pageIndex = val;
                 console.log(`当前页: ${val}`);
             }
         }

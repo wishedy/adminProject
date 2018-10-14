@@ -51,7 +51,7 @@
                 </el-form-item>
                 <div class="block">
                     <el-form-item>
-                        <el-button type="primary" @click="getUserList">查询</el-button>
+                        <el-button type="primary" @click="checkList">查询</el-button>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="default" @click="resetList">重置</el-button>
@@ -274,8 +274,14 @@
             t.getUserList();
         },
         methods:{
+            checkList() {
+                let t = this;
+                t.pageIndex === 1 ? t.getUserList() : t.pageIndex = 1;
+            },
             resetList(){
                 let t = this;
+                t.pageSize = 10;
+                t.pageIndex = 1;
                 t.formInline={
                     customerId: '',
                     customerDegree:'',

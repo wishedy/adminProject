@@ -53,7 +53,7 @@
                 </el-form-item>
                 <div class="block">
                     <el-form-item>
-                        <el-button type="primary" @click="getRecommendList">查询</el-button>
+                        <el-button type="primary" @click="checkList">查询</el-button>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="default" @click="resetList">重置</el-button>
@@ -282,6 +282,10 @@
             }
         },
         methods:{
+            checkList(){
+                let t = this;
+                t.pageIndex === 1 ? t.getRecommendList() : t.pageIndex = 1;
+            },
             tableCurrentChange(val){
                 let t = this;
                 if(val){
@@ -318,6 +322,8 @@
             },
             resetList(){
               let t = this;
+                t.pageSize = 10;
+                t.pageIndex = 1;
               t.formInline = {
                   pageIndex:1,
                   pageSize:10,

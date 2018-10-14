@@ -19,7 +19,7 @@
                 </el-form-item>
                 <div class="block">
                      <el-form-item>
-                         <el-button type="primary" @click="getFeedBackList">查询</el-button>
+                         <el-button type="primary" @click="checkList">查询</el-button>
                      </el-form-item>
                      <el-form-item>
                         <el-button type="default" @click="resetList">重置</el-button>
@@ -180,6 +180,10 @@
             t.getFeedBackList();
         },
         methods:{
+            checkList(){
+                let t = this;
+                t.pageIndex === 1 ? t.getFeedBackList() : t.pageIndex = 1;
+            },
             feedBackContent(){
               let t = this;
               t.centerDialogVisible = false;
@@ -190,6 +194,8 @@
             },
             resetList(){
                 let t = this;
+                t.pageSize = 10;
+                t.pageIndex = 1;
                 t.formInline={
                     feedbackId:'',//该反馈的唯一标识
                     customerId:'',//反馈用户的id

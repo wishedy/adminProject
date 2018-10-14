@@ -36,7 +36,7 @@
                 </el-form-item>-->
                 <div class="block">
                     <el-form-item>
-                        <el-button type="primary" @click="onSubmit">查询</el-button>
+                        <el-button type="primary" @click="checkList">查询</el-button>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="default" @click="resetList">重置</el-button>
@@ -306,8 +306,14 @@
             }
         },
         methods:{
+            checkList(){
+                let t = this;
+                t.pageIndex === 1 ? t.getDynamicList() : t.pageIndex = 1;
+            },
             resetList(){
               let t = this;
+                t.pageSize = 10;
+                t.pageIndex = 1;
               t.formInline = {
                   dynamicId:'',//该动态的唯一标识
                   'dynamicType':'',//0脱单动态，1话题动态，2普通动态

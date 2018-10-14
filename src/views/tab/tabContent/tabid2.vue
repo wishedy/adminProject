@@ -58,7 +58,7 @@
                 </el-form-item>
                 <div class="block">
                     <el-form-item>
-                        <el-button type="primary" @click="onSubmit">查询</el-button>
+                        <el-button type="primary" @click="checkList">查询</el-button>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="default" @click="reset">重置</el-button>
@@ -246,6 +246,10 @@
         },
         methods: {
             ...mapActions(['tab2ShowDialog']),
+            checkList(){
+                let t = this;
+                t.pageIndex === 1 ? t.getAuditList() : t.pageIndex = 1;
+            },
             tableCurrentChange(val){
                 let t = this;
                 if(val){
@@ -301,6 +305,8 @@
             },
             reset(){
                 let t = this;
+                t.pageSize = 10;
+                t.pageIndex = 1;
                 t.formInline = {
                     customerId: '',
                     customerName: '',
