@@ -387,6 +387,7 @@
             },
             getAuditList(){
                 let t = this;
+                t.selectedOne = false;
                 t.selectedData = {};
                 axios.get('/call/customer/getAuditList', {
                     params: t.formInline
@@ -409,6 +410,25 @@
             awakenUserInfo(){
                 let t = this;
                 if(t.selectedOne){
+                    let arr =
+                        [
+                        'degreeAttachment',
+                        'identityAttachment',
+                        'otherAttachment',
+                        'professionAttachment',
+                        'schoolAttachment'
+                    ];
+                    let attachmentIdList = [];
+                    for(let num = 0;num<arr.length;num++){
+                        console.log(t.selectedData[arr[num]]);
+                        if(t.selectedData[arr[num]]&&t.selectedData[arr[num]].length){
+                            let arrInner = t.selectedData[arr[num]].split(',');
+                            for(let innerNum = 0;innerNum<arrInner.length;innerNum++){
+                                attachmentIdList.push(arrInner[innerNum]);
+                            }
+                        }
+                    }
+                    console.log(attachmentIdList);
                     t.dialogInfo ={
                         title:t.selectedData.customerName+"的审核信息",
                         degreeImg:t.selectedData.jobPhoto,

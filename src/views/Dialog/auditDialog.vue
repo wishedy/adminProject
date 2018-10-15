@@ -10,10 +10,15 @@
                                 <span class="auditNumber">{{DialogInfo.degreeNum}}</span>
                             </div>
                         </div></el-col>
-                        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                        <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10">
                             <div class="grid-content">
                             <img class="adminAuditImage" :src="DialogInfo.degreeImg"/>
                         </div>
+                        </el-col>
+                        <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10">
+                            <div class="grid-content">
+                                <img class="adminAuditImage" :src="DialogInfo.degreeImg"/>
+                            </div>
                         </el-col>
                     </el-row>
                     <el-row class="audiContentItem">

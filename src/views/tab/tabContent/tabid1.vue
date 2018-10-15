@@ -1,15 +1,7 @@
 <template>
     <section class="adminContentContainer">
         <section class="adminContentInner">
-            <el-form :inline="true" :model="formInline" class="demo-form-inline" label-width="80px" label-position="left"><!--userId: '',
-                    userName: '',
-                    userSex: '',
-                    userAge: '',
-                    userState: '',
-                    userEmail: '',
-                    userPhoneNumber: '',
-                    userRegisterTime: '',
-                    userAuditTime: '',-->
+            <el-form :inline="true" :model="formInline" class="demo-form-inline" label-width="80px" label-position="left">
                 <el-form-item label="会员ID">
                     <el-input v-model="formInline.customerId" placeholder="会员ID" class="adminInputEl"></el-input>
                 </el-form-item>
@@ -156,7 +148,7 @@
                 </el-form>
             </div>
         </section>
-        <el-dialog
+        <!--<el-dialog
             width="30%"
             title="提示"
             :visible.sync="activateOnOff"
@@ -166,7 +158,7 @@
                 <el-button @click="activateOnOff = false">取 消</el-button>
                 <el-button type="primary" @click="activate(1)">确 定</el-button>
             </span>
-        </el-dialog>
+        </el-dialog>-->
         <el-dialog
             :title="'拉黑'+selectedData.customerName"
             width="40%"
@@ -305,7 +297,7 @@
                 }
 
             },
-            activate(type){
+            /*activate(type){
                 let t = this;
                 if(!t.selectedOne){
                     t.$message.error('请选择您要激活的会员!');
@@ -323,7 +315,7 @@
                     }
 
                 }
-            },
+            },*/
             getUserList(){
                 let t = this;
                 t.selectedData = {};
