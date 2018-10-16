@@ -147,7 +147,7 @@
                         <el-button @click.native="awakenUserInfo">详情</el-button>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click.native="passAudit(0)">审核通过</el-button>
+                        <el-button type="primary" @click.native="passAudit(0)">审核</el-button>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="danger" @click.native="rejectAudit(0)">驳回</el-button>
@@ -155,7 +155,100 @@
                 </el-form>
             </div>
         </section>
-        <AuditDialog :DialogInfo="dialogInfo"></AuditDialog>
+
+        <el-dialog
+            title="提示"
+            :visible.sync="attachmentDialog"
+            width="80%"
+            center>
+            <el-main>
+                <!--0头像，1背景图，2学位证，3学历证，4身份证，5个人写真，6工作相关证件7其他认证资料8举报附件-->
+                <div class="block" v-if="attachmentDialogData!={}">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="attachmentHeader">
+                        <h1 class="auditTitle">学位证:</h1>
+                        <span class="auditTitle" >证件号</span>
+                        <el-input v-if="attachmentDialogData['2'][0]&&attachmentDialogData['2'][0]['attachmentNumber']" v-model="attachmentDialogData['2'][0]['attachmentNumber']"   class="attachNum" :disabled="true"></el-input>
+                    </el-col>
+                    <el-main>
+                        <el-row>
+                            <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10" class="attachmentItem" v-if="attachmentDialogData['2']" v-for="(item,index) in attachmentDialogData['2']" :key="index">
+                                <div class="grid-content">
+                                    <img :src="item.attachmentLink" alt="">
+                                </div>
+                                <div class="block desContent">
+                                    <h1 class="time" v-text="item.createTime"></h1>
+                                    <h1 class="des" v-text="item.attachmentRemark"></h1>
+                                </div>
+                            </el-col>
+                        </el-row>
+
+                    </el-main>
+                </div>
+                <div class="block">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="attachmentHeader">
+                        <h1 class="auditTitle">学历证:</h1>
+                        <span class="auditTitle" >证件号</span>
+                        <el-input  v-if="attachmentDialogData['3'][0]&&attachmentDialogData['3'][0]['attachmentNumber']" v-model="attachmentDialogData['3'][0]['attachmentNumber']"      class="attachNum" :disabled="true"></el-input>
+                    </el-col>
+                    <el-main>
+                        <el-row>
+                            <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10" class="attachmentItem" v-if="attachmentDialogData['3']" v-for="(item,index) in attachmentDialogData['3']" :key="index">
+                                <div class="grid-content">
+                                    <img :src="item.attachmentLink" alt="">
+                                </div>
+                                <div class="block desContent">
+                                    <h1 class="time" v-text="item.createTime"></h1>
+                                    <h1 class="des" v-text="item.attachmentRemark"></h1>
+                                </div>
+                            </el-col>
+                        </el-row>
+
+                    </el-main>
+                </div>
+                <div class="block">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="attachmentHeader">
+                        <h1 class="auditTitle">职业相关:</h1>
+                        <span class="auditTitle" >证件号</span>
+                        <el-input  v-if="attachmentDialogData['6'][0]&&attachmentDialogData['2'][0]['attachmentNumber']" v-model="attachmentDialogData['6'][0]['attachmentNumber']"     class="attachNum" :disabled="true"></el-input>
+                    </el-col>
+                    <el-main>
+                        <el-row>
+                            <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10" class="attachmentItem" v-if="attachmentDialogData['6']" v-for="(item,index) in attachmentDialogData['6']" :key="index">
+                                <div class="grid-content">
+                                    <img :src="item.attachmentLink" alt="">
+                                </div>
+                                <div class="block desContent">
+                                    <h1 class="time" v-text="item.createTime"></h1>
+                                    <h1 class="des" v-text="item.attachmentRemark"></h1>
+                                </div>
+                            </el-col>
+                        </el-row>
+
+                    </el-main>
+                </div>
+                <div class="block">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="attachmentHeader">
+                        <h1 class="auditTitle">其他相关:</h1>
+                        <span class="auditTitle" >证件号</span>
+                        <el-input  v-if="attachmentDialogData['7'][0]&&attachmentDialogData['2'][0]['attachmentNumber']" v-model="attachmentDialogData['7'][0]['attachmentNumber']"     class="attachNum" :disabled="true"></el-input>
+                    </el-col>
+                    <el-main>
+                        <el-row>
+                            <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10" class="attachmentItem" v-if="attachmentDialogData['7']" v-for="(item,index) in attachmentDialogData['7']" :key="index">
+                                <div class="grid-content">
+                                    <img :src="item.attachmentLink" alt="">
+                                </div>
+                                <div class="block desContent">
+                                    <h1 class="time" v-text="item.createTime"></h1>
+                                    <h1 class="des" v-text="item.attachmentRemark"></h1>
+                                </div>
+                            </el-col>
+                        </el-row>
+
+                    </el-main>
+                </div>
+            </el-main>
+        </el-dialog>
         <el-dialog
             title="提示"
             :visible.sync="centerDialogVisible"
@@ -202,6 +295,7 @@
     export default {
         data() {
             return {
+                attachmentDialog:false,
                 formInline: {
                     customerId: '',
                     customerName: '',
@@ -211,6 +305,16 @@
                     getType:1,
                     pageSize:10,
                     pageIndex:1
+                },
+                attachmentDialogData:{
+                    '2':[],
+                    '3':[],
+                    '4':[],
+                    '6':[],
+                    '7':[]
+                },
+                formDes:{
+                  num:12545789878
                 },
                 pageSize:10,
                 pageIndex:1,
@@ -407,6 +511,20 @@
                         console.log(error);
                     });
             },
+            formatAttachmentList(data){
+              let t = this;
+              let jsonData = {};
+              let originalData = JSON.parse(JSON.stringify(data));
+              for(let num = 0;num<originalData.length;num++){
+                  if(jsonData[originalData[num]['attachmentType']]){
+                      jsonData[originalData[num]['attachmentType']].push(originalData[num]);
+                  }else{
+                      jsonData[originalData[num]['attachmentType']] = [];
+                      jsonData[originalData[num]['attachmentType']].push(originalData[num]);
+                  }
+              }
+              return jsonData;
+            },
             awakenUserInfo(){
                 let t = this;
                 if(t.selectedOne){
@@ -429,16 +547,29 @@
                         }
                     }
                     console.log(attachmentIdList);
-                    t.dialogInfo ={
-                        title:t.selectedData.customerName+"的审核信息",
-                        degreeImg:t.selectedData.jobPhoto,
-                        degreeNum:t.selectedData.jobNum,
-                        professionImg:t.selectedData.studyPhoto,
-                        professionNum:t.selectedData.studyNum,
-                        otherImg:t.selectedData.otherPhoto,
-                        otherNum:t.selectedData.otherNum
-                    };
-                    t.tab2ShowDialog();
+                    axios({
+                        url: '/call/customer/getAuditAttachmentList',
+                        method: "POST",
+                        data: {
+                            attachmentList:JSON.stringify(attachmentIdList),
+                            customerId:t.selectedData.customerId,
+                            isValid:1
+                        },
+                        transformRequest: [function (data) {
+                            return "paramJson=" + JSON.stringify(data);
+                        }],
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        timeout: 30000
+                    }).then(function(req){
+                        console.log(req.data);
+                        if(req.data&&req.data.responseObject&&req.data.responseObject.responseData&&req.data.responseObject.responseData.data_list&&req.data.responseObject.responseData.data_list.length){
+                            t.attachmentDialogData=t.formatAttachmentList(req.data.responseObject.responseData.data_list);
+                            console.log(t.attachmentDialogData);
+                        }
+                    });
+                    t.attachmentDialog = true;
                 }else{
                     t.$message.error('请选择您要审核的用户!');
                 }
@@ -460,6 +591,61 @@
 <style lang="scss" scoped>
 
     @import "../../../styleComponent/ContentInner";
+    .attachmentHeader{
+        height: 60px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+    }
+    .attachmentItem{
+        .grid-content{
+            box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+
+        }
+        .desContent{
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+            height:50px;
+            margin-top: 10px;
+            .time{
+                margin: 0 10px;
+                height: 30px;
+                display: inline-block;
+            }
+            .des{
+                width: 200px;
+                overflow: hidden;
+                text-overflow:ellipsis;
+                white-space: nowrap;
+                height: 30px;
+                display: inline-block;
+
+            }
+        }
+        margin: 10px;
+    }
+    .attachNum{
+        height:60px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width:270px;
+        float: left;
+
+    }
+    .auditTitle{
+        margin-right: 20px;
+        display: inline-block;
+        float: left;
+        font-size: 20px;
+        line-height: 20px;
+        i{
+            margin: 0 10px;
+        }
+    }
     .rejectAuditInline{
         padding: 20px 0;
     }
@@ -479,6 +665,12 @@
         }
         .adminAuditControl{
             padding: 20px 0;
+        }
+    }
+    .grid-content{
+        img{
+            width: 100%;
+            height: 100%;
         }
     }
 </style>

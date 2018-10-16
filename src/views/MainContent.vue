@@ -8,8 +8,8 @@
                 text-color="#97a8be"
                 active-text-color="#ffd04b">
                 <Hamburger class="adminNav" @click.native.stop="toggleSide" :class="{'rotateClassName':toggleOnOff}"></Hamburger>
-                <p class="adminTitle">后台管理系统</p>
-                <div class="adminWelcome">心心相遇，欢迎您admin</div>
+                <!--<p class="adminTitle">后台管理系统</p>
+                <div class="adminWelcome">心心相遇，欢迎您admin</div>-->
                 <div class="right-menu">
                     <section class="adminUser">
                         <section class="adminUserLogo">

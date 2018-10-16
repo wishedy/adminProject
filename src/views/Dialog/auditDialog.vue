@@ -1,21 +1,31 @@
 <template>
     <section>
-        <el-dialog :title="DialogInfo.title" :visible.sync="tab2Data.toggleSlide" center :before-close="handleClose">
+        <el-dialog :title="DialogInfo.title" :visible.sync="tab2Data.toggleSlide" center :before-close="handleClose" width="80%">
             <el-container class="adminAuditContainer">
                 <el-main>
                     <el-row class="audiContentItem">
                         <el-col><div class="grid-content adminAuditNumber">
                             <div class="block audiItem">
-                                <span class="auditTitle"><i class="el-icon-star-on"></i>学位证或学历证</span>
-                                <span class="auditNumber">{{DialogInfo.degreeNum}}</span>
+                                <span class="auditTitle"><i class="el-icon-star-on"></i>学位证</span>
+                                <span class="auditNumber">{{DialogInfo.degreeNum}}1111111111</span>
                             </div>
                         </div></el-col>
-                        <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10">
+                        <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10" class="attachmentItem">
                             <div class="grid-content">
                             <img class="adminAuditImage" :src="DialogInfo.degreeImg"/>
                         </div>
                         </el-col>
-                        <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10">
+                        <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10" class="attachmentItem">
+                            <div class="grid-content">
+                                <img class="adminAuditImage" :src="DialogInfo.degreeImg"/>
+                            </div>
+                        </el-col>
+                        <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10" class="attachmentItem">
+                            <div class="grid-content">
+                                <img class="adminAuditImage" :src="DialogInfo.degreeImg"/>
+                            </div>
+                        </el-col>
+                        <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10" class="attachmentItem">
                             <div class="grid-content">
                                 <img class="adminAuditImage" :src="DialogInfo.degreeImg"/>
                             </div>
@@ -28,7 +38,7 @@
                                 <span class="auditNumber">{{DialogInfo.professionNum}}</span>
                             </div>
                         </div></el-col>
-                        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                        <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10" class="attachmentItem">
                             <div class="grid-content">
                                 <img class="adminAuditImage" :src="DialogInfo.professionImg"/>
                             </div>
@@ -37,11 +47,24 @@
                     <el-row class="audiContentItem">
                         <el-col><div class="grid-content adminAuditNumber">
                             <div class="block audiItem">
-                                <span class="auditTitle"><i class="el-icon-star-on"></i>学位证或学历证</span>
+                                <span class="auditTitle"><i class="el-icon-star-on"></i>学历证</span>
                                 <span class="auditNumber">{{DialogInfo.otherNum}}</span>
                             </div>
                         </div></el-col>
-                        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                        <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10" class="attachmentItem">
+                            <div class="grid-content">
+                                <img class="adminAuditImage" :src="DialogInfo.otherImg"/>
+                            </div>
+                        </el-col>
+                    </el-row>
+                    <el-row class="audiContentItem">
+                        <el-col><div class="grid-content adminAuditNumber">
+                            <div class="block audiItem">
+                                <span class="auditTitle"><i class="el-icon-star-on"></i>其他证件</span>
+                                <span class="auditNumber">{{DialogInfo.otherNum}}</span>
+                            </div>
+                        </div></el-col>
+                        <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10" class="attachmentItem">
                             <div class="grid-content">
                                 <img class="adminAuditImage" :src="DialogInfo.otherImg"/>
                             </div>
@@ -53,6 +76,9 @@
     </section>
 </template>
 <style lang="scss" scoped>
+    .attachmentItem{
+        margin-bottom: 20px;
+    }
     .adminAuditNumber{
         font-size: 18px;
         color: #333;

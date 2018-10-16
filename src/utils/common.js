@@ -9,6 +9,11 @@ class Common {
         this.listNum = this.listNum.bind(this);
         this.auditType = this.auditType.bind(this);
         this.auditResult = this.auditResult.bind(this);
+        this.isEmptyObject = this.isEmptyObject.bind(this);
+    }
+    isEmptyObject(obj){
+        for(let n in obj){return false}
+        return true;
     }
     TopicStatus(type){
         let str = '';
