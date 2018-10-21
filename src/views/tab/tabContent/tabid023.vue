@@ -373,7 +373,6 @@
     </section>
 </template>
 <script>
-   // import userData from '../../../virtualData/articleData';
     import Common from '../../../utils/common.js';
     import axios from 'axios';
     export default {
