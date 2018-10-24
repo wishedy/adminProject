@@ -6,6 +6,8 @@ import Tabid4 from './views/tab/tabContent/tabid4.vue';
 import Tabid5 from './views/tab/tabContent/tabid5.vue';
 import Tabid6 from './views/tab/tabContent/tabid6.vue';
 import Tabid22 from './views/tab/tabContent/tabid022.vue';
+import Tabid21 from './views/tab/tabContent/tabid021.vue';
+import Tabid26 from './views/tab/tabContent/tabid026.vue';
 import Tabid23 from './views/tab/tabContent/tabid023.vue';
 import Tabid24 from './views/tab/tabContent/tabid024.vue';
 import Tabid25 from './views/tab/tabContent/tabid025.vue';
@@ -50,6 +52,14 @@ export default {
         {
             path:"/022",
             component: Tabid22
+        },
+        {
+            path:"/021",
+            component: Tabid21
+        },
+        {
+            path:"/026",
+            component: Tabid26
         },
         {
             path:"/023",
