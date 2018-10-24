@@ -64,64 +64,29 @@
                     </el-table-column>
                     <el-table-column
                         prop="customerId"
-                        label="作者ID">
-                    </el-table-column>
-                    <el-table-column
-                        prop="customerName"
-                        label="作者">
+                        label="会员ID">
                     </el-table-column>
                     <el-table-column
                         prop="articleTitle"
                         label="消息标题">
                     </el-table-column>
                     <el-table-column
-                        prop="articleLink"
-                        label="消息链接">
-                    </el-table-column>
-                    <el-table-column
                         prop="templateId"
-                        label="模板ID">
+                        label="消息类型">
                     </el-table-column>
                     <el-table-column
                         prop="forwardNum"
-                        sortable
-                        label="转发">
+                        label="消息场景">
                     </el-table-column>
                     <el-table-column
                         prop="collectNum"
                         sortable
-                        label="收藏">
-                    </el-table-column>
-                    <el-table-column
-                        prop="browseNum"
-                        sortable
-                        label="浏览">
-                    </el-table-column>
-                    <el-table-column
-                        prop="likeNum"
-                        sortable
-                        label="点赞">
-                    </el-table-column>
-                    <el-table-column
-                        prop="articleIdList"
-                        sortable
-                        :formatter="commentIdListNum"
-                        label="评论">
+                        label="发送时间">
                     </el-table-column>
                     <el-table-column
                         prop="isValid"
                         :formatter="formatterValid"
                         label="状态">
-                    </el-table-column>
-                    <el-table-column
-                        prop="updateTime"
-                        sortable
-                        label="更新时间">
-                    </el-table-column>
-                    <el-table-column
-                        prop="createTime"
-                        sortable
-                        label="创建时间">
                     </el-table-column>
                 </el-table>
                 <div class="block adminPage">
