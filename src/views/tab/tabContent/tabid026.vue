@@ -3,13 +3,13 @@
         <section class="adminContentInner">
             <el-form :inline="true" :model="formInline" class="demo-form-inline" label-width="80px" label-position="left">
                 <el-form-item label="场景ID">
-                    <el-input v-model="formInline.articleId" placeholder="文章ID" class="adminInputEl"></el-input>
+                    <el-input v-model="formInline.articleId" placeholder="消息场景ID" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="场景标题">
                     <el-input v-model="formInline.customerId" placeholder="作者ID" class="adminInputEl"></el-input>
                 </el-form-item>
                 <el-form-item label="场景状态">
-                    <el-select v-model="formInline.isValid" placeholder="文章状态" class="adminInputEl">
+                    <el-select v-model="formInline.isValid" placeholder="消息场景状态" class="adminInputEl">
                         <el-option label="无效" value="0"></el-option>
                         <el-option label="有效" value="1"></el-option>
                     </el-select>
@@ -143,7 +143,7 @@
             title="提示"
             :visible.sync="innerVisible"
             append-to-body>
-            <span>确定要无效这条文章？</span>
+            <span>确定要无效这条消息场景？</span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="innerVisible = false">取 消</el-button>
                 <el-button type="primary" @click="detailInfo(1)">确 定</el-button>
@@ -154,7 +154,7 @@
             title="提示"
             :visible.sync="activateOnOff"
             append-to-body>
-            <span>确定要激活这条文章？</span>
+            <span>确定要激活这条消息场景？</span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="activateOnOff = false">取 消</el-button>
                 <el-button type="primary" @click="activate(1)">确 定</el-button>
@@ -171,11 +171,11 @@
                 formInline: {
                     pageIndex:1,
                     pageSize:10,
-                    articleId:'',//该文章的唯一标识
-                    articleTitle:'',//文章的标题
-                    templateId:'',//文章使用的模板id
-                    customerId:'',//该文章的作者id,
-                    customerName:'',//该文章的作者Name,
+                    articleId:'',//该消息场景的唯一标识
+                    articleTitle:'',//消息场景的标题
+                    templateId:'',//消息场景使用的模板id
+                    customerId:'',//该消息场景的作者id,
+                    customerName:'',//该消息场景的作者Name,
                     'isValid':''//，0无效,1有效
                 },
                 imageUrl: '',
@@ -284,11 +284,11 @@
                 t.formInline = {
                     pageIndex:1,
                     pageSize:10,
-                    articleId:'',//该文章的唯一标识
-                    articleTitle:'',//文章的标题
-                    templateId:'',//文章使用的模板id
-                    customerId:'',//该文章的作者id,
-                    customerName:'',//该文章的作者Name,
+                    articleId:'',//该消息场景的唯一标识
+                    articleTitle:'',//消息场景的标题
+                    templateId:'',//消息场景使用的模板id
+                    customerId:'',//该消息场景的作者id,
+                    customerName:'',//该消息场景的作者Name,
                     'isValid':''//，0无效,1有效
                 };
                 t.getArticleList();
@@ -340,7 +340,7 @@
             activate(type){
                 let t = this;
                 if(!t.selectedOne){
-                    t.$message.error('请选择您要激活的文章!');
+                    t.$message.error('请选择您要激活的消息场景!');
                 }else{
                     if(type===0){
                         t.activateOnOff = true;
@@ -362,7 +362,7 @@
                         }).then(function(req){
                             t.activateOnOff = false;
                             t.$message({
-                                message: t.selectedData.articleTitle+'文章已被激活',
+                                message: t.selectedData.articleTitle+'消息场景已被激活',
                                 type: 'success'
                             });
                             t.getArticleList();
@@ -373,7 +373,7 @@
             detailInfo(type){
                 let t = this;
                 if(!t.selectedOne){
-                    t.$message.error('请选择您要无效的文章!');
+                    t.$message.error('请选择您要无效的消息场景!');
                 }else{
                     if(type===0){
                         t.innerVisible = true;
@@ -395,7 +395,7 @@
                         }).then(function(req){
                             t.innerVisible = false;
                             t.$message({
-                                message: t.selectedData.articleTitle+'文章已被无效',
+                                message: t.selectedData.articleTitle+'消息场景已被无效',
                                 type: 'success'
                             });
                             t.getArticleList();
@@ -406,14 +406,14 @@
             editArticle(type){
                 let t = this;
                 if(!t.selectedOne){
-                    t.$message.error('请选择您要无效的文章!');
+                    t.$message.error('请选择您要无效的消息场景!');
                 }else{
                     if(type===0){
                         t.articleDialog = true;
                     }else if(type===1){
                         t.articleDialog = false;
                         t.$message({
-                            message: t.selectedData.articleTitle+'文章已生成',
+                            message: t.selectedData.articleTitle+'消息场景已生成',
                             type: 'success'
                         });
                     }
@@ -422,14 +422,14 @@
             pushContent(type){
                 let t = this;
                 if(!t.selectedOne){
-                    t.$message.error('请选择您要推送的文章!');
+                    t.$message.error('请选择您要推送的消息场景!');
                 }else{
                     if(type===0){
                         t.pushOnOff = true;
                     }else if(type===1){
                         t.pushOnOff = false;
                         t.$message({
-                            message: t.selectedData.articleTitle+'文章已推送',
+                            message: t.selectedData.articleTitle+'消息场景已推送',
                             type: 'success'
                         });
                     }
