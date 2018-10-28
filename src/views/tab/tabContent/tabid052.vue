@@ -122,11 +122,11 @@
         </section>
         <el-dialog
             :visible.sync="centerDialogVisible"
-            width="35%"
+            width="55%"
             center>
             <div class="block">
                 <el-main>
-                    <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="demo-ruleForm">
+                    <el-form :model="ruleForm2" status-icon  ref="ruleForm2" label-width="100px" class="demo-ruleForm">
                         <el-form-item label="场景标题" prop="pass">
                             <el-input type="password" v-model="ruleForm2.pass" autocomplete="off" style="width:200px;"></el-input>
                         </el-form-item>
@@ -146,6 +146,9 @@
                             <el-radio-group v-model="radio2">
                                 <el-radio :label="0">允许</el-radio>
                                 <el-radio :label="1">不允许</el-radio>
+                                <el-radio :label="3">
+                                    <el-input-number v-model="input"  :min="1" :max="10" label="描述文字"></el-input-number>
+                                </el-radio>
                             </el-radio-group>
                         </el-form-item>
                         <el-form-item label="审核用户" prop="checkPass">
@@ -192,6 +195,7 @@
     export default {
         data() {
             return {
+                input:'',
                 radio2:'0',
                 formInline: {
                     pageIndex:1,

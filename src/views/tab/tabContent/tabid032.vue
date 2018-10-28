@@ -111,7 +111,8 @@
         </section>
         <el-dialog
             width="30%"
-            title="提示"
+            center
+            :title="'无效模板'+selectedData.templateTitle"
             :visible.sync="innerVisible"
             append-to-body>
             <span>确定要无效这条模板？</span>
@@ -122,7 +123,8 @@
         </el-dialog>
         <el-dialog
             width="30%"
-            title="提示"
+            center
+            :title="'激活模板'+selectedData.templateTitle"
             :visible.sync="activateOnOff"
             append-to-body>
             <span>确定要激活这条模板？</span>
@@ -132,18 +134,13 @@
             </span>
         </el-dialog>
         <el-dialog
-            width="80%"
-            title="模板详情"
+            width="50%"
+            :title="selectedData.templateTitle"
             :visible.sync="infoOnOff"
             center
             append-to-body>
             <el-main class="detailInfo">
-                <div class="detailItem">
-                    <h1 class="detailItemTitle">效果图</h1>
-                    <section class="detailItemImg">
-                        <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524054334359&di=8222adebfed9c9f02b8b9ae3c8e9245d&imgtype=0&src=http%3A%2F%2Fpic40.nipic.com%2F20140417%2F18460687_100054352164_2.jpg" alt="">
-                    </section>
-                </div>
+                <textarea name=""   cols="30" rows="10" class="templateContentArea" v-model="selectedData.templateContent"></textarea>
             </el-main>
         </el-dialog>
         <el-dialog
@@ -154,13 +151,15 @@
             append-to-body>
             <el-main class="templateContent">
                 <div class="demo-input-suffix block">
-                    <div>
+                    <div class="block">
                         模板标题
                     </div>
                     <el-input v-model="templateTitle" placeholder="模板标题"  class="adminInputEl"></el-input>
                 </div>
                 <div class="demo-input-suffix block">
+                    <div class="block">
                     模板内容
+                    </div>
                     <textarea name="" id="" cols="30" rows="10" class="templateContentArea" v-model="templateContent"></textarea>
                 </div>
             </el-main>

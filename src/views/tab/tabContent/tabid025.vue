@@ -140,22 +140,22 @@
                 <div class="block adminAuditControl">
                     <el-form :inline="true" class="demo-form-inline">
                         <el-form-item>
-                            <el-button  type="primary" @click.native="editArticle(0)">编辑</el-button>
+                            <el-button  type="default" @click.native="editArticle(0)">编辑</el-button>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click.native="pushContent(0)" type="primary">推送</el-button>
+                            <el-button @click.native="pushContent(0)" type="default">推送</el-button>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click.native="activate(0)" type="success">激活</el-button>
+                            <el-button @click.native="activate(0)" type="default">激活</el-button>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click.native="verifyActivate(0)" type="success">审核</el-button>
+                            <el-button @click.native="detailInfo(0)" type="default">无效</el-button>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click.native="detailInfo(0)" type="danger">无效</el-button>
+                            <el-button @click.native="verifyActivate(0)" type="default">审核</el-button>
                         </el-form-item>
                         <el-form-item>
-                            <el-button @click.native="verifyDetailInfo(0)" type="danger">驳回</el-button>
+                            <el-button @click.native="verifyDetailInfo(0)" type="default">驳回</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -230,7 +230,6 @@
                     <el-select v-model="formInline.region" placeholder="推送位置" class="adminInputEl">
                         <el-option label="按序推送" value="0"></el-option>
                         <el-option label="优先推送" value="1"></el-option>
-                        <el-option label="延后推送" value="2"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="推送ID" :inline="true">

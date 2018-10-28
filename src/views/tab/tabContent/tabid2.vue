@@ -157,12 +157,33 @@
         </section>
 
         <el-dialog
-            title="提示"
+            :title="selectedData.customerName+'的审核资料'"
             :visible.sync="attachmentDialog"
             width="80%"
             center>
             <el-main>
                 <!--0头像，1背景图，2学位证，3学历证，4身份证，5个人写真，6工作相关证件7其他认证资料8举报附件-->
+                <div class="block" v-if="attachmentDialogData!={}">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="attachmentHeader">
+                        <h1 class="auditTitle">身份证:</h1>
+                        <span class="auditTitle" >证件号</span>
+                        <el-input v-if="attachmentDialogData['4'][0]&&attachmentDialogData['4'][0]['attachmentNumber']" v-model="attachmentDialogData['4'][0]['attachmentNumber']"   class="attachNum" :disabled="true"></el-input>
+                    </el-col>
+                    <el-main>
+                        <el-row>
+                            <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10" class="attachmentItem" v-if="attachmentDialogData['4']" v-for="(item,index) in attachmentDialogData['4']" :key="index">
+                                <div class="grid-content">
+                                    <img :src="item.attachmentLink" alt="">
+                                </div>
+                                <div class="block desContent">
+                                    <h1 class="time" v-text="item.createTime"></h1>
+                                    <h1 class="des" v-text="item.attachmentRemark"></h1>
+                                </div>
+                            </el-col>
+                        </el-row>
+
+                    </el-main>
+                </div>
                 <div class="block" v-if="attachmentDialogData!={}">
                     <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="attachmentHeader">
                         <h1 class="auditTitle">学位证:</h1>
@@ -250,7 +271,7 @@
             </el-main>
         </el-dialog>
         <el-dialog
-            title="提示"
+            :title="'通过'+selectedData.customerName+'的审核'"
             :visible.sync="centerDialogVisible"
             width="30%"
             center>
@@ -261,17 +282,19 @@
             </span>
         </el-dialog>
         <el-dialog
-            title="提示"
+            :title="'驳回'+selectedData.customerName+'的审核'"
             :visible.sync="rejectDialogVisible"
             width="30%"
             center>
-            <span class="rejectAuditTitle">是否确认驳回{{selectedData.name}}的审核信息</span>
+            <span class="rejectAuditTitle">是否确认驳回{{selectedData.customerName}}的审核信息</span>
             <section class="rejectAuditInline">
                 <el-form :inline="true" class="demo-form-inline">
                     <el-form-item label="选择驳回理由" :inline="true" class="rejectAuditInline">
-                        <el-select v-model="formInline.region" placeholder="驳回审核的理由">
-                            <el-option label="第一个驳回理由" value="0"></el-option>
-                            <el-option label="第二个驳回理由" value="1"></el-option>
+                        <el-select v-model="region" placeholder="驳回审核的理由">
+                            <el-option label="虚假资料" value="0"></el-option>
+                            <el-option label="证件不清晰" value="1"></el-option>
+                            <el-option label="证件号码不一致" value="2"></el-option>
+                            <el-option label="资料不齐全" value="3"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="输入驳回理由" :inline="true" class="rejectAuditInline">
@@ -295,6 +318,7 @@
     export default {
         data() {
             return {
+                region:'0',
                 attachmentDialog:false,
                 formInline: {
                     customerId: '',
