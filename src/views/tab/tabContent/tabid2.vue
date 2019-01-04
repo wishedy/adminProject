@@ -287,7 +287,7 @@
 </template>
 <script>
     import Common from '../../../utils/common.js';
-    import AuditDialog from '../../Dialog/auditDialog';
+    import AuditDialog from '../../components/Dialog/auditDialog';
     import userData from '../../../virtualData/auditInformation';
     import axios from 'axios';
     import {mapGetters,mapActions} from 'vuex';
@@ -589,7 +589,7 @@
 </script>
 <style lang="scss" scoped>
 
-    @import "../../../styleComponent/ContentInner";
+    @import "../../../static/scss/common";
     .attachmentHeader{
         height: 60px;
         display: flex;

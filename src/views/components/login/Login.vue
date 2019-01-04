@@ -49,7 +49,7 @@
     </section>
 </template>
 <style lang="scss">
-    @import "../styleComponent/mask";
+    @import "../../../static/scss/common";
     .adminLogin{
         @include maskBg();
         display: flex;
@@ -75,7 +75,7 @@
 </style>
 <script>
     import {mapActions} from 'vuex';
-    import regularTest from '../utils/regularTest.js';
+    import regularTest from '../../../utils/regularTest.js';
     import axios from 'axios';
     export default {
         data() {

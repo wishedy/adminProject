@@ -516,7 +516,7 @@
     }
 </script>
 <style lang="scss" scoped>
-    @import "../../../styleComponent/ContentInner";
+    @import "../../../static/scss/common";
     .adminInputEl{
         width:200px;
     }
