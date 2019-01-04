@@ -155,7 +155,6 @@
                 </el-form>
             </div>
         </section>
-
         <el-dialog
             title="提示"
             :visible.sync="attachmentDialog"
