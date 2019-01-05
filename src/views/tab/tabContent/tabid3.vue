@@ -224,7 +224,7 @@
     </section>
 </template>
 <style lang="scss" scoped>
-    @import "../../../styleComponent/ContentInner";
+    @import "../../../static/scss/common";
     .adminContentInner{
         @include ContentInner();
         .adminInputEl{

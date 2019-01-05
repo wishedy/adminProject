@@ -41,30 +41,6 @@
                 <el-form-item label="手机号">
                     <el-input v-model="formInline.customerPhoneNum" placeholder="手机号" class="adminInputEl"></el-input>
                 </el-form-item>
-                <el-form-item label="注册时间">
-                    <el-date-picker
-                        v-model="creationTime"
-                        type="daterange"
-                        align="right"
-                        unlink-panels
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期"
-                        :picker-options="creationTimePickerOptions">
-                    </el-date-picker>
-                </el-form-item>
-                <el-form-item label="审核时间">
-                    <el-date-picker
-                        v-model="updateTime"
-                        type="daterange"
-                        align="right"
-                        unlink-panels
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期"
-                        :picker-options="updateTimePickerOptions">
-                    </el-date-picker>
-                </el-form-item>
                 <div class="block">
                     <el-form-item>
                         <el-button type="primary" @click="checkList">查询</el-button>
@@ -164,59 +140,28 @@
             <div class="block adminAuditControl">
                 <el-form :inline="true" class="demo-form-inline">
                     <el-form-item>
-                        <el-button type="default" @click.native="checkPermission">查看权限</el-button>
+                        <el-button type="default">查看权限</el-button>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="default"  @click.native="blackCustomer(0)">拉黑</el-button>
+                        <el-button type="danger"  @click.native="blackCustomer(0)">拉黑</el-button>
                     </el-form-item>
                 </el-form>
             </div>
         </section>
-        <el-dialog
-            width="50%"
-            :title="selectedData.customerName+'的操作权限'"
+        <!--<el-dialog
+            width="30%"
+            title="提示"
             :visible.sync="activateOnOff"
-            center
             append-to-body>
-            <section class="block">
-                <el-main>
-                    <el-badge class="item permission-item">
-                        <el-button type="danger">禁止操作样式</el-button>
-                    </el-badge>
-                    <el-badge  class="item permission-item">
-                        <el-button type="success">允许操作样式</el-button>
-                    </el-badge>
-                    <el-badge :value="12" class="item permission-item">
-                        <el-button plain>注册体验样式</el-button>
-                    </el-badge>
-                    <el-badge  class="item permission-item">
-                        <el-button type="success">允许操作样式</el-button>
-                    </el-badge>
-                    <el-badge class="item permission-item">
-                        <el-button type="danger">禁止操作样式</el-button>
-                    </el-badge>
-                    <el-badge  class="item permission-item">
-                        <el-button type="success">允许操作样式</el-button>
-                    </el-badge>
-                    <el-badge :value="12" class="item permission-item">
-                        <el-button plain>注册体验样式</el-button>
-                    </el-badge>
-                    <el-badge :value="12" class="item permission-item">
-                        <el-button plain>注册体验样式</el-button>
-                    </el-badge>
-                    <el-badge  class="item permission-item">
-                        <el-button type="success">允许操作样式</el-button>
-                    </el-badge>
-                    <el-badge :value="12" class="item permission-item">
-                        <el-button plain>注册体验样式</el-button>
-                    </el-badge>
-                </el-main>
-            </section>
-        </el-dialog>
+            <span>确定要激活该用户？</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="activateOnOff = false">取 消</el-button>
+                <el-button type="primary" @click="activate(1)">确 定</el-button>
+            </span>
+        </el-dialog>-->
         <el-dialog
             :title="'拉黑'+selectedData.customerName"
             width="40%"
-            center
             :visible.sync="rejectDialogVisible">
             <section class="block">
                 <el-form  :model="blacklist" class="demo-form-inline" label-width="80px" label-position="left">
@@ -228,7 +173,7 @@
                     <el-form-item label="拉黑回复">
                         <el-input
                             type="textarea"
-                            :autosize="{ minRows: 2, maxRows: 4}"
+                            autosize
                             class="adminInputElDialog"
                             placeholder="请输入内容"
                             v-model="blacklist.textarea2">
@@ -248,10 +193,7 @@
     .adminInputElDialog{
         width:300px;
     }
-    @import "../../../styleComponent/ContentInner";
-    .permission-item{
-        margin: 10px 20px;
-    }
+    @import "../../../static/scss/common";
    .adminContentInner{
        @include ContentInner();
        .adminInputEl{
@@ -275,6 +217,7 @@
         data() {
             return {
                 activateOnOff:false,
+                innerVisible:false,
                 rejectDialogVisible:false,
                 count:0,
                 blacklist:{
@@ -297,63 +240,8 @@
                 pageIndex:1,
                 selectedData:{},
                 selectedOne:false,
-                tableData:[],
-                creationTimePickerOptions: {
-                    shortcuts: [{
-                        text: '最近一周',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: '最近一个月',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: '最近三个月',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }]
-                },
-                updateTimePickerOptions: {
-                    shortcuts: [{
-                        text: '最近一周',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: '最近一个月',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: '最近三个月',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }]
-                },
-                creationTime:'',
-                updateTime:''
+                value2:"",
+                tableData:[]
             }
         },
         computed: {
@@ -371,12 +259,6 @@
                 let t = this;
                 t.formInline.pageSize = newVal;
                 t.getUserList();
-            },
-            creationTime(newVal){
-                console.log(newVal);
-            },
-            updateTime(newVal){
-                console.log(newVal);
             }
         },
         mounted(){
@@ -387,14 +269,6 @@
             checkList() {
                 let t = this;
                 t.pageIndex === 1 ? t.getUserList() : t.pageIndex = 1;
-            },
-            checkPermission(){
-              let t = this;
-                if(!t.selectedOne){
-                    t.$message.error('请选择您要查看的会员!');
-                }else{
-                   t.activateOnOff = true;
-                }
             },
             resetList(){
                 let t = this;
@@ -423,6 +297,25 @@
                 }
 
             },
+            /*activate(type){
+                let t = this;
+                if(!t.selectedOne){
+                    t.$message.error('请选择您要激活的会员!');
+                }else{
+                    if(type===0){
+                        t.activateOnOff = true;
+                    }else if(type===1){
+                        t.activateOnOff = false;
+                        t.selectedData['blackState'] = 1;
+                        t.$message({
+                            message: t.selectedData.customerName+'已被激活',
+                            type: 'success'
+                        });
+                        t.getUserList();
+                    }
+
+                }
+            },*/
             getUserList(){
                 let t = this;
                 t.selectedData = {};

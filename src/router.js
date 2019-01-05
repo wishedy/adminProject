@@ -1,4 +1,4 @@
-import index from './views/index.vue'
+import index from './views/components/Calendar/index.vue'
 import Tabid1 from './views/tab/tabContent/tabid1.vue';
 import Tabid2 from './views/tab/tabContent/tabid2.vue';
 import Tabid3 from './views/tab/tabContent/tabid3.vue';

@@ -4,7 +4,7 @@ const state = {
     nowTabData: '',
     Context:false,
     outLoginDialogOnOff:false,
-    loginOnOff:localStorage.getItem("userName")?localStorage.getItem("userName"):'',
+    loginOnOff:'张恒',
     tab2Data:tab2Data
 };
 export default  state;

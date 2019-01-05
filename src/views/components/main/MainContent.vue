@@ -13,7 +13,7 @@
                 <div class="right-menu">
                     <section class="adminUser">
                         <section class="adminUserLogo">
-                            <img src="../images/userLogo.jpg" alt="">
+                            <img src="../../../images/userLogo.jpg" alt="">
                         </section>
                     </section>
                 </div>
@@ -157,8 +157,8 @@
     }
 </style>
 <script>
-    import Tab from './tab/index'
-    import Hamburger from './Hamburger/index';
+    import Tab from '../../tab/index'
+    import Hamburger from '../Hamburger/index';
     import {mapGetters,mapActions} from 'vuex'
     export default {
         data(){

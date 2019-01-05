@@ -20,11 +20,10 @@
     }
 </style>
 <script>
-    import OutLoginDialog from './views/Dialog/OutLogin.vue'
-    import jquery from 'jquery';
-    import LoginBar from './views/Login.vue'
-    import SideBar from './views/sideBar';
-    import ContentBar from './views/MainContent';
+    import OutLoginDialog from './views/components/Dialog/OutLogin.vue'
+    import LoginBar from './views/components/login/Login.vue'
+    import SideBar from './views/components/sideBar/sideBar';
+    import ContentBar from './views/components/main/MainContent';
     import {mapGetters,mapActions} from 'vuex';
     export default {
         data(){
