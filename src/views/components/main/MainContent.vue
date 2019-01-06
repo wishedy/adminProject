@@ -157,7 +157,8 @@
     }
 </style>
 <script>
-    import Tab from '../../tab/index'
+    import Tab from '../../tab/index';
+    import common from '../../../utils/common';
     import Hamburger from '../Hamburger/index';
     import {mapGetters,mapActions} from 'vuex'
     export default {
@@ -169,7 +170,16 @@
         computed:{
             ...mapGetters(['toggleOnOff','nowTabData']),
             marTop(){
-                return (this.nowTabData.length>2);
+                let t = this;
+                console.log(common.isEmptyObject(t.nowTabData));
+                return !common.isEmptyObject(t.nowTabData);
+            }
+        },
+        watch:{
+            nowTabData(n){
+                let t = this;
+                console.log(common.isEmptyObject(t.nowTabData));
+                console.log(n);
             }
         },
         methods:{
@@ -177,6 +187,10 @@
         },
         components:{
             Hamburger,Tab
+        },
+        mounted(){
+            let t = this;
+            console.log(common.isEmptyObject(t.nowTabData));
         }
     }
 </script>

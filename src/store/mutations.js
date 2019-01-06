@@ -1,4 +1,3 @@
-import tab2Mutations from './contentMutations/tab2Mutations';
 const mutations = {
     toggleSide(state,data){
         state.toggleOnOff = !state.toggleOnOff;
@@ -18,29 +17,25 @@ const mutations = {
       state.outLoginDialogOnOff = true;
     },
     addTab(state,data){
-        let nowData = (state.nowTabData.length)?JSON.parse(state.nowTabData):{};
+        let nowData = JSON.parse(JSON.stringify(state.nowTabData));
         if(!nowData[data.routerLink]){
             nowData[data.routerLink] = data;
         }
-        state.nowTabData = JSON.stringify(nowData);
-        // console.log(state.nowTabData)
+        state.nowTabData = nowData;
     },
     deleteTab(state,data){
-        let nowData = (state.nowTabData.length)?JSON.parse(state.nowTabData):{};
+        let nowData = JSON.parse(JSON.stringify(state.nowTabData));
         delete  nowData[data.routerLink];
-        state.nowTabData = JSON.stringify(nowData);
+        state.nowTabData = nowData;
     },
     ContextOn(state){
         state.Context = true;
     },
     ContextOff(state){
         state.Context = false;
+    },
+    test(state,str){
+        console.log(state,str);
     }
 };
-const contentActions = [tab2Mutations];
-for(let i = 0;i<contentActions.length;i++){
-    for(let key in contentActions[i]){
-        mutations[key] = contentActions[i][key];
-    }
-}
 export default  mutations;

@@ -1,4 +1,3 @@
-import tab2Actions from './contentActions/tab2Actions';
 const actions = {
     toggleSide: ({commit, state}) => {
         commit('toggleSide');//toggleSide(commit, state);
@@ -29,10 +28,4 @@ const actions = {
         commit('ContextOff');
     }
 };
-const contentActions = [tab2Actions];
-for(let i = 0;i<contentActions.length;i++){
-    for(let key in contentActions[i]){
-        actions[key] = contentActions[i][key];
-    }
-}
 export default  actions;

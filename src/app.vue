@@ -20,7 +20,8 @@
     }
 </style>
 <script>
-    import OutLoginDialog from './views/components/Dialog/OutLogin.vue'
+    import OutLoginDialog from './views/components/Dialog/OutLogin.vue';
+    import common from './utils/common';
     import LoginBar from './views/components/login/Login.vue'
     import SideBar from './views/components/sideBar/sideBar';
     import ContentBar from './views/components/main/MainContent';
@@ -38,16 +39,11 @@
             LoginBar,
             OutLoginDialog
         },
-        watch:{
-            nowTabData(){
-                console.log("改变");
-            }
-        },
         mounted(){
-            console.log(this.nowTabData.length===0)
-            if(this.nowTabData.length===0){
-                this.$router.push({ path: '/' });
-            }
+            let t = this;
+            /*if(common.isEmptyObject(t.nowTabData)){
+                t.$router.push({ path: '/' });
+            }*/
         },
         computed:{
             ...mapGetters(['nowTabData','loginOnOff'])

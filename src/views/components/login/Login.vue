@@ -262,7 +262,7 @@
                     }
                 }).then(function(response) {
                     let reqData = response.data;
-                    if(reqData.responseObject.responsePk>0){
+                    if(reqData.responseObject.responseStatus){
                         t.$message({
                             type: 'success',
                             message: '管理员注册成功!'
@@ -294,7 +294,7 @@
                     }
                 }).then(function(response) {
                     let reqData = response.data;
-                    if(reqData.responseObject.responsePk>0){
+                    if(reqData.responseObject.responseStatus){
                         t.login(reqData.responseObject.responseData['data_list'].adminName);
                         localStorage.setItem('userName',reqData.responseObject.responseData['data_list'].adminName);
                         localStorage.setItem('adminId',reqData.responseObject.responsePk);

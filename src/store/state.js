@@ -1,10 +1,8 @@
-import tab2Data from './contentData/tabid2';
 const state = {
     toggleOnOff:true,
-    nowTabData: '',
+    nowTabData: {},
     Context:false,
     outLoginDialogOnOff:false,
-    loginOnOff:'张恒',
-    tab2Data:tab2Data
+    loginOnOff:localStorage.getItem('adminId')?localStorage.getItem('adminId'):"",
 };
 export default  state;

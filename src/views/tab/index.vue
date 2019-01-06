@@ -28,11 +28,7 @@
             }
         },
         computed:{
-            ...mapGetters(['Context','loginOnOff']),
-            nowTabData(){
-                let t = this;
-                return (t.$store.state.nowTabData.length)?JSON.parse(t.$store.state.nowTabData):{};
-            }
+            ...mapGetters(['Context','loginOnOff','nowTabData'])
         },
         components:{
             ContextCom

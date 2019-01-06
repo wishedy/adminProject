@@ -1,0 +1,225 @@
+<template>
+    <el-dialog
+        :visible.sync="dialogVisible"
+        width="61.8%"
+        :before-close="handleClose"
+        center>
+        <div class="block">
+            <el-form ref="form" :model="addForm" label-width="80px">
+                <el-form-item label="栏目标题">
+                    <el-input v-model="addForm.columnTitle"></el-input>
+                </el-form-item>
+                <el-form-item label="路由模块">
+                    <el-input v-model="addForm.columnRouterName"></el-input>
+                </el-form-item>
+                <el-form-item label="栏目层级">
+                    <el-radio-group v-model="addForm.columnIndex">
+                        <el-radio label="0">一级栏目</el-radio>
+                        <el-radio label="1">二级栏目</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item label="父级栏目">
+                    <el-select v-model="addForm.parentColumnId" placeholder="父级栏目">
+                        <el-option label="一级栏目" value="0"></el-option>
+                        <el-option label="二级栏目" value="1"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="选择ICON">
+                    <el-radio-group v-model="addForm.iconId" class="el-icon-list">
+                        <el-radio-button label="0">
+                            <div class="el-icon-item">
+                                <span class="el-item-center el-icon-tickets"></span>
+                                <p class="el-item-des">
+                                    el-icon-tickets
+                                </p>
+                            </div>
+                        </el-radio-button>
+                        <el-radio-button label="1">
+                            <div class="el-icon-item">
+                                <span class="el-item-center el-icon-tickets"></span>
+                                <p class="el-item-des">
+                                    el-icon-tickets
+                                </p>
+                            </div>
+                        </el-radio-button>
+                        <el-radio-button label="2">
+                            <div class="el-icon-item">
+                                <span class="el-item-center el-icon-tickets"></span>
+                                <p class="el-item-des">
+                                    el-icon-tickets
+                                </p>
+                            </div>
+                        </el-radio-button>
+                        <el-radio-button label="3">
+                            <div class="el-icon-item">
+                                <span class="el-item-center el-icon-tickets"></span>
+                                <p class="el-item-des">
+                                    el-icon-tickets
+                                </p>
+                            </div>
+                        </el-radio-button>
+                        <el-radio-button label="4">
+                            <div class="el-icon-item">
+                                <span class="el-item-center el-icon-tickets"></span>
+                                <p class="el-item-des">
+                                    el-icon-tickets
+                                </p>
+                            </div>
+                        </el-radio-button>
+                        <el-radio-button label="5">
+                            <div class="el-icon-item">
+                                <span class="el-item-center el-icon-tickets"></span>
+                                <p class="el-item-des">
+                                    el-icon-tickets
+                                </p>
+                            </div>
+                        </el-radio-button>
+                        <el-radio-button label="6">
+                            <div class="el-icon-item">
+                                <span class="el-item-center el-icon-tickets"></span>
+                                <p class="el-item-des">
+                                    el-icon-tickets
+                                </p>
+                            </div>
+                        </el-radio-button>
+                        <el-radio-button label="7">
+                            <div class="el-icon-item">
+                                <span class="el-item-center el-icon-tickets"></span>
+                                <p class="el-item-des">
+                                    el-icon-tickets
+                                </p>
+                            </div>
+                        </el-radio-button>
+                        <el-radio-button label="8">
+                            <div class="el-icon-item">
+                                <span class="el-item-center el-icon-tickets"></span>
+                                <p class="el-item-des">
+                                    el-icon-tickets
+                                </p>
+                            </div>
+                        </el-radio-button>
+                        <el-radio-button label="9">
+                            <div class="el-icon-item">
+                                <span class="el-item-center el-icon-tickets"></span>
+                                <p class="el-item-des">
+                                    el-icon-tickets
+                                </p>
+                            </div>
+                        </el-radio-button>
+                        <el-radio-button label="10">
+                            <div class="el-icon-item">
+                                <span class="el-item-center el-icon-tickets"></span>
+                                <p class="el-item-des">
+                                    el-icon-tickets
+                                </p>
+                            </div>
+                        </el-radio-button>
+                    </el-radio-group>
+                </el-form-item>
+            </el-form>
+        </div>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="handleClose">取 消</el-button>
+            <el-button type="primary" @click="addColumn">确 定</el-button>
+        </span>
+    </el-dialog>
+</template>
+<script>
+    import { createNamespacedHelpers } from 'vuex'
+    const { mapGetters,mapActions } = createNamespacedHelpers('module001');
+    export default {
+        data(){
+          return {
+              addForm:{
+                  columnTitle:'',
+                  columnIndex:'',
+                  iconId:'',
+                  columnRouterName:'',
+                  parentColumnId:''
+              }
+          }
+        },
+        computed:{
+            ...mapGetters(['dialogVisible','addMessage'])
+        },
+        watch:{
+            addForm:{
+                handler(n){
+                    console.log(n)
+                },
+                deep:true
+
+            },
+            addMessage(n){
+                let t = this;
+                if(n){
+                    t.$message({
+                        showClose: true,
+                        message: '创建栏目成功',
+                        type: 'success'
+                    });
+                    t.hideMsg();
+                }
+            }
+        },
+        methods:{
+            ...mapActions(['showLayer','hideLayer','createColumn','hideMsg']),
+            handleClose(){
+                let t = this;
+                t.hideLayer();
+                t.addForm = {
+                    columnTitle:'',
+                    columnIndex:'',
+                    iconId:'',
+                    columnRouterName:'',
+                    parentColumnId:''
+                };
+            },
+            addColumn(){
+                let t = this;
+                console.log(t.addForm);
+                let normalOnOff = t.addForm.columnTitle.length>0&&t.addForm.columnIndex.length>0&&t.addForm.iconId.length>0&&t.addForm.columnRouterName.length>0;
+                let addOnOff = parseInt(t.columnIndex,10)===0?normalOnOff:normalOnOff&&t.addForm.parentColumnId.length>0;
+                if(addOnOff){
+                    t.createColumn(JSON.parse(JSON.stringify(t.addForm)));
+                }else{
+                    t.$message({
+                        message: '创建字段不足',
+                        type: 'warning'
+                    });
+                }
+
+            }
+        }
+    }
+</script>
+<style lang="scss" scoped>
+    .el-icon-item{
+        width: 150px;
+        height: 80px;
+        display: inline-block;
+        text-align: center;
+        .el-item-center{
+            display: block;
+            margin: 0 auto;
+            height: 30px;
+            width: 30px;
+            padding: 10px 0;
+            font-size: 30px;
+            line-height: 30px;
+        }
+        .el-item-des{
+            font-size: 16px;
+            width: 100%;
+            margin: 0 auto;
+            display: block;
+            height: 40px;
+            word-wrap: break-word;
+            word-break: normal;
+        }
+    }
+    .el-icon-list{
+        height: 320px;
+        overflow-y: auto;
+    }
+</style>

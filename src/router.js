@@ -1,4 +1,6 @@
 import index from './views/components/Calendar/index.vue'
+import manage from './views/column/001/001.vue';
+import icon from './views/column/002/002.vue';
 import Tabid1 from './views/tab/tabContent/tabid1.vue';
 import Tabid2 from './views/tab/tabContent/tabid2.vue';
 import Tabid3 from './views/tab/tabContent/tabid3.vue';
@@ -14,6 +16,7 @@ import Tabid25 from './views/tab/tabContent/tabid025.vue';
 import Tabid32 from './views/tab/tabContent/tabid032.vue';
 import Tabid52 from './views/tab/tabContent/tabid052.vue';
 import Tabid53 from './views/tab/tabContent/tabid053.vue';
+import aside from './views/tab/tabContent/aside.vue';
 export default {
     linkActiveClass: 'active',
     routes: [
@@ -28,6 +31,14 @@ export default {
         {
             path:"/011",
             component: Tabid1
+        },
+        {
+            path:"/manage",
+            component: manage
+        },
+        {
+            path:"/icon",
+            component: icon
         },
         {
             path:"/012",
@@ -84,6 +95,10 @@ export default {
         {
             path:"/053",
             component: Tabid53
-        }
+        },
+        {
+            path:"/054",
+            component: aside
+        },
     ]
 }
