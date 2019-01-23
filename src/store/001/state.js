@@ -8,6 +8,7 @@ const state = {
         createDuringTime:[],
         updateDuringTime:[]
     },
+    iconList:[],
     tableData:[],
     pageIndex:1,
     pageSize:20,

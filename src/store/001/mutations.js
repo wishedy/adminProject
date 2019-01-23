@@ -16,15 +16,20 @@ const mutations = {
             .then(function (response) {
                 let reqData = response.data;
                 if(reqData.responseObject.responseData['data_list']){
-                    //t.tableData = reqData.responseObject.responseData['data_list'];
+                    console.log(reqData.responseObject.responseData['data_list']);
+                    state.tableData = reqData.responseObject.responseData['data_list'];
                 }
                 if(reqData.responseObject.responseData.totalCount){
-                    //t.count = reqData.responseObject.responseData.totalCount;
+                    state.count = reqData.responseObject.responseData.totalCount;
                 }
             })
             .catch(function (error) {
                 console.log(error);
             });
+    },
+    saveIconList(state,list){
+        console.log(list,'列表列表列表列表');
+      state.iconList = list;
     },
     handleCurrentChange(state){
 

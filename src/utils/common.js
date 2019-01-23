@@ -10,6 +10,14 @@ class Common {
         this.auditType = this.auditType.bind(this);
         this.auditResult = this.auditResult.bind(this);
         this.isEmptyObject = this.isEmptyObject.bind(this);
+        this.checkInvalid = this.checkInvalid.bind(this);
+    }
+    checkInvalid(val){
+        if(((typeof val =='string')&&(val.length==0))||(val==undefined)||(val=='undefined')||(val=='null')||(typeof val=='undefined')||(typeof val=='null')||(val==null)){
+            return true;
+        }else{
+            return false;
+        }
     }
     isEmptyObject(obj){
         for(let n in obj){return false}

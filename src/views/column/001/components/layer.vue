@@ -1,7 +1,7 @@
 <template>
     <el-dialog
         :visible.sync="dialogVisible"
-        width="61.8%"
+        width="64%"
         :before-close="handleClose"
         center>
         <div class="block">
@@ -25,92 +25,12 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="选择ICON">
-                    <el-radio-group v-model="addForm.iconId" class="el-icon-list">
-                        <el-radio-button label="0">
+                    <el-radio-group v-model="addForm.columnIcon" class="el-icon-list">
+                        <el-radio-button :label="item.iconName" v-for="(item,index) in iconList" :key="item.Id" class="el-icon-inner">
                             <div class="el-icon-item">
-                                <span class="el-item-center el-icon-tickets"></span>
-                                <p class="el-item-des">
-                                    el-icon-tickets
-                                </p>
-                            </div>
-                        </el-radio-button>
-                        <el-radio-button label="1">
-                            <div class="el-icon-item">
-                                <span class="el-item-center el-icon-tickets"></span>
-                                <p class="el-item-des">
-                                    el-icon-tickets
-                                </p>
-                            </div>
-                        </el-radio-button>
-                        <el-radio-button label="2">
-                            <div class="el-icon-item">
-                                <span class="el-item-center el-icon-tickets"></span>
-                                <p class="el-item-des">
-                                    el-icon-tickets
-                                </p>
-                            </div>
-                        </el-radio-button>
-                        <el-radio-button label="3">
-                            <div class="el-icon-item">
-                                <span class="el-item-center el-icon-tickets"></span>
-                                <p class="el-item-des">
-                                    el-icon-tickets
-                                </p>
-                            </div>
-                        </el-radio-button>
-                        <el-radio-button label="4">
-                            <div class="el-icon-item">
-                                <span class="el-item-center el-icon-tickets"></span>
-                                <p class="el-item-des">
-                                    el-icon-tickets
-                                </p>
-                            </div>
-                        </el-radio-button>
-                        <el-radio-button label="5">
-                            <div class="el-icon-item">
-                                <span class="el-item-center el-icon-tickets"></span>
-                                <p class="el-item-des">
-                                    el-icon-tickets
-                                </p>
-                            </div>
-                        </el-radio-button>
-                        <el-radio-button label="6">
-                            <div class="el-icon-item">
-                                <span class="el-item-center el-icon-tickets"></span>
-                                <p class="el-item-des">
-                                    el-icon-tickets
-                                </p>
-                            </div>
-                        </el-radio-button>
-                        <el-radio-button label="7">
-                            <div class="el-icon-item">
-                                <span class="el-item-center el-icon-tickets"></span>
-                                <p class="el-item-des">
-                                    el-icon-tickets
-                                </p>
-                            </div>
-                        </el-radio-button>
-                        <el-radio-button label="8">
-                            <div class="el-icon-item">
-                                <span class="el-item-center el-icon-tickets"></span>
-                                <p class="el-item-des">
-                                    el-icon-tickets
-                                </p>
-                            </div>
-                        </el-radio-button>
-                        <el-radio-button label="9">
-                            <div class="el-icon-item">
-                                <span class="el-item-center el-icon-tickets"></span>
-                                <p class="el-item-des">
-                                    el-icon-tickets
-                                </p>
-                            </div>
-                        </el-radio-button>
-                        <el-radio-button label="10">
-                            <div class="el-icon-item">
-                                <span class="el-item-center el-icon-tickets"></span>
-                                <p class="el-item-des">
-                                    el-icon-tickets
+                                <span class="el-item-center" :class="item.iconName"></span>
+                                <p class="el-item-des" v-text="item.iconName">
+
                                 </p>
                             </div>
                         </el-radio-button>
@@ -125,22 +45,25 @@
     </el-dialog>
 </template>
 <script>
-    import { createNamespacedHelpers } from 'vuex'
+    import Common from '../../../../utils/common';
+    import { createNamespacedHelpers } from 'vuex';
     const { mapGetters,mapActions } = createNamespacedHelpers('module001');
     export default {
         data(){
+            let adminId = Common.checkInvalid(localStorage.getItem('adminId'))?'':localStorage.getItem('adminId');
           return {
               addForm:{
                   columnTitle:'',
                   columnIndex:'',
-                  iconId:'',
+                  columnIcon:'',
                   columnRouterName:'',
-                  parentColumnId:''
+                  parentColumnId:'',
+                  adminId:adminId
               }
           }
         },
         computed:{
-            ...mapGetters(['dialogVisible','addMessage'])
+            ...mapGetters(['dialogVisible','addMessage','iconList'])
         },
         watch:{
             addForm:{
@@ -148,7 +71,6 @@
                     console.log(n)
                 },
                 deep:true
-
             },
             addMessage(n){
                 let t = this;
@@ -170,15 +92,16 @@
                 t.addForm = {
                     columnTitle:'',
                     columnIndex:'',
-                    iconId:'',
+                    columnIcon:'',
                     columnRouterName:'',
-                    parentColumnId:''
+                    parentColumnId:'',
+                    adminId:t.adminId
                 };
             },
             addColumn(){
                 let t = this;
                 console.log(t.addForm);
-                let normalOnOff = t.addForm.columnTitle.length>0&&t.addForm.columnIndex.length>0&&t.addForm.iconId.length>0&&t.addForm.columnRouterName.length>0;
+                let normalOnOff = t.addForm.adminId.length>0&&t.addForm.columnTitle.length>0&&t.addForm.columnIndex.length>0&&t.addForm.iconId.length>0&&t.addForm.columnRouterName.length>0;
                 let addOnOff = parseInt(t.columnIndex,10)===0?normalOnOff:normalOnOff&&t.addForm.parentColumnId.length>0;
                 if(addOnOff){
                     t.createColumn(JSON.parse(JSON.stringify(t.addForm)));
@@ -221,5 +144,8 @@
     .el-icon-list{
         height: 320px;
         overflow-y: auto;
+        .el-icon-inner{
+            border-left: 1px solid #dcdfe6;
+        }
     }
 </style>

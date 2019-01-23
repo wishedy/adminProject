@@ -21,6 +21,9 @@ const actions  = {
         commit("showLayer");
 
     },
+    saveIconList:({commit,state},list)=>{
+        commit("saveIconList",list);
+    },
     createColumn:({commit,state},data)=>{
         commit("createColumn",data);
     },

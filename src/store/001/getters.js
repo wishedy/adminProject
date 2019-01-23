@@ -19,6 +19,9 @@ const  getters = {
     },
     addMessage(state){
         return state.addMessage;
+    },
+    iconList(state){
+        return state.iconList;
     }
 };
 export default  getters;
