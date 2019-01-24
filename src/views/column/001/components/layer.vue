@@ -101,7 +101,7 @@
             addColumn(){
                 let t = this;
                 console.log(t.addForm);
-                let normalOnOff = t.addForm.adminId.length>0&&t.addForm.columnTitle.length>0&&t.addForm.columnIndex.length>0&&t.addForm.iconId.length>0&&t.addForm.columnRouterName.length>0;
+                let normalOnOff = t.addForm.adminId.length>0&&t.addForm.columnTitle.length>0&&t.addForm.columnIndex.length>0&&t.addForm.columnIcon.length>0&&t.addForm.columnRouterName.length>0;
                 let addOnOff = parseInt(t.columnIndex,10)===0?normalOnOff:normalOnOff&&t.addForm.parentColumnId.length>0;
                 if(addOnOff){
                     t.createColumn(JSON.parse(JSON.stringify(t.addForm)));

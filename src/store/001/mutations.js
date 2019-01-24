@@ -61,9 +61,10 @@ const mutations = {
             data: {
                 columnTitle:data.columnTitle,
                 columnIndex:data.columnIndex,
-                iconId:data.iconId,
+                columnIcon:data.columnIcon,
                 columnRouterName:data.columnRouterName,
-                parentColumnId:data.parentColumnId
+                parentColumnId:data.parentColumnId,
+                adminId:data.adminId
             }
         }).then(function(response) {
             let reqData = response.data;

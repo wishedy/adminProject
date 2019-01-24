@@ -31,6 +31,10 @@
                 label="ICON类名">
             </el-table-column>
             <el-table-column
+                prop="columnRouterName"
+                label="路由模块">
+            </el-table-column>
+            <el-table-column
                 prop="adminName"
                 label="创建管理员">
             </el-table-column>
