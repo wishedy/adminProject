@@ -82,6 +82,9 @@
                     });
                     t.hideMsg();
                 }
+            },
+            dialogVisible(n){
+                console.log(n);
             }
         },
         methods:{
