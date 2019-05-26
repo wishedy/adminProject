@@ -1,7 +1,15 @@
 //全站正则判断
 class regularTest {
     constructor(){
-
+        let _this = this;
+        _this.testNum = _this.testNum.bind(_this);
+        _this.testName = _this.testName.bind(_this);
+        _this.testPhoneNum = _this.testPhoneNum.bind(_this);
+        _this.testEmail = _this.testEmail.bind(_this);
+        _this.testID = _this.testID.bind(_this);
+        _this.isPInt = _this.isPInt.bind(_this);
+        _this.decimals = _this.decimals.bind(_this);
+        _this.minus = _this.minus.bind(_this);
     }
     testNum(val){
         //判断数字

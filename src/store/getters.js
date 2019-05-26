@@ -16,6 +16,9 @@ const  getters = {
     },
     tab2Data(state){
       return state.tab2Data;
-    }
+    },
+    recommendDialog(state){
+      return state.recommendDialog;
+    },
 };
 export default  getters;

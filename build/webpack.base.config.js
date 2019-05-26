@@ -19,7 +19,7 @@ module.exports = {
         alias: {
             '@': resolve('../src'),
             '~': resolve('../src/assets'),
-            'scss': resolve('../src/static/scss'),
+            '@scss': resolve('../src/static/scss'),
         }
     },
     module: {

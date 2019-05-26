@@ -1,6 +1,15 @@
 import index from './views/components/Calendar/index.vue'
-import manage from './views/column/001/001.vue';
-import icon from './views/column/002/002.vue';
+import manage from './views/column/001/001.vue';//管理全站栏目
+import icon from './views/column/002/002.vue';//管理全站icon
+import customer01 from './views/column/003/003.vue';//会员管理列表页
+import customer02 from './views/column/004/004.vue';//会员审核列表页
+import customer03 from './views/column/005/005.vue';//会员反馈列表页
+import customer04 from './views/column/006/006.vue';//会员举报列表页
+import customer05 from './views/column/007/007.vue';//会员黑名单列表页
+import resource01 from './views/column/008/008.vue';//资源动态列表页
+import resource02 from './views/column/009/009.vue';//资源文章列表页
+import resource03 from './views/column/010/010.vue';//推荐列表页
+import resource04 from './views/column/011/011.vue';//话题列表页
 import Tabid1 from './views/tab/tabContent/tabid1.vue';
 import Tabid2 from './views/tab/tabContent/tabid2.vue';
 import Tabid3 from './views/tab/tabContent/tabid3.vue';
@@ -28,17 +37,53 @@ export default {
             path: '*',
             component: index
         },
-        {
+        /*{
             path:"/011",
             component: Tabid1
-        },
+        },*/
         {
-            path:"/manage",
+            path:"/001",
             component: manage
         },
         {
-            path:"/icon",
+            path:"/002",
             component: icon
+        },
+        {
+            path:"/003",
+            component: customer01
+        },
+        {
+            path:"/004",
+            component: customer02
+        },
+        {
+            path:"/005",
+            component: customer03
+        },
+        {
+            path:"/006",
+            component: customer04
+        },
+        {
+            path:"/007",
+            component: customer05
+        },
+        {
+            path:"/008",
+            component: resource01
+        },
+        {
+            path:"/009",
+            component: resource02
+        },
+        {
+            path:"/010",
+            component: resource03
+        },
+        {
+            path:"/011",
+            component: resource04
         },
         {
             path:"/012",

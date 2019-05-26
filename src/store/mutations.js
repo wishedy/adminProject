@@ -34,6 +34,13 @@ const mutations = {
     ContextOff(state){
         state.Context = false;
     },
+    showRecommend(state){
+        state.recommendDialog = true;
+        console.log(state.recommendDialog);
+    },
+    hideRecommend(state){
+        state.recommendDialog = false;
+    },
     test(state,str){
         console.log(state,str);
     }

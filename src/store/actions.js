@@ -26,6 +26,12 @@ const actions = {
     },
     ContextOff:({commit,state},data)=>{
         commit('ContextOff');
-    }
+    },
+    showRecommend:({commit,state},data)=>{
+        commit('showRecommend');
+    },
+    hideRecommend:({commit,state},data)=>{
+        commit('hideRecommend');
+    },
 };
 export default  actions;

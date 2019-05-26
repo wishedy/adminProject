@@ -42,42 +42,10 @@
         }
     }
 </script>
+<style  lang="scss">
+    @import "../../../static/scss/column/002.scss";
+</style>
 <style scoped lang="scss">
-    .iconContainer{
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-        min-height:400px;
-        max-height: 800px;
-        overflow-y: auto;
-        .el-icon-item{
-            width: 160px;
-            height: 100px;
-            display: inline-block;
-            text-align: center;
-            margin: 10px;
-            border: 1px solid #c7d0da;
-            .el-item-center{
-                display: block;
-                margin: 0 auto;
-                height: 30px;
-                width: 30px;
-                padding: 10px 0;
-                font-size: 30px;
-                line-height: 30px;
-            }
-            .el-item-des{
-                font-size: 16px;
-                width: 100%;
-                margin: 0 auto;
-                display: block;
-                height: 40px;
-                word-wrap: break-word;
-                word-break: normal;
-            }
-        }
-    }
     .adminAuditControl{
         padding: 90px;
     }

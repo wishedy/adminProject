@@ -11,6 +11,7 @@ class Common {
         this.auditResult = this.auditResult.bind(this);
         this.isEmptyObject = this.isEmptyObject.bind(this);
         this.checkInvalid = this.checkInvalid.bind(this);
+        this.rejectWarn = this.rejectWarn.bind(this);
     }
     checkInvalid(val){
         if(((typeof val =='string')&&(val.length==0))||(val==undefined)||(val=='undefined')||(val=='null')||(typeof val=='undefined')||(typeof val=='null')||(val==null)){
@@ -256,6 +257,26 @@ class Common {
             {
                 reasonName:'虚假资料',
                 reasonType:4
+            }
+        ]
+    }
+    rejectWarn(){
+        return [
+            {
+                reasonName:'虚假资料',
+                reasonType:0
+            },
+            {
+                reasonName:'证件不清晰',
+                reasonType:1
+            },
+            {
+                reasonName:'证件号码不一致',
+                reasonType:2
+            },
+            {
+                reasonName:'资料不齐全',
+                reasonType:3
             }
         ]
     }
