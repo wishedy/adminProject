@@ -17,6 +17,18 @@ const mutations = {
             .catch(function (error) {
                 console.log(error);
             });
+        axios.get('/manage/column/list', {
+            params: {
+                columnIndex:0
+            }
+        })
+            .then(function (response) {
+
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     },
     createIcon(state,data){
         console.log(data);
