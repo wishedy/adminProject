@@ -15,7 +15,14 @@ var server = new webpackDevServer(compiler, {
             pathRewrite: {
                 '^/call': '/call'
             }
-        }
+        },
+        '/manage': {
+            target: 'http://188.131.139.100:8083',
+            changeOrigin: true,
+            pathRewrite: {
+                '^/manage': '/manage'
+            }
+        },
     }
 });
 server.listen(config.dev.port, "127.0.0.1");

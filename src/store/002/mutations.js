@@ -2,13 +2,13 @@ import axios from 'axios';
 const mutations = {
     getList(state){
         console.log(state.formInline);
-        axios.get('/call/icon/getList', {
+        axios.get('/manage/icon', {
             params: {}
         })
             .then(function (response) {
                 let reqData = response.data;
-                if(reqData.responseObject.responseData['data_list']){
-                    state.tableData = reqData.responseObject.responseData['data_list'];
+                if(reqData){
+                    state.tableData = reqData;
                 }
                 /*if(reqData.responseObject.responseData.totalCount){
                     //t.count = reqData.responseObject.responseData.totalCount;
@@ -23,7 +23,7 @@ const mutations = {
         let t = this;
         axios({
             method: 'post',
-            url: '/call/icon/create',
+            url: '/manage/icon',
             transformRequest: [function(data) {
                 return "paramJson=" + JSON.stringify(data);
             }],
@@ -31,6 +31,7 @@ const mutations = {
                 'X-Requested-With': 'XMLHttpRequest'
             },
             data: {
+                adminId:1,
                 iconName:data.iconName
             }
         }).then(function(response) {
