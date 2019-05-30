@@ -52,6 +52,7 @@ const mutations = {
         state.dialogVisible = true;
     },
     showEditLayer(state,type){
+        console.log('12');
         state.editVisible = true;
         state.editType = type;
     },

@@ -7,40 +7,40 @@
         center>
         <div class="block">
             <el-form ref="form" :model="form" label-width="80px">
-                <el-form-item label="话题名称">
+                <el-form-item label="消息名称">
                     <el-input v-model="form.name"></el-input>
                 </el-form-item>
                 <div class="block" style="width: 100%;height: 320px;">
-                    <span class="upload-label">话题封面</span>
+                    <span class="upload-label">消息封面</span>
                     <div class="upload-pic">
                         <div v-if="imageUrl"   :style="{background: 'url('+imageUrl+') no-repeat center center/cover'}"  class="avatar"></div>
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </div>
                 </div>
-                <el-form-item label="话题描述">
+                <el-form-item label="消息描述">
                     <el-input type="textarea" v-model="form.desc"></el-input>
                 </el-form-item>
             </el-form>
             <div class="admin-audit-info">
                 <div class="admin-feedback-author">
-                    <span class="label">话题作者:</span>
+                    <span class="label">消息作者:</span>
                     <span class="admin-feedback-info">萤火虫</span>
                 </div>
                 <div class="admin-feedback-state">
-                    <span class="label">话题状态:</span>
+                    <span class="label">消息状态:</span>
                     <span class="admin-feedback-info">已回复</span>
                 </div>
                 <div class="admin-feedback-tile">
-                    <span class="label">话题时间:</span>
+                    <span class="label">消息时间:</span>
                     <span class="admin-feedback-info">2019-05-03 08:00 </span>
                 </div>
                 <div class="admin-feedback-tile">
-                    <span class="label">话题类型:</span>
-                    <span class="admin-feedback-info">脱单话题</span>
+                    <span class="label">消息类型:</span>
+                    <span class="admin-feedback-info">脱单消息</span>
                 </div>
                 <div class="admin-feedback-tile">
                     <span class="label">资源ID:</span>
-                    <span class="admin-feedback-info">78887778885 </span>
+                    <span class="admin-feedback-info">78887778885</span>
                 </div>
             </div>
 
@@ -54,7 +54,7 @@
 <script>
     import Common from '../../../../utils/common';
     import { createNamespacedHelpers } from 'vuex';
-    const { mapGetters,mapActions } = createNamespacedHelpers('module011');
+    const { mapGetters,mapActions } = createNamespacedHelpers('module012');
     export default {
         data(){
             let adminId = Common.checkInvalid(localStorage.getItem('adminId'))?'':localStorage.getItem('adminId');
