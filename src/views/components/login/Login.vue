@@ -37,6 +37,12 @@
                     </el-option>
                 </el-select>
             </el-form-item>
+            <el-form-item label="性别">
+                <el-radio-group v-model="registerForm.gender">
+                    <el-radio label="1">男</el-radio>
+                    <el-radio label="2">女</el-radio>
+                </el-radio-group>
+            </el-form-item>
             <el-form-item label="密码"  prop="registerPassWord">
                 <el-input type="password" v-model="registerForm.registerPassWord" auto-complete="off"></el-input>
             </el-form-item>
@@ -77,6 +83,7 @@
     import {mapActions} from 'vuex';
     import regularTest from '../../../utils/regularTest.js';
     import axios from 'axios';
+    import md5 from 'blueimp-md5';
     export default {
         data() {
             var validatePass = (rule, value, callback) => {
@@ -183,7 +190,8 @@
                     registerPhoneNum:'',
                     registerIdentityNum:'',
                     registerGrade:'',
-                    registerPassWord:''
+                    registerPassWord:'',
+                    gender:'1'
                 },
                 registerRules:{
                     registerName:[
@@ -245,31 +253,31 @@
               let t = this;
                 axios({
                     method: 'post',
-                    url: '/call/admin/register',
-                    transformRequest: [function(data) {
-                        return "paramJson=" + JSON.stringify(data);
-                    }],
+                    url: '/api/admin/register',
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest'
                     },
                     data: {
-                        registerGrade:t.registerForm.registerGrade,//管理员等级，0超级管理员，1普通管理员
-                        registerName:t.registerForm.registerName,//管理员姓名
-                        registerEmail:t.registerForm.registerEmail,//管理员邮箱
-                        registerPhoneNum:t.registerForm.registerPhoneNum,//管理员电话号
-                        registerIdentityNum:t.registerForm.registerIdentityNum,//管理员身份证号
-                        registerPassWord:t.registerForm.registerPassWord//
+                        grade:t.registerForm.registerGrade,//管理员等级，0超级管理员，1普通管理员
+                        name:t.registerForm.registerName,//管理员姓名
+                        loginName:t.registerForm.registerName,//管理员姓名
+                        email:t.registerForm.registerEmail,//管理员邮箱
+                        phoneNum:t.registerForm.registerPhoneNum,//管理员电话号
+                        identityNum:t.registerForm.registerIdentityNum,//管理员身份证号
+                        passWord:md5(t.registerForm.registerPassWord),//
+                        gender:t.registerForm.gender
                     }
                 }).then(function(response) {
                     let reqData = response.data;
-                    if(reqData.responseObject.responseStatus){
+                    console.log(reqData);
+                    /*if(reqData.responseObject.responseStatus){
                         t.$message({
                             type: 'success',
                             message: '管理员注册成功!'
                         });
                         t.registerOnOff = false;
                         t.resetForm('registerForm');
-                    }
+                    }*/
                     console.log(response.data);
                 });
             },
@@ -279,37 +287,58 @@
             },
             checkLogin(){
                 let t = this;
-                axios({
-                    method: 'post',
-                    url: '/call/admin/login',
-                    transformRequest: [function(data) {
-                        return "paramJson=" + JSON.stringify(data);
-                    }],
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    data: {
-                        adminName:t.ruleForm2.pass,
-                        adminPassWord:t.ruleForm2.checkPass
+                axios.get('/api/admin/login', {
+                    params: {
+                        loginName:t.ruleForm2.pass,
+                        password:md5(t.ruleForm2.checkPass)
                     }
-                }).then(function(response) {
-                    let reqData = response.data;
-                    if(reqData.responseObject.responseStatus){
-                        t.login(reqData.responseObject.responseData['data_list'].adminName);
-                        localStorage.setItem('userName',reqData.responseObject.responseData['data_list'].adminName);
-                        localStorage.setItem('adminId',reqData.responseObject.responsePk);
-                        t.$message({
-                            type: 'success',
-                            message: '登录成功!'
-                        });
-                    }else{
-                        if(reqData.responseObject.responseCode==1){
-                            t.$message.error('请填写正确的用户名或密码');
-                        }else if(reqData.responseObject.responseCode==0){
-                            t.$message.error('登录参数有误');
+                })
+                    .then(function (response) {
+                        console.log(response);
+                        let reqData = response.data;
+                        console.log(reqData);
+                        if(reqData.success){
+                            let code = parseInt(reqData.code,10);
+                            let message = '';
+                            switch (code) {
+                                case 200:
+                                    message = '登录成功';
+                                    break;
+                                case 201:
+                                    message = '用户名不存在';
+                                    break;
+                                case 202:
+                                    message = '密码错误';
+                                    break;
+                                case 203:
+                                    message = '您暂未通过审核';
+                                    break;
+                                case 204:
+                                    message = '重名';
+                                    break;
+                                case 500:
+                                    message = '登录失败';
+                                    break;
+
+                            }
+                            if(code===200){
+                                t.$message({
+                                    type: 'success',
+                                    message: message
+                                });
+                            }else{
+                                t.$message.error(message);
+                            }
+                            t.login(reqData.result.loginName);
+                            localStorage.setItem('userName',reqData.result.loginName);
+                            localStorage.setItem('adminId',reqData.result.id);
+                        }else{
+                            t.$message.error('登录失败！');
                         }
-                    }
-                });
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             },
             goRegister(){
               let t = this;

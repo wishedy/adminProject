@@ -11,6 +11,7 @@ import resource02 from './views/column/009/009.vue';//资源文章列表页
 import resource03 from './views/column/010/010.vue';//推荐列表页
 import resource04 from './views/column/011/011.vue';//话题列表页
 import message01 from './views/column/012/012.vue';//消息列表页
+import admin from './views/column/013/013.vue';//管理员列表页
 import Tabid1 from './views/tab/tabContent/tabid1.vue';
 import Tabid2 from './views/tab/tabContent/tabid2.vue';
 import Tabid3 from './views/tab/tabContent/tabid3.vue';
@@ -96,7 +97,7 @@ export default {
         },*/
         {
             path:"/013",
-            component: Tabid3
+            component: admin
         },
         {
             path:"/014",

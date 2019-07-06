@@ -17,6 +17,7 @@ import module009 from './009/index';
 import module010 from './010/index';
 import module011 from './011/index';
 import module012 from './012/index';
+import module013 from './012/index';
 export default new Vuex.Store({
     state,
     mutations,
@@ -35,5 +36,6 @@ export default new Vuex.Store({
         module010,
         module011,
         module012,
+        module013
     }
 });

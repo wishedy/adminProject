@@ -44,6 +44,9 @@
             /*if(common.isEmptyObject(t.nowTabData)){
                 t.$router.push({ path: '/' });
             }*/
+            setTimeout(()=>{
+                console.log(t.loginOnOff);
+            },2000);
         },
         computed:{
             ...mapGetters(['nowTabData','loginOnOff'])

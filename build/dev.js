@@ -23,6 +23,13 @@ var server = new webpackDevServer(compiler, {
                 '^/manage': '/manage'
             }
         },
+        '/api': {
+            target: 'http://47.94.193.122:8780',
+            changeOrigin: true,
+            pathRewrite: {
+                '^/api': '/api'
+            }
+        }
     }
 });
 server.listen(config.dev.port, "127.0.0.1");
