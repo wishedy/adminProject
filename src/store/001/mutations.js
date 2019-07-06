@@ -3,42 +3,25 @@ const mutations = {
     changeFormInline(state,data){
         state.formInline = data;
     },
-    getList(state){
-        console.log(state.formInline);
-        let searchData = JSON.parse(JSON.stringify(state.formInline));
-        searchData.pageIndex = state.pageIndex;
-        searchData.pageSize = state.pageSize;
-        searchData.createDuringTime =JSON.stringify(searchData.createDuringTime);
-        searchData.updateDuringTime =JSON.stringify(searchData.updateDuringTime);
-        axios.get('/call/column/getList', {
-            params: searchData
-        })
-            .then(function (response) {
-                let reqData = response.data;
-                if(reqData.responseObject.responseData['data_list']){
-                    console.log(reqData.responseObject.responseData['data_list']);
-                    state.tableData = reqData.responseObject.responseData['data_list'];
-                }
-                if(reqData.responseObject.responseData.totalCount){
-                    state.count = reqData.responseObject.responseData.totalCount;
-                }
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+    saveTableList(state,data){
+        state.tableData = data.result.list;
+        state.count = data.result.total;
     },
     saveIconList(state,list){
         console.log(list,'列表列表列表列表');
       state.iconList = list;
     },
-    handleCurrentChange(state){
-
+    handleCurrentChange(state,num){
+        state.pageIndex = num;
     },
-    handleSizeChange(state){
-
+    handleSizeChange(state,num){
+        state.pageSize = num;
+    },
+    triggerTable(state){
+      state.triggerTableNum++;
     },
     tableCurrentChange(state,data){
-
+        state.selectTableData = data;
     },
     hideLayer(state){
         state.dialogVisible = false;
@@ -77,6 +60,9 @@ const mutations = {
     },
     hideMsg(state){
         state.addMessage = false;
+    },
+    changeEditType(state,type){
+        state.editType = type;
     }
 };
 export default mutations;

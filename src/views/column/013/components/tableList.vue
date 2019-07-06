@@ -41,8 +41,6 @@
 
 <script>
     import Common from '../../../../utils/common';
-    import { createNamespacedHelpers } from 'vuex'
-    const { mapGetters,mapActions } = createNamespacedHelpers('module013');
     export default {
         props:{
             tableList:{
@@ -53,9 +51,6 @@
         },
         data(){
             return {}
-        },
-        computed:{
-            ...mapGetters(['tableData'])
         },
         methods:{
             formatGrade(row, column){
@@ -73,7 +68,6 @@
                 return gradeName;
             },
             formatGender(row, column){
-                let t = this;
                 let gender = row['gender'];
                 let genderName = "";
                 switch (parseInt(gender,10)) {

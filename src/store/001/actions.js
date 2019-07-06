@@ -2,17 +2,20 @@ const actions  = {
     changeFormInline:({commit,state},data)=>{
         commit('changeFormInline',data);
     },
-    getList:({commit,state})=>{
-        commit('getList');
+    saveTableList:({commit,state},data)=>{
+        commit('saveTableList',data);
     },
-    handleCurrentChange:({commit,state})=>{
-        commit("handleCurrentChange");
+    handleCurrentChange:({commit,state},num)=>{
+        commit("handleCurrentChange",num);
     },
-    handleSizeChange:({commit,state})=>{
-        commit("handleSizeChange");
+    triggerTable:({commit,state})=>{
+        commit("triggerTable");
+    },
+    handleSizeChange:({commit,state},num)=>{
+        commit("handleSizeChange",num);
     },
     tableCurrentChange:({commit,state},data)=>{
-        commit("tableCurrentChange");
+        commit("tableCurrentChange",data);
     },
     hideLayer:({commit,state})=>{
         commit("hideLayer");
@@ -29,6 +32,9 @@ const actions  = {
     },
     hideMsg:({commit,state})=>{
         commit("hideMsg");
+    },
+    changeEditType:({commit,state},type)=>{
+        commit("changeEditType",type);
     }
 };
 export default actions;

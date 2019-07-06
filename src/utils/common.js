@@ -12,6 +12,7 @@ class Common {
         this.isEmptyObject = this.isEmptyObject.bind(this);
         this.checkInvalid = this.checkInvalid.bind(this);
         this.rejectWarn = this.rejectWarn.bind(this);
+        this.createTime = this.createTime.bind(this);
     }
     checkInvalid(val){
         if(((typeof val =='string')&&(val.length==0))||(val==undefined)||(val=='undefined')||(val=='null')||(typeof val=='undefined')||(typeof val=='null')||(val==null)){
@@ -19,6 +20,19 @@ class Common {
         }else{
             return false;
         }
+    }
+    createTime(dateObj, type){
+        let timeStr = '';
+        let addZero = (str) => {
+            if (parseInt(str, 10) < 10) {
+                return '0' + parseInt(str, 10);
+            }
+            else {
+                return parseInt(str, 10);
+            }
+        };
+        type === 0 ? timeStr = dateObj.getFullYear() + '-' + addZero(dateObj.getMonth() + 1) + '-' + addZero(dateObj.getDate()) + ' ' + addZero(dateObj.getHours()) + ':' + addZero(dateObj.getMinutes()) + ':' + addZero(dateObj.getSeconds()) : timeStr = dateObj.getFullYear() + '-' + addZero(dateObj.getMonth() + 1) + '-' + addZero(dateObj.getDate()) + ' ' + 23 + ':' + 59 + ':' + 59;
+        return timeStr;
     }
     isEmptyObject(obj){
         for(let n in obj){return false}

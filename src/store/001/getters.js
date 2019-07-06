@@ -14,6 +14,9 @@ const  getters = {
     count(state){
         return state.count;
     },
+    triggerTableNum(state){
+      return state.triggerTableNum;
+    },
     dialogVisible(state){
         return state.dialogVisible;
     },
@@ -22,6 +25,12 @@ const  getters = {
     },
     iconList(state){
         return state.iconList;
+    },
+    editType(state){
+        return state.editType;
+    },
+    selectTableData(state){
+        return state.selectTableData;
     }
 };
 export default  getters;

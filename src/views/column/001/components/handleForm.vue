@@ -45,10 +45,10 @@
         </el-form-item>
         <div class="block">
             <el-form-item>
-                <el-button type="primary" @click="getList">查询</el-button>
+                <el-button type="primary" @click.native="triggerTable">查询</el-button>
             </el-form-item>
             <el-form-item>
-                <el-button type="default" @click="resetList">重置</el-button>
+                <el-button type="default" @click.native="resetList">重置</el-button>
             </el-form-item>
         </div>
     </el-form>
@@ -60,6 +60,15 @@
         data(){
             return {
                 formInline:{
+                    columnIndex:'',
+                    isValid:'',
+                    columnId:'',
+                    columnTitle:'',
+                    columnIcon:'',
+                    createDuringTime:[],
+                    updateDuringTime:[]
+                },
+                originalForm:{
                     columnIndex:'',
                     isValid:'',
                     columnId:'',
@@ -135,18 +144,13 @@
             }
         },
         methods:{
-            ...mapActions(['changeFormInline','getList']),
+            ...mapActions(['changeFormInline','triggerTable']),
             onSubmit(){
                 console.log('初始化')
             },
             resetList(){
                 let t = this;
-                t.formInline = {
-                    isValid:'',
-                    columnId:'',
-                    columnTitle:'',
-                    columnIcon:''
-                };
+                t.formInline = JSON.parse(JSON.stringify(t.originalForm));
                 t.changeFormInline({});
             }
         },

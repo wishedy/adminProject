@@ -61,7 +61,6 @@
 <script>
     import { createNamespacedHelpers } from 'vuex'
     const { mapGetters,mapActions } = createNamespacedHelpers('module013');
-    import axios from 'axios';
     export default {
         data(){
             return {

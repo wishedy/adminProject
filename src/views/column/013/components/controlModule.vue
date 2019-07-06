@@ -1,9 +1,6 @@
 <template>
     <div class="block adminAuditControl">
         <el-form :inline="true" class="demo-form-inline">
-<!--            <el-form-item>-->
-<!--                <el-button type="default" @click.native="showLayer">详情</el-button>-->
-<!--            </el-form-item>-->
             <el-form-item>
                 <el-button type="default" @click.native="reBackDialog">驳回</el-button>
             </el-form-item>

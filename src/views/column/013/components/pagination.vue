@@ -14,8 +14,6 @@
     </div>
 </template>
 <script>
-    import { createNamespacedHelpers } from 'vuex'
-    const { mapGetters,mapActions } = createNamespacedHelpers('module013');
     export default {
         props:{
             pageIndex:{
@@ -35,7 +33,6 @@
             }
         },
         methods:{
-            //...mapActions(['handleCurrentChange','handleSizeChange'])
             handleSizeChange(val){
                 let _this = this;
                 _this.$emit("changePage",1,val)

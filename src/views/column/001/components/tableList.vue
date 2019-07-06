@@ -58,9 +58,13 @@
 </template>
 
 <script>
+    const xhrUrl = {
+      "getTableList":""
+    };
     import Common from '../../../../utils/common';
     import { createNamespacedHelpers } from 'vuex'
     const { mapGetters,mapActions } = createNamespacedHelpers('module001');
+    import axios from 'axios;'
     export default {
         data(){
             return {
@@ -68,10 +72,24 @@
             }
         },
         computed:{
-            ...mapGetters(['tableData'])
+            ...mapGetters(['tableData',"pageIndex","pageSize",'triggerTableNum'])
+        },
+        watch:{
+            pageIndex(){
+                let _this = this;
+                _this.getTableList();
+            },
+            pageSize(){
+                let _this = this;
+                _this.getTableList();
+            },
+            triggerTableNum(){
+                let _this = this;
+                _this.getTableList();
+            }
         },
         methods:{
-            ...mapActions(['tableCurrentChange']),
+            ...mapActions(['tableCurrentChange',"saveTableList"]),
             formatIndex(row, column){
                 let t = this;
                 let columnIndex = row['columnIndex'];
@@ -82,6 +100,19 @@
                 let type = row['isValid'];
                 return Common.formatterValid(type);
             },
+            getTableList(){
+                let _this = this;
+                axios.get(xhrUrl.getTableList, {
+                    params: {}
+                })
+                    .then(function (response) {
+                        console.log(response);
+                        _this.saveTableList(response.data);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }
         }
     }
 </script>

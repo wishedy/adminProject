@@ -22,11 +22,6 @@
     import TableList from './components/tableList';
     import Pagination from './components/pagination';
     import ControlModule from './components/controlModule';
-    import DetailLayer from './components/DetailLayer';
-    import EditPanel from './components/EditPanel';
-    import RejectWarn from './components/RejectWarn';
-    import PassDialog from './components/PassDialog';
-    import Recommend from '../../components/Recommend/Recommend';
     import axios from 'axios';
     import { createNamespacedHelpers } from 'vuex'
     const { mapGetters,mapActions } = createNamespacedHelpers('module013');
@@ -46,12 +41,7 @@
             HandleForm,
             Pagination,
             TableList,
-            ControlModule,
-            DetailLayer,
-            RejectWarn,
-            PassDialog,
-            Recommend,
-            EditPanel
+            ControlModule
         },
         watch:{
             pageNum(){
