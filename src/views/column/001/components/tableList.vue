@@ -64,7 +64,7 @@
     import Common from '../../../../utils/common';
     import { createNamespacedHelpers } from 'vuex'
     const { mapGetters,mapActions } = createNamespacedHelpers('module001');
-    import axios from 'axios;'
+    import axios from 'axios';
     export default {
         data(){
             return {
