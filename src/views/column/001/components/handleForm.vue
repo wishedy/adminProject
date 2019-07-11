@@ -156,7 +156,7 @@
         },
         mounted(){
             let t = this;
-            t.getList();
+            //t.getList();
             console.log(t.formInline)
         }
     }

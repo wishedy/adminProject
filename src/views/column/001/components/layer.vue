@@ -18,18 +18,17 @@
                         <el-radio label="1">二级栏目</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="父级栏目">
+                <el-form-item label="父级栏目" v-if="addForm.columnIndex==1">
                     <el-select v-model="addForm.parentColumnId" placeholder="父级栏目">
-                        <el-option label="一级栏目" value="0"></el-option>
-                        <el-option label="二级栏目" value="1"></el-option>
+                        <el-option :label="item.id" :value="item.id" v-for="(item) in columnList">{{item.title}}</el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="选择ICON">
                     <el-radio-group v-model="addForm.columnIcon" class="el-icon-list">
-                        <el-radio-button :label="item.iconName" v-for="(item,index) in iconList" :key="item.Id" class="el-icon-inner">
+                        <el-radio-button :label="item.id" v-for="(item,index) in iconList" :key="item.id" class="el-icon-inner">
                             <div class="el-icon-item">
-                                <span class="el-item-center" :class="item.iconName"></span>
-                                <p class="el-item-des" v-text="item.iconName">
+                                <span class="el-item-center" :class="item.name"></span>
+                                <p class="el-item-des" v-text="item.name">
 
                                 </p>
                             </div>
@@ -63,7 +62,7 @@
           }
         },
         computed:{
-            ...mapGetters(['dialogVisible','addMessage','iconList'])
+            ...mapGetters(['dialogVisible','addMessage','iconList',"columnList"])
         },
         watch:{
             addForm:{
@@ -105,7 +104,7 @@
                 let t = this;
                 console.log(t.addForm);
                 let normalOnOff = t.addForm.adminId.length>0&&t.addForm.columnTitle.length>0&&t.addForm.columnIndex.length>0&&t.addForm.columnIcon.length>0&&t.addForm.columnRouterName.length>0;
-                let addOnOff = parseInt(t.columnIndex,10)===0?normalOnOff:normalOnOff&&t.addForm.parentColumnId.length>0;
+                let addOnOff = parseInt(t.addForm.columnIndex,10)===0?normalOnOff:normalOnOff&&t.addForm.parentColumnId.length>0;
                 if(addOnOff){
                     t.createColumn(JSON.parse(JSON.stringify(t.addForm)));
                 }else{

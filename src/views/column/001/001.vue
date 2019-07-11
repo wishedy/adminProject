@@ -28,18 +28,37 @@
         mounted(){
           let t = this;
           t.getIconList();
+          t.getColumnList();
         },
         methods:{
-            ...mapActions(['saveIconList']),
+            ...mapActions(['saveIconList','saveColumnList']),
             getIconList(){
                 let t = this;
-                axios.get('/call/icon/getList', {
+                axios.get('/api/icon/query', {
                     params: {}
                 })
                     .then(function (response) {
                         let reqData = response.data;
-                        if(reqData.responseObject.responseData['data_list']){
-                            t.saveIconList(reqData.responseObject.responseData['data_list']);
+                        if(reqData.result){
+                            t.saveIconList(reqData.result);
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            getColumnList(){
+                let t = this;
+                axios.get('/api/columns/query', {
+                    params: {
+                        grade:0,
+                    }
+                })
+                    .then(function (response) {
+                        let reqData = response.data;
+                        console.log(reqData.result);
+                        if(reqData.result){
+                            t.saveColumnList(reqData.result);
                         }
                     })
                     .catch(function (error) {

@@ -20,6 +20,9 @@ const  getters = {
     dialogVisible(state){
         return state.dialogVisible;
     },
+    columnList(state){
+      return state.columnList;
+    },
     addMessage(state){
         return state.addMessage;
     },

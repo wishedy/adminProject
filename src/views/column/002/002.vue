@@ -1,9 +1,9 @@
 <template>
     <section class="adminContentContainer">
         <section class="adminContentInner iconContainer">
-            <div class="el-icon-item" v-for="(item,index) in tableData" :class="{'el-icon-item-active':index===activeIndex}" @click.stop="changeActive(index)">
-                <span class="el-item-center" :class="item.iconName"></span>
-                <p class="el-item-des" v-text="item.iconName"></p>
+            <div class="el-icon-item" v-for="(item,index) in tableData.result" :class="{'el-icon-item-active':index===activeIndex}" @click.stop="changeActive(index)">
+                <span class="el-item-center" :class="item.name"></span>
+                <p class="el-item-des" v-text="item.name"></p>
             </div>
         </section>
         <div class="block adminAuditControl">
@@ -24,6 +24,7 @@
     import { createNamespacedHelpers } from 'vuex'
     const { mapGetters,mapActions } = createNamespacedHelpers('module002');
     import AddLayer from './components/layer';
+    import axios from 'axios';
     export default {
         data(){
             return {
@@ -52,10 +53,29 @@
                         cancelButtonText: '取消',
                         type: 'info'
                     }).then(() => {
-                        this.$message({
-                            type: 'success',
-                            message: '已删除!'
+                        axios({
+                            method: 'post',
+                            url: '/api/icon/update',
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            },
+                            data: {
+                                id:_this.tableData.result[_this.activeIndex].id,
+                                deleteFlag:0
+                            }
+                        }).then(function(response) {
+                            let reqData = response.data;
+                            console.log(reqData);
+                            if(parseInt(reqData.code,10)===200){
+                                _this.$message({
+                                    type: 'success',
+                                    message: '已删除!'
+                                });
+                                _this.activeIndex = -1;
+                                _this.getList();
+                            }
                         });
+
                     }).catch(() => {
                         this.$message({
                             type: 'info',

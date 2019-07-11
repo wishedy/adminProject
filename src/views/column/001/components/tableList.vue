@@ -8,11 +8,11 @@
             @current-change="tableCurrentChange"
             style="width: 100%">
             <el-table-column
-                prop="columnId"
+                prop="id"
                 label="栏目ID">
             </el-table-column>
             <el-table-column
-                prop="columnTitle"
+                prop="title"
                 label="栏目名称">
             </el-table-column>
             <el-table-column
@@ -27,19 +27,19 @@
                 label="栏目状态">
             </el-table-column>
             <el-table-column
-                prop="columnIcon"
+                prop="iconName"
                 label="ICON类名">
             </el-table-column>
             <el-table-column
-                prop="columnRouterName"
+                prop="routerName"
                 label="路由模块">
             </el-table-column>
             <el-table-column
-                prop="adminName"
+                prop="createAdmin"
                 label="创建管理员">
             </el-table-column>
             <el-table-column
-                prop="updateAdminId"
+                prop="updateAdmin"
                 label="更新管理员">
             </el-table-column>
             <el-table-column
@@ -59,7 +59,7 @@
 
 <script>
     const xhrUrl = {
-      "getTableList":""
+      "getTableList":"/api/columns/query"
     };
     import Common from '../../../../utils/common';
     import { createNamespacedHelpers } from 'vuex'
@@ -87,6 +87,10 @@
                 let _this = this;
                 _this.getTableList();
             }
+        },
+        mounted(){
+          let _this = this;
+            _this.getTableList();
         },
         methods:{
             ...mapActions(['tableCurrentChange',"saveTableList"]),

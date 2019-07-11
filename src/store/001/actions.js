@@ -27,6 +27,9 @@ const actions  = {
     saveIconList:({commit,state},list)=>{
         commit("saveIconList",list);
     },
+    saveColumnList:({commit,state},list)=>{
+        commit("saveColumnList",list);
+    },
     createColumn:({commit,state},data)=>{
         commit("createColumn",data);
     },

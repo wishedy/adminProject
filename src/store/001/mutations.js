@@ -4,12 +4,16 @@ const mutations = {
         state.formInline = data;
     },
     saveTableList(state,data){
-        state.tableData = data.result.list;
-        state.count = data.result.total;
+        state.tableData = data.result;
+        state.count = data.result.length;
     },
     saveIconList(state,list){
         console.log(list,'列表列表列表列表');
       state.iconList = list;
+    },
+    saveColumnList(state,list){
+        console.log(list,'列表列表列表列表');
+      state.columnList = list;
     },
     handleCurrentChange(state,num){
         state.pageIndex = num;
@@ -34,19 +38,17 @@ const mutations = {
         let t = this;
         axios({
             method: 'post',
-            url: '/call/column/create',
-            transformRequest: [function(data) {
-                return "paramJson=" + JSON.stringify(data);
-            }],
+            url: '/api/columns/insert',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'
             },
             data: {
-                columnTitle:data.columnTitle,
-                columnIndex:data.columnIndex,
-                columnIcon:data.columnIcon,
-                columnRouterName:data.columnRouterName,
+                title:data.columnTitle,
+                grade:data.columnIndex,
+                iconId:data.columnIcon,
+                routerName:data.columnRouterName,
                 parentColumnId:data.parentColumnId,
+                columnIndex:data.columnIndex,
                 adminId:data.adminId
             }
         }).then(function(response) {
