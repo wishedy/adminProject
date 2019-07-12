@@ -24,6 +24,12 @@ const mutations = {
     triggerTable(state){
       state.triggerTableNum++;
     },
+    showSort(state){
+      state.sortOnOff = true;
+    },
+    hideSort(state){
+        state.sortOnOff = false;
+    },
     tableCurrentChange(state,data){
         state.selectTableData = data;
     },

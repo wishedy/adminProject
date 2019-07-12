@@ -57,6 +57,7 @@
     "webpack-merge": "^4.1.1"
   },
   "dependencies": {
+    "awe-dnd": "^0.3.4",
     "axios": "^0.18.1",
     "blueimp-md5": "^2.10.0",
     "jquery": "^3.3.1",

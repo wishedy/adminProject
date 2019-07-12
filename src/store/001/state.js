@@ -8,6 +8,7 @@ const state = {
         createDuringTime:[],
         updateDuringTime:[]
     },
+    sortOnOff:false,
     columnList:[],
     triggerTableNum:0,
     selectTableData:{},

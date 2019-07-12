@@ -8,6 +8,9 @@
                 <el-button type="default" @click.native="editColumn">编辑</el-button>
             </el-form-item>
             <el-form-item>
+                <el-button type="default" @click.native="showSortDialog">排序</el-button>
+            </el-form-item>
+            <el-form-item>
                 <el-button type="default" @click.native="showPassDialog">激活</el-button>
             </el-form-item>
             <el-form-item>
@@ -22,7 +25,7 @@
     const { mapGetters,mapActions } = createNamespacedHelpers('module001');
     export default {
         methods:{
-            ...mapActions(['showLayer',"changeEditType"]),
+            ...mapActions(['showLayer',"changeEditType","showSort"]),
             addColumn(){
               let _this = this;
               _this.changeEditType(0);
@@ -36,6 +39,14 @@
               }else{
                   _this.$message.error('请选择一条数据');
               }
+            },
+            showSortDialog(){
+              let _this = this;
+                if(Common.isEmptyObject(_this.selectTableData)){
+                    _this.$message.error('请选择一条数据');
+                }else{
+                    _this.showSort();
+                }
             },
             showPassDialog(){
                 let _this = this;

@@ -34,6 +34,9 @@ const  getters = {
     },
     selectTableData(state){
         return state.selectTableData;
+    },
+    sortOnOff(state){
+        return state.sortOnOff;
     }
 };
 export default  getters;

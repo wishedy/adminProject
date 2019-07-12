@@ -38,6 +38,12 @@ const actions  = {
     },
     changeEditType:({commit,state},type)=>{
         commit("changeEditType",type);
-    }
+    },
+    showSort:({commit,state})=>{
+        commit("showSort");
+    },
+    hideSort:({commit,state})=>{
+        commit("hideSort");
+    },
 };
 export default actions;

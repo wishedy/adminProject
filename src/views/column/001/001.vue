@@ -7,6 +7,7 @@
             <ControlModule></ControlModule>
         </section>
         <AddLayer></AddLayer>
+        <SortDialog></SortDialog>
     </section>
 </template>
 <!--栏目:demo-->
@@ -16,6 +17,7 @@
     import Pagination from './components/pagination';
     import ControlModule from './components/controlModule';
     import AddLayer from './components/layer';
+    import SortDialog from './components/sortDialog';
     import axios from 'axios';
     import { createNamespacedHelpers } from 'vuex'
     const { mapGetters,mapActions } = createNamespacedHelpers('module001');
@@ -72,6 +74,7 @@
             Pagination,
             ControlModule,
             AddLayer,
+            SortDialog
         }
     }
 </script>
