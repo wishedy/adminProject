@@ -16,7 +16,7 @@
                 label="栏目名称">
             </el-table-column>
             <el-table-column
-                prop="columnIndex"
+                prop="grade"
                 :formatter="formatIndex"
                 label="栏目层级">
             </el-table-column>
@@ -96,7 +96,7 @@
             ...mapActions(['tableCurrentChange',"saveTableList"]),
             formatIndex(row, column){
                 let t = this;
-                let columnIndex = row['columnIndex'];
+                let columnIndex = row['grade'];
                 return parseInt(columnIndex,10)===0?'一级':'二级';
             },
             formatterValid(row,column){

@@ -23,9 +23,10 @@
     import Common from '../../../../utils/common';
     import { createNamespacedHelpers } from 'vuex'
     const { mapGetters,mapActions } = createNamespacedHelpers('module001');
+    import axios from 'axios';
     export default {
         methods:{
-            ...mapActions(['showLayer',"changeEditType","showSort"]),
+            ...mapActions(['showLayer',"changeEditType","showSort",'triggerTable']),
             addColumn(){
               let _this = this;
               _this.changeEditType(0);
@@ -33,7 +34,7 @@
             },
             editColumn(){
               let _this = this;
-              if(Common.isEmptyObject(_this.selectTableData)){
+              if(!Common.isEmptyObject(_this.selectTableData)){
                   _this.changeEditType(1);
                   _this.showLayer();
               }else{
@@ -58,17 +59,48 @@
                         cancelButtonText: '取消',
                         type: 'info'
                     }).then(() => {
-                        this.$message({
-                            type: 'success',
-                            message: '已激活!'
+                        _this.valid(1,()=>{
+                            _this.$message({
+                                type: 'success',
+                                message: '已激活!'
+                            });
                         });
                     }).catch(() => {
-                        this.$message({
+                        _this.$message({
                             type: 'info',
                             message: '已取消'
                         });
                     });
                 }
+            },
+            valid(isValid,callback){
+                let _this = this;
+                console.log("操作");
+                axios({
+                    method: 'post',
+                    url: '/api/columns/update',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    data: {
+                        id:_this.selectTableData.id,
+                        isValid:isValid
+                    }
+                }).then(function(response) {
+                    console.log('进入成功');
+                    let reqData = response.data;
+                    if(parseInt(reqData.code,10)===200){
+                        _this.triggerTable();
+                        callback&&callback();
+                    }
+                    console.log(response.data);
+                }).catch((res) => {
+                    console.log(res);
+                    _this.$message({
+                        type: 'info',
+                        message: '操作失败'
+                    });
+                });
             },
             rejectDialog(){
                 let _this = this;
@@ -80,9 +112,11 @@
                         cancelButtonText: '取消',
                         type: 'warning'
                     }).then(() => {
-                        _this.$message({
-                            type: 'success',
-                            message: '已无效!'
+                        _this.valid(0,()=>{
+                            _this.$message({
+                                type: 'success',
+                                message: '已无效!'
+                            });
                         });
                     }).catch(() => {
                         _this.$message({

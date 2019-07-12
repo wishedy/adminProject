@@ -32,6 +32,7 @@ const mutations = {
     },
     tableCurrentChange(state,data){
         state.selectTableData = data;
+        console.log(data);
     },
     hideLayer(state){
         state.dialogVisible = false;
@@ -42,9 +43,10 @@ const mutations = {
     createColumn(state,data){
         console.log(data);
         let t = this;
+        let xhrUrl = parseInt(state.editType,10)===0?'/api/columns/insert':'/api/columns/update';
         axios({
             method: 'post',
-            url: '/api/columns/insert',
+            url: xhrUrl,
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'
             },
@@ -59,9 +61,10 @@ const mutations = {
             }
         }).then(function(response) {
             let reqData = response.data;
-            if(reqData.responseObject.responseStatus){
+            if(parseInt(reqData.code,10)===200){
                 state.addMessage = true;
                 state.dialogVisible = false;
+                state.triggerTableNum++;
             }
             console.log(response.data);
         });

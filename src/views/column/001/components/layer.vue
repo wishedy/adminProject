@@ -10,17 +10,17 @@
                     <el-input v-model="addForm.columnTitle"></el-input>
                 </el-form-item>
                 <el-form-item label="路由模块">
-                    <el-input v-model="addForm.columnRouterName"></el-input>
+                    <el-input v-model="addForm.columnRouterName">{{addForm.columnRouterName}}</el-input>
                 </el-form-item>
                 <el-form-item label="栏目层级">
-                    <el-radio-group v-model="addForm.columnIndex">
+                    <el-radio-group v-model="addForm.grade">
                         <el-radio label="0">一级栏目</el-radio>
                         <el-radio label="1">二级栏目</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="父级栏目" v-if="addForm.columnIndex==1">
+                <el-form-item label="父级栏目" v-if="addForm.grade==1">
                     <el-select v-model="addForm.parentColumnId" placeholder="父级栏目">
-                        <el-option :label="item.id" :value="item.id" v-for="(item) in columnList">{{item.title}}</el-option>
+                        <el-option :label="item.title" :value="item.id" v-for="(item) in columnList">{{item.title}}</el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="选择ICON">
@@ -53,7 +53,7 @@
           return {
               addForm:{
                   columnTitle:'',
-                  columnIndex:'',
+                  grade:'',
                   columnIcon:'',
                   columnRouterName:'',
                   parentColumnId:'',
@@ -62,7 +62,7 @@
           }
         },
         computed:{
-            ...mapGetters(['dialogVisible','addMessage','iconList',"columnList"])
+            ...mapGetters(['dialogVisible','addMessage','iconList',"columnList",'selectTableData'])
         },
         watch:{
             addForm:{
@@ -84,10 +84,21 @@
             },
             dialogVisible(n){
                 console.log(n);
+                if(n){
+                    let _this = this;
+                    _this.checkForm(_this.selectTableData);
+                }
+            },
+            selectTableData:{
+                handler(newVal){
+                    let _this = this;
+                    _this.checkForm(newVal);
+                },
+                deep:true
             }
         },
         methods:{
-            ...mapActions(['showLayer','hideLayer','createColumn','hideMsg']),
+            ...mapActions(['showLayer','hideLayer','createColumn','hideMsg','tableCurrentChange']),
             handleClose(){
                 let t = this;
                 t.hideLayer();
@@ -100,11 +111,28 @@
                     adminId:t.adminId
                 };
             },
+            checkForm(newVal){
+                let _this = this;
+                if(!Common.isEmptyObject(newVal)){
+                    console.log('=========');
+                    console.log(newVal);
+                    console.log('=========');
+                    let adminId = Common.checkInvalid(localStorage.getItem('adminId'))?'':localStorage.getItem('adminId');
+                    _this.addForm.columnIcon = newVal.iconId;
+                    _this.addForm.columnTitle = newVal.title;
+                    console.log(newVal.grade,newVal.routerName);
+                    _this.addForm.grade = newVal.grade;
+
+                    _this.addForm.columnRouterName = newVal.routerName;
+                    _this.addForm.parentColumnId = newVal.parentColumnId;
+                    _this.adminId = adminId;
+                }
+            },
             addColumn(){
                 let t = this;
                 console.log(t.addForm);
-                let normalOnOff = t.addForm.adminId.length>0&&t.addForm.columnTitle.length>0&&t.addForm.columnIndex.length>0&&t.addForm.columnIcon.length>0&&t.addForm.columnRouterName.length>0;
-                let addOnOff = parseInt(t.addForm.columnIndex,10)===0?normalOnOff:normalOnOff&&t.addForm.parentColumnId.length>0;
+                let normalOnOff = t.addForm.adminId.length>0&&t.addForm.columnTitle.length>0&&t.addForm.grade.length>0&&t.addForm.grade.length>0&&t.addForm.columnRouterName.length>0;
+                let addOnOff = parseInt(t.addForm.grade,10)===0?normalOnOff:normalOnOff&&t.addForm.parentColumnId.length>0;
                 if(addOnOff){
                     t.createColumn(JSON.parse(JSON.stringify(t.addForm)));
                 }else{
