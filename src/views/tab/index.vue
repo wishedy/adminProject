@@ -1,7 +1,7 @@
 <template>
     <section class="el-tabs__header">
         <ul class="adminTabList">
-            <router-link tag="li" active-class="is-active" v-for="(item,i) in nowTabData" :key="i" class="el-tabs__item" :to="'/'+item.routerLink" @contextmenu.native.prevent="rightClose($event,item)">
+            <router-link tag="li" active-class="is-active" v-for="(item,i) in nowTabData" :key="i" class="el-tabs__item" :to="'/'+item.routerName" @contextmenu.native.prevent="rightClose($event,item)">
                 {{item.title}}<span class="el-icon-close" @click.stop="closeTab(item)"></span>
             </router-link>
             <ContextCom :style="styleJson"  v-show="Context" @deleteAll="closeAll" @deleteIt="closeIt" @deleteOthers="closeOthers"></ContextCom>
@@ -56,7 +56,7 @@
             closeOthers(){
                 let t = this;
                 for(let key in t.nowTabData){
-                    if(t.nowTabData[key].routerLink!==t.contextData.routerLink){
+                    if(t.nowTabData[key].routerName!==t.contextData.routerName){
                         t.closeTab(t.nowTabData[key]);
                     }
                 }
@@ -73,12 +73,12 @@
                 let nowPathname = this.$route.path.substring(1,1000);
                 this.deleteTab(v);
                 let  lastKey = '';
-                if((v.routerLink)&&(nowPathname===v.routerLink)){
+                if((v.routerName)&&(nowPathname===v.routerName)){
                     for(let key in t.nowTabData){
                         lastKey = key;
                     }
                     if(lastKey.length){
-                        t.$router.push({ path: t.nowTabData[lastKey].routerLink});
+                        t.$router.push({ path: t.nowTabData[lastKey].routerName});
                     }else{
                         t.$router.push({ path: '/' });
                     }

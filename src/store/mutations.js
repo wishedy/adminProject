@@ -18,8 +18,8 @@ const mutations = {
     },
     addTab(state,data){
         let nowData = JSON.parse(JSON.stringify(state.nowTabData));
-        if(!nowData[data.routerLink]){
-            nowData[data.routerLink] = data;
+        if(!nowData[data.routerName]){
+            nowData[data.routerName] = data;
         }
         state.nowTabData = nowData;
     },

@@ -44,21 +44,25 @@ const mutations = {
         console.log(data);
         let t = this;
         let xhrUrl = parseInt(state.editType,10)===0?'/api/columns/insert':'/api/columns/update';
+        let paramJson = {
+            title:data.columnTitle,
+            iconId:data.columnIcon,
+            routerName:data.columnRouterName,
+            parentColumnId:data.parentColumnId,
+            grade:data.grade
+        };
+        if(parseInt(state.editType,10)===0){
+            paramJson.createAdmin = date.adminId;
+        }else{
+            paramJson.updateAdmin = data.adminId;
+        }
         axios({
             method: 'post',
             url: xhrUrl,
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'
             },
-            data: {
-                title:data.columnTitle,
-                grade:data.columnIndex,
-                iconId:data.columnIcon,
-                routerName:data.columnRouterName,
-                parentColumnId:data.parentColumnId,
-                columnIndex:data.columnIndex,
-                adminId:data.adminId
-            }
+            data: paramJson
         }).then(function(response) {
             let reqData = response.data;
             if(parseInt(reqData.code,10)===200){

@@ -26,11 +26,13 @@
     import axios from 'axios';
     export default {
         methods:{
-            ...mapActions(['showLayer',"changeEditType","showSort",'triggerTable']),
+            ...mapActions(['showLayer',"changeEditType","showSort",'triggerTable','tableCurrentChange']),
             addColumn(){
               let _this = this;
               _this.changeEditType(0);
               _this.showLayer();
+              console.log('选择');
+                _this.tableCurrentChange({});
             },
             editColumn(){
               let _this = this;

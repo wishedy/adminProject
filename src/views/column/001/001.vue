@@ -60,6 +60,9 @@
                         let reqData = response.data;
                         console.log(reqData.result);
                         if(reqData.result){
+                            console.log('获取导数据');
+                            console.log(reqData.result);
+                            console.log('获取导数据');
                             t.saveColumnList(reqData.result);
                         }
                     })

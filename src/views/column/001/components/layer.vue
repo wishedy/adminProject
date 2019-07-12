@@ -62,7 +62,7 @@
           }
         },
         computed:{
-            ...mapGetters(['dialogVisible','addMessage','iconList',"columnList",'selectTableData'])
+            ...mapGetters(['dialogVisible','addMessage','iconList',"columnList",'selectTableData','editType'])
         },
         watch:{
             addForm:{
@@ -86,15 +86,30 @@
                 console.log(n);
                 if(n){
                     let _this = this;
-                    _this.checkForm(_this.selectTableData);
+                    if(parseInt(_this.editType,10)===0){
+                        _this.resetForm();
+                    }else{
+                        _this.checkForm(_this.selectTableData);
+                    }
+
                 }
             },
             selectTableData:{
                 handler(newVal){
                     let _this = this;
-                    _this.checkForm(newVal);
+                    if(parseInt(_this.editType,10)===0){
+                        _this.resetForm();
+                    }else{
+                        _this.checkForm(newVal);
+                    }
                 },
                 deep:true
+            },
+            editType(newVal){
+                let _this = this;
+                if(parseInt(newVal,10)===0){
+                    _this.resetForm();
+                }
             }
         },
         methods:{
@@ -102,13 +117,18 @@
             handleClose(){
                 let t = this;
                 t.hideLayer();
-                t.addForm = {
+                _this.resetForm();
+            },
+            resetForm(){
+              let _this = this;
+                let adminId = Common.checkInvalid(localStorage.getItem('adminId'))?'':localStorage.getItem('adminId');
+                _this.addForm = {
                     columnTitle:'',
-                    columnIndex:'',
+                    grade:'',
                     columnIcon:'',
                     columnRouterName:'',
                     parentColumnId:'',
-                    adminId:t.adminId
+                    adminId:adminId
                 };
             },
             checkForm(newVal){
