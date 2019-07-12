@@ -13,6 +13,7 @@ class Common {
         this.checkInvalid = this.checkInvalid.bind(this);
         this.rejectWarn = this.rejectWarn.bind(this);
         this.createTime = this.createTime.bind(this);
+        this.formatDate = this.formatDate.bind(this);
     }
     checkInvalid(val){
         if(((typeof val =='string')&&(val.length==0))||(val==undefined)||(val=='undefined')||(val=='null')||(typeof val=='undefined')||(typeof val=='null')||(val==null)){
@@ -20,6 +21,16 @@ class Common {
         }else{
             return false;
         }
+    }
+    formatDate(t){
+        let now=new Date(t);
+        let year=now.getFullYear();
+        let month=now.getMonth()+1;
+        let date=now.getDate();
+        let hour=now.getHours();
+        let minute=now.getMinutes();
+        let second=now.getSeconds();
+        return year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second;
     }
     createTime(dateObj, type){
         let timeStr = '';

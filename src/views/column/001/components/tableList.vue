@@ -45,6 +45,7 @@
             <el-table-column
                 prop="createTime"
                 sortable
+                :formatter="formatterTime"
                 label="创建时间">
             </el-table-column>
             <el-table-column
@@ -72,7 +73,7 @@
             }
         },
         computed:{
-            ...mapGetters(['tableData',"pageIndex","pageSize",'triggerTableNum'])
+            ...mapGetters(['tableData',"pageIndex","pageSize",'triggerTableNum','formInline'])
         },
         watch:{
             pageIndex(){
@@ -104,8 +105,15 @@
                 let type = row['isValid'];
                 return Common.formatterValid(type);
             },
+            formatterTime(row,column){
+                let t = this;
+                let time = row['createTime'];
+                return Common.formatDate(time);
+            },
             getTableList(){
                 let _this = this;
+                console.log('--------------------');
+                console.log(_this.formInline);
                 axios.get(xhrUrl.getTableList, {
                     params: {}
                 })

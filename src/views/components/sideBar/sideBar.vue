@@ -9,7 +9,7 @@
                     <span slot="title">{{item.title}}</span>
                 </template>
                 <el-menu-item :index="(''+i)+'-'+(index+'')" v-for="(inItem,index) in item.OneColList" :key="inItem.id" @click.native.stop="routerDirec(inItem)" @mouseup.native.stop="runFn(inItem)">
-                    <i :class="inItem.icon"></i>
+                    <i :class="inItem.iconName"></i>
                     {{inItem.title}}
                 </el-menu-item>
             </el-submenu>

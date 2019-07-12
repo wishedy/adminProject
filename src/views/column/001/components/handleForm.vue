@@ -4,7 +4,7 @@
             <el-input v-model="formInline.columnId" placeholder="栏目ID" class="adminInputEl"></el-input>
         </el-form-item>
         <el-form-item label="栏目层级">
-            <el-select v-model="formInline.columnIndex" placeholder="栏目层级" class="adminInputEl">
+            <el-select v-model="formInline.grade" placeholder="栏目层级" class="adminInputEl">
                 <el-option label="一级栏目" value="0"></el-option>
                 <el-option label="二级栏目" value="1"></el-option>
             </el-select>

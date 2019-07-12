@@ -20,7 +20,7 @@
                 </el-form-item>
                 <el-form-item label="父级栏目" v-if="addForm.grade==1">
                     <el-select v-model="addForm.parentColumnId" placeholder="父级栏目">
-                        <el-option :label="item.title" :value="item.id" v-for="(item) in columnList">{{item.title}}</el-option>
+                        <el-option :label="item.title" :value="item.id" v-for="(item) in columnList" :key="item.id">{{item.title}}</el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="选择ICON">
