@@ -52,7 +52,7 @@ const mutations = {
             grade:data.grade
         };
         if(parseInt(state.editType,10)===0){
-            paramJson.createAdmin = date.adminId;
+            paramJson.createAdmin = data.adminId;
         }else{
             paramJson.updateAdmin = data.adminId;
         }

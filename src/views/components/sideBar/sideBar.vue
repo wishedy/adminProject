@@ -3,12 +3,12 @@
     <aside class="adminSide" :class="{'active':!toggleOnOff}">
         <el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"
                  :collapse="toggleOnOff" text-color="#BFCBD9" >
-            <el-submenu :index="i" v-for="(item,i) in tabList" :key="i">
+            <el-submenu :index="i+''" v-for="(item,i) in tabList" :key="i">
                 <template slot="title">
                     <i :class="item.iconName"></i>
                     <span slot="title">{{item.title}}</span>
                 </template>
-                <el-menu-item :index="i+''+index" v-for="(inItem,index) in item.OneColList" :key="inItem.grade" @click.native.stop="routerDirec(inItem)" @mouseup.native.stop="runFn(inItem)">
+                <el-menu-item :index="(''+i)+'-'+(index+'')" v-for="(inItem,index) in item.OneColList" :key="inItem.id" @click.native.stop="routerDirec(inItem)" @mouseup.native.stop="runFn(inItem)">
                     <i :class="inItem.icon"></i>
                     {{inItem.title}}
                 </el-menu-item>
